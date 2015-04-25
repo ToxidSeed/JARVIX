@@ -1,6 +1,6 @@
 Ext.define('MyApp.GestionProcesos.WinGuardarDescripcion',{
 	extend:'Ext.window.Window' , 
-	title:'Descripcion',	
+	title:'Descripcion',	 
 	internal:{
 		id:null,
 		procesoFlujoId:null,
