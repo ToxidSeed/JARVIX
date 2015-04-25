@@ -1,6 +1,6 @@
 Ext.define('MyApp.ProjectsExplorer',{
 	extend: 'Ext.ux.desktop.Module',
-	requires:[
+	requires:[ 
 	          'Ext.window.Window',
                   'MyApp.WinTableExplorer'
 	          ],
