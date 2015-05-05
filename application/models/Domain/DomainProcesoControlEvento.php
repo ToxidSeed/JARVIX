@@ -9,7 +9,7 @@
 require_once BASEMODELPATH.'BaseDomain.php';
 
 class DomainProcesoControlEvento extends BaseDomain{
-    function __construct($id) {
+    function __construct($id = null) {
         $this->id = $id;
     }
     

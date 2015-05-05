@@ -26,7 +26,7 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
           name:'nombre',
           fieldLabel:'Nombre',
           width:350
-      })
+      });
       
       main.uploadImage = Ext.create('Ext.form.field.File',{
           name:'prototypeUpload',
@@ -224,7 +224,7 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
          loadOnCreate:false,
          width:350,
          pageSize:20,         
-         src:base_url+'Falta',
+         src:base_url+'GestionProcesos/GestionProcesosController/getRequerimientos',
          columns:[
              {
                  xtype:'rownumberer'
@@ -245,7 +245,10 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
               {
                   text:'Agregar',
                   handler:function(){
-                      
+                      var winAddRequerimiento = Ext.create('MyApp.GestionProcesos.WinAddRequerimiento');
+                      //console.log(main.internal);
+                      winAddRequerimiento.internal.proceso.id = main.internal.id
+                      winAddRequerimiento.show();
                   }
               },{
                   text:'Quitar',
@@ -307,7 +310,12 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
                  title:'Requerimientos Funcionales',
                  items:[
                      main.panelRequerimientosFuncionales
-                 ]
+                 ],
+                 listeners:{
+                     'expand':function(){
+                         main.regreshReqs();
+                     }
+                 }
              }
          ]
       });
@@ -407,6 +415,13 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
             ProcesoId:main.internal.id
         }); 
       
+   },refreshReqs:function(){
+        var main = this;
+        
+        main.gridRequerimientosFuncionales.load({
+           ProcesoId: main.internal.id 
+        });
+        
    },resizePanelControl:function(){
        var main = this;
        

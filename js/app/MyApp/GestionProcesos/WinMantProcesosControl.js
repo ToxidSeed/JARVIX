@@ -182,7 +182,7 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
          'itemdblclick':function(grid,record,item,index,event){
              var propiedadName = record.get('propiedad.nombre');             
              main.myWinEditor.setTitle(propiedadName);     
-             main.myTextAreaEditor.setValue("");
+             main.myTextAreaEditor.setValue(record.get('valor'));
              main.myWinEditor.params = {
                  method:'propiedad',
                  data:{
@@ -212,9 +212,17 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
                  dataIndex:'evento.nombre'
              },{
                  header:'Valor',
-                 dataIndex:'Valor',
+                 dataIndex:'valor',
                  flex:1
-             }             
+             },{
+                 header:'eventoId',
+                 dataIndex:'evento.id',
+                 hidden:true
+             },{
+                 header:'controlEventoId',
+                 dataIndex:'controlEvento.id',
+                 hidden:true
+             }
          ],
          pagingBar:true
       });
@@ -224,12 +232,14 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
          'itemdblclick':function(grid,record,item,index,event){
              var eventoName = record.get('evento.nombre');             
              main.myWinEditor.setTitle(eventoName);                          
+             main.myTextAreaEditor.setValue(record.get('valor'));
              main.myWinEditor.params = {
-                 method:'evento',
+                 method:'evento',                 
                  data:{
                      id:record.get('id'),
                      eventoId:record.get('evento.id'),
-                     controlId: main.internal.Control.id                     
+                     controlId: main.internal.Control.id,      
+                     ControlEventoId: record.get('controlEvento.id')
                  }
              };
              main.myWinEditor.showAt(event.getX(),event.getY());
@@ -323,12 +333,12 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
                 main.mainPanel,
                main.mainTab               
            ]
-        });
-        
+        });       
         
         main.on({
-            'resize':function(win,neww,newh){
-                
+            'resize':function(win,neww,newh){                
+                main.gridPropiedades.setHeight(newh-90);
+                main.gridEventos.setHeight(newh-90);
             },
             'show':function(){
                 main.loadControl();
@@ -349,8 +359,7 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
               ControlId:main.internal.Control.id,
               nombre:  main.txtNombre.getValue(),   
               ProcesoId: main.internal.Proceso.id,
-              comentarios:main.txtComentarios.getValue()
-              
+              comentarios:main.txtComentarios.getValue()              
           },
           success:function(response){
               var msg = new Per.MessageBox();               
@@ -467,6 +476,9 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
           if (params.method === 'propiedad'){
               main.addValorPropiedad(params);
           }
+          if (params.method === 'evento'){
+              main.addValorEvento(params);
+          }
     },
     addValorPropiedad:function(params){
         var main = this;
@@ -480,9 +492,11 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
                 Valor: main.myTextAreaEditor.getValue(),
                 ControlPropiedadId: params.data.ControlPropiedadId
             },
-            success:function(response){               
-                main.winHelper = Ext.create('Per.DebugHelperWindow');
-                main.winHelper.showMsg(response.responseText);
+            success:function(response){      
+                main.myWinEditor.close();
+                main.txtTipoControl.disabled = true;
+                //main.winHelper = Ext.create('Per.DebugHelperWindow');
+                //main.winHelper.showMsg(response.responseText);
                 
 //                console.log(response);
                 //Loading Properties
@@ -490,17 +504,21 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
             }
         });
     },
-    addValorEvento:function(){
+    addValorEvento:function(params){
         var main = this;
         Ext.Ajax.request({
-            //url:base_url+'GestionProcesos/ProcesoControl/find',
+            url:base_url+'GestionProcesos/ProcesoControl/writeEvento',
             params:{
-                id:main.internal.ProcesoControl.id
+                ProcesoControlEventoId:params.data.id,
+                ControlId: params.data.controlId,
+                EventoId: params.data.eventoId,
+                ProcesoControlId: main.internal.ProcesoControl.id,
+                Valor: main.myTextAreaEditor.getValue(),
+                ControlEventoId: params.data.ControlEventoId
             },
             success:function(response){
-                
-                //Loading Properties
-                main.getPropiedades();
+                main.myWinEditor.close();                
+                main.getEventos();
             }
         });
         

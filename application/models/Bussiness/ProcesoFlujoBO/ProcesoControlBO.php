@@ -18,36 +18,36 @@ class ProcesoControlBO extends BaseBO{
         $this->ProcesoControlEventoMapper = new ProcesoControlEventoMapper();
     }
     
-    private $dmnProcesoControl;
-    private $properties = array();
-    private $events = array();
+//    private $dmnProcesoControl;
+//    private $properties = array();
+//    private $events = array();
     private $ProcesoControlMapper;
     private $ProcesoControlPropiedadMapper;
     private $ProcesoControlEventoMapper;
     
-    function getDmnProcesoControl() {
-        return $this->dmnProcesoControl;
-    }
+//    function getDmnProcesoControl() {
+//        return $this->dmnProcesoControl;
+//    }
 
-    function getProperties() {
-        return $this->properties;
-    }
+//    function getProperties() {
+//        return $this->properties;
+//    }
+//
+//    function getEvents() {
+//        return $this->events;
+//    }
 
-    function getEvents() {
-        return $this->events;
-    }
+//    function setDmnProcesoControl($dmnProcesoControl) {
+//        $this->dmnProcesoControl = $dmnProcesoControl;
+//    }
 
-    function setDmnProcesoControl($dmnProcesoControl) {
-        $this->dmnProcesoControl = $dmnProcesoControl;
-    }
-
-    function setProperties($properties) {
-        $this->properties = $properties;
-    }
-
-    function setEvents($events) {
-        $this->events = $events;
-    }
+//    function setProperties($properties) {
+//        $this->properties = $properties;
+//    }
+//
+//    function setEvents($events) {
+//        $this->events = $events;
+//    }
 
         
     public function add(){
@@ -129,6 +129,14 @@ class ProcesoControlBO extends BaseBO{
         $curDmnProcesoControlPropiedad->setValor($dmnProcesoControlPropiedad->getValor());
         $this->ProcesoControlPropiedadMapper->update($curDmnProcesoControlPropiedad);        
     }
+    
+    public function addSingleEvent(DomainProcesoControlEvento $dmnProcesoControlEvento){
+        $this->addEvent($dmnProcesoControlEvento);
+    }
+    public function updSingleEvent(DomainProcesoControlEvento $dmnProcesoControlEvento){
+        $this->updEvent($dmnProcesoControlEvento);
+    }    
+    
     protected function addEvent(DomainProcesoControlEvento $dmnProcesoControlEvento){
         $this->ProcesoControlEventoMapper->insert($dmnProcesoControlEvento);
     }

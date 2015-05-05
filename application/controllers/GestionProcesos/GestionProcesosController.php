@@ -101,6 +101,14 @@ class GestionProcesosController extends BaseController{
         $response = $this->FinderProcesosFlujos->getFlujosRegistradosByProceso($this->getField('ProcesoId'));
         echo json_encode(Response::asResults($response)); 
     }
-            
+    
+    public function getRequerimientos(){    
+        //Check DataType Validation
+        $this->load->model('Bussiness/ProcesoFlujoBO/ProcesoBO','ProcesoBO');
+        $response = $this->ProcesoBO->getRequerimientos(
+                    $this->getField('ProcesoId')
+                );
+        echo json_encode(Response::asResults($response));    
+    }            
 }
 ?>

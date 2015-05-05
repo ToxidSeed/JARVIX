@@ -18,10 +18,11 @@ class ProcesoControlEventoMapper extends BaseMapper{
     }
     
     protected $fields = array(
-        'id',
-        'procesocontrolid',
-        'valor',
-        'controleventoid'
+        'procesocontrolevento.id',
+        'procesocontrolevento.procesocontrolid',
+        'procesocontrolevento.valor',
+        'procesocontrolevento.controleventoid',
+        'procesocontrolevento.eventoid'
     );
     
     protected $uniqueValues = array(
@@ -34,11 +35,12 @@ class ProcesoControlEventoMapper extends BaseMapper{
     
     protected $tableName = 'procesocontrolevento';
     
-    protected function doCreateObject(array $record = null){
+    protected function doCreateObject(array $record = null){        
         $dmnProcesoControlEvento = new DomainProcesoControlEvento($record['ID']);
         $dmnProcesoControlEvento->setProcesoControl(new DomainProcesoControl($record['PROCESOCONTROLID']));
         $dmnProcesoControlEvento->setControlEvento(new DomainControlEvento($record['CONTROLEVENTOID']));
         $dmnProcesoControlEvento->setEvento( new DomainEvento($record['EVENTOID']));
+        $dmnProcesoControlEvento->setValor($record['VALOR']);                
         return $dmnProcesoControlEvento;
     }
     
@@ -46,11 +48,14 @@ class ProcesoControlEventoMapper extends BaseMapper{
         $this->doInsert($dmnProcesoControlEvento);
     }
    protected function doInsert(DomainProcesoControlEvento $dmnProcesoControlEvento){
+       $this->load->database();
        $fields['procesocontrolid'] = $dmnProcesoControlEvento->getProcesoControl()->getId();
        $fields['valor'] = $dmnProcesoControlEvento->getValor();
-       $fields['controlpropiedadid'] = $dmnProcesoControlEvento->getControlEvento()->getId();
+       $fields['eventoid'] = $dmnProcesoControlEvento->getEvento()->getId();
+       $fields['controleventoid'] = $dmnProcesoControlEvento->getControlEvento()->getId();
        $this->db->set($fields);
-       $res = $this->db->insert($fields);
+       $res = $this->db->insert($this->tableName);
+    //   echo $this->db->last_query();
        $dmnProcesoControlEvento->setId($this->db->insert_id());
        if(!$res){
            $this->db->trans_rollback();
@@ -61,10 +66,11 @@ class ProcesoControlEventoMapper extends BaseMapper{
     public function update(DomainProcesoControlEvento $dmnProcesoControlEvento){
         $this->doUpdate($dmnProcesoControlEvento);
     }
-   protected function doUpdate(DomainProcesoControlEvento $dmnProcesoControlEvento){
-        $fields['procesocontrolid'] = $dmnProcesoControlEvento->getProcesoControl()->getId();
+   protected function doUpdate(DomainProcesoControlEvento $dmnProcesoControlEvento){                     
+       $this->load->database();
+        $fields['id'] = $dmnProcesoControlEvento->getId();
         $fields['valor'] = $dmnProcesoControlEvento->getValor();
-        $fields['controleventoid'] = $dmnProcesoControlEvento->getControlEvento()->getId();
+        //$fields['controleventoid'] = $dmnProcesoControlEvento->getControlEvento()->getId();
         $this->db->set($fields);
         $this->db->where('id',$dmnProcesoControlEvento->getId());
         $res = $this->db->update($this->tableName);

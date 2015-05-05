@@ -5,7 +5,7 @@
  */
 Ext.define('Per.Store',{
    statics:{
-       getDataAsJSON: function(records){
+       getDataAsJSON: function(records,names){
            var fields = [];
            var json = '[';
            for(var index = 0; index < records.length; index++){
@@ -14,9 +14,17 @@ Ext.define('Per.Store',{
                fields = records[index].fields.items;
                for(var idxColumn = 0; idxColumn < fields.length; idxColumn++){
                    //Agregando la propiedad
-                   json += '"'+fields[idxColumn].name+'"';
-                   json += ' : ';
-                   json += '"'+records[index].get(fields[idxColumn].name)+'",';
+                   if (names === undefined){
+                       json += '"'+fields[idxColumn].name+'"';
+                        json += ' : ';
+                        json += '"'+records[index].get(fields[idxColumn].name)+'",';
+                   }else{
+                       if(names.indexOf(fields[idxColumn].name) >= 0 ){
+                            json += '"'+fields[idxColumn].name+'"';
+                            json += ' : ';
+                            json += '"'+records[index].get(fields[idxColumn].name)+'",';
+                       }
+                   }                                                             
                }
                //quitamos la ultima coma agregada
                json = json.substr(0,json.length - 1);
@@ -33,7 +41,8 @@ Ext.define('Per.Store',{
            //
            return json;
        }
-   } 
+   }
+   
 });
 
 

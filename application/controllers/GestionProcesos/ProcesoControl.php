@@ -10,9 +10,12 @@ require_once BASECONTROLLERPATH.'BaseController.php';
 require_once DOMAINPATH.'DomainTipoControl.php';
 require_once DOMAINPATH.'DomainProceso.php';
 require_once DOMAINPATH.'DomainProcesoControlPropiedad.php';
+require_once DOMAINPATH.'DomainProcesoControlEvento.php';
 require_once DOMAINPATH.'DomainPropiedad.php';
+require_once DOMAINPATH.'DomainEvento.php';
 require_once DOMAINPATH.'DomainProcesoControl.php';
 require_once DOMAINPATH.'DomainControlPropiedad.php';
+require_once DOMAINPATH.'DomainControlEvento.php';
 
 class ProcesoControl extends BaseController{
     function __construct() {
@@ -99,6 +102,7 @@ class ProcesoControl extends BaseController{
                         $this->getField('ControlId'),
                         $this->getField('ProcesoControlId')
                     );                                
+            
             $this->getEventosReferencias($response);
             echo json_encode(Response::asResults($response));
         } catch (Exception $ex) {
@@ -148,8 +152,7 @@ class ProcesoControl extends BaseController{
     public function writePropiedad(){
         try{
             //Verificar si el dato enviado tiene id
-            $id = $this->getField('ProcesoControlPropiedadId');                        
-            var_dump($id);
+            $id = $this->getField('ProcesoControlPropiedadId');                                    
             if ($id === ''){
                 $this->addPropiedad();
             }else{
@@ -169,6 +172,27 @@ class ProcesoControl extends BaseController{
             }
         }
     }
+    public function writeEvento(){
+        try{
+            $id = $this->getField('ProcesoControlEventoId');
+            if($id === ''){
+                $this->addEvento();
+            }else{
+                $this->updEvento();
+            }
+            $this->getAnswer()->setSuccess(true);
+            $this->getAnswer()->setMessage('Actualizado Correctamente');
+            $this->getAnswer()->setCode(0);
+            echo $this->getAnswer()->getAsJSON(); 
+        } catch (Exception $ex) {
+            if($ex->getCode() == FORM_VALIDATION_ERRORS_CODE){
+                echo $this->getAnswer()->getAsJSON();
+            }else{
+                echo Answer::setFailedMessage($ex->getMessage(),$ex->getCode());
+            }
+        }
+    }
+    
     private function addPropiedad(){
         $dmnProcesoControlPropiedad = new DomainProcesoControlPropiedad();
         $dmnProcesoControlPropiedad->setValor($this->getField('Valor'));
@@ -179,11 +203,31 @@ class ProcesoControl extends BaseController{
         $this->load->model('Bussiness/ProcesoFlujoBO/ProcesoControlBO','ProcesoControlBO');
         $this->ProcesoControlBO->addSingleProperty($dmnProcesoControlPropiedad);
     }
+    private function addEvento(){
+        $dmnProcesoControlEvento = new DomainProcesoControlEvento();
+        $dmnProcesoControlEvento->setValor($this->getField('Valor'));
+        $dmnProcesoControlEvento->setEvento(new DomainEvento($this->getField('EventoId')));
+        $dmnProcesoControlEvento->setProcesoControl(new DomainProcesoControl($this->getField('ProcesoControlId')));
+        $dmnProcesoControlEvento->setControlEvento(new DomainControlEvento($this->getField('ControlEventoId')));
+        $this->load->model('Bussiness/ProcesoFlujoBO/ProcesoControlBO','ProcesoControlBO');
+        $this->ProcesoControlBO->addSingleEvent($dmnProcesoControlEvento);
+                
+    }
+    
     private function updPropiedad(){
         $dmnProcesoControlPropiedad = new DomainProcesoControlPropiedad($this->getField('ProcesoControlPropiedadId'));
         $dmnProcesoControlPropiedad->setValor($this->getField('Valor'));
         $this->load->model('Bussiness/ProcesoFlujoBO/ProcesoControlBO','ProcesoControlBO');
         $this->ProcesoControlBO->updSingleProperty($dmnProcesoControlPropiedad);        
     }
+    private function updEvento(){
+        $dmnProcesoControlEvento = new DomainProcesoControlEvento($this->getField('ProcesoControlEventoId'));
+        $dmnProcesoControlEvento->setValor($this->getField('Valor'));
+        $this->load->model('Bussiness/ProcesoFlujoBO/ProcesoControlBO','ProcesoControlBO');        
+        $this->ProcesoControlBO->updSingleEvent($dmnProcesoControlEvento);        
+        
+    }
+    
+    
     
 }

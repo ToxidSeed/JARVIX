@@ -17,6 +17,8 @@
       Ext.require('MyApp.GestionProcesos.WinGuardarDescripcion');  
       Ext.require('MyApp.GestionProcesos.WinMantProcesosControl');
       Ext.require('MyApp.GestionProcesos.WinHelpControls');      
+      Ext.require('MyApp.GestionProcesos.WinAddRequerimiento');      
+      
 //      Ext.require('MyApp.GestionProcesos.WinMantGestionProcesos');
       
 
