@@ -2,6 +2,15 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/models/Bussiness/ProcesoFlujoBO/ProcesoBO.php</file>
+            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/models/Mapper/ProcesoRequerimientoFuncionalMapper.php</file>
+            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/js/app/MyApp/GestionProcesos/WinMantGestionProcesos.js</file>
+            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/js/app/MyApp/GestionProcesos/WinAddRequerimiento.js</file>
+            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/controllers/GestionProcesos/GestionProcesosController.php</file>
+            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/models/Domain/DomainProcesoRequerimientoFuncional.php</file>
+            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/models/Bussiness/ProcesoFlujoBO/ProcesoRequerimientoFuncionalBO.php</file>
+            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/controllers/GestionProcesos/ProcesoRequerimientoFuncional.php</file>
+        </group>
     </open-files>
 </project-private>

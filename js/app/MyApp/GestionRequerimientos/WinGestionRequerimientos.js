@@ -21,6 +21,11 @@ Ext.define('MyApp.GestionRequerimientos.WinGestionRequerimientos',{
                           title:'Nuevo Requerimiento Funcional'
                       });
                       WinNewRequerimiento.show();
+                      WinNewRequerimiento.on({
+                        'saved':function(){                            
+                            main.fnGetRequerimientos();
+                        }
+                    });
                   }
               }
           ] 
@@ -83,13 +88,21 @@ Ext.define('MyApp.GestionRequerimientos.WinGestionRequerimientos',{
                  handler:function(){
                      main.limpiarCriterios();
                  }
+             },{
+                 text:'Ocultar',
+                 handler:function(){
+                     main.panelCriterioBusqueda.collapse();
+                 }
              }
          ] 
       });
       
       main.panelCriterioBusqueda = Ext.create('Ext.panel.Panel',{          
           region:'west', 
+          title:'Buscar Requerimientos',
           bodyPadding:'10px',
+          collapsible:true,
+          collapsed:true,
           tbar:main.panelCritTbar,
           items:[
                 main.txtCodigo,
@@ -97,7 +110,7 @@ Ext.define('MyApp.GestionRequerimientos.WinGestionRequerimientos',{
                  main.fieldFechaRegistro,
                  main.fieldFechaUltAct
           ]
-      })
+      });
       
       main.GridRequerimientos = Ext.create('Per.GridPanel',{
          loadOnCreate:false,
@@ -112,10 +125,11 @@ Ext.define('MyApp.GestionRequerimientos.WinGestionRequerimientos',{
              },
              {
                  header:'Codigo',
-                 dataIndex:'id'
+                 dataIndex:'codigo'
              },{
                  header:'Nombre',
-                 dataIndex:'nombre'
+                 dataIndex:'nombre',
+                 flex:1
              },{
                  header:'Fecha de Registro',
                  dataIndex:'fechaRegistro'
@@ -130,7 +144,7 @@ Ext.define('MyApp.GestionRequerimientos.WinGestionRequerimientos',{
       
       main.GridRequerimientos.on({
           'afterrender':function(){
-              main.GridRequerimientos.load(main.getParams());
+              main.fnGetRequerimientos();
           },
           'itemdblclick':function(grid,record,item){
             var WinRequerimientos = new MyApp.GestionRequerimientos.WinMantGestionRequerimientos({
@@ -141,7 +155,14 @@ Ext.define('MyApp.GestionRequerimientos.WinGestionRequerimientos',{
                                 id:record.get('id')
                             }
             });
+            //Ext.util.Observable.capture(WinRequerimientos, function(evname) {console.log(evname, arguments);})
             WinRequerimientos.show();
+            WinRequerimientos.on({
+                        'saved':function(){                            
+                            main.fnGetRequerimientos();
+                        }
+                    });
+            
           }
       });
       
@@ -164,6 +185,10 @@ Ext.define('MyApp.GestionRequerimientos.WinGestionRequerimientos',{
    },
    limpiarCriterios:function(){
        var main = this;
+   },
+   fnGetRequerimientos:function(){
+       var main = this;
+       main.GridRequerimientos.load(main.getParams());
    }
 });
 

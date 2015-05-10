@@ -5,31 +5,35 @@
 Ext.define('MyApp.GestionRequerimientos.WinMantGestionRequerimientos',{
    extend:'Ext.window.Window',
    create:true,
-   width:500,
-   height:380,
+   width:700,
+   height:390,
    modal:true,
    frame:false,
    internal:{},
    initComponent:function(){
+       
        var main = this;
+       
        main.txtCodigo = Ext.create('Ext.form.field.Text',{
-          fieldLabel:'Codigo'
+          fieldLabel:'Codigo',
+          disabled:true
        });
        
-       main.txtNombre = Ext.create('Ext.form.field.Text',{
+       main.txtNombre = Ext.create('Ext.form.field.TextArea',{
            fieldLabel:'Nombre',
-           width:350
-       })
-       
-       main.txtDescripcion = Ext.create('Ext.form.field.TextArea',{
-           fieldLabel:'Descripcion',
            width:350,
+           height:50
+       });
+       
+       main.txtDescripcion = Ext.create('Ext.form.field.HtmlEditor',{
+           fieldLabel:'Descripcion',           
+           width:650,
             height:200
-       })
+       });
        
        main.dtFechaRegistro = Ext.create('Ext.form.field.Date',{
            fieldLabel:'Fecha de Registro'
-       })
+       });
        
        main.dtFechaModificacion = Ext.create('Ext.form.field.Date',{
            fieldLabel:'Fecha de Modificacion' 
@@ -43,7 +47,7 @@ Ext.define('MyApp.GestionRequerimientos.WinMantGestionRequerimientos',{
        main.btnGuardar = Ext.create('Ext.button.Button',{
           text:'Guardar' ,
           handler:function(){
-              if(main.create == true){
+              if(main.create === true){
                   main.saveNew();
               }else{
                   main.saveModified();
@@ -53,7 +57,7 @@ Ext.define('MyApp.GestionRequerimientos.WinMantGestionRequerimientos',{
        main.btnChangeStatus = Ext.create('Ext.button.Button',{
           text:'Inactivar',
           handler:function(){
-              if(main.create == false){
+              if(main.create === false){
                   main.ChangeStatus();
               }
           }
@@ -73,15 +77,15 @@ Ext.define('MyApp.GestionRequerimientos.WinMantGestionRequerimientos',{
               main.btnCancelar
           ] 
        });
-       
-       
-       if(main.create == true){
+              
+       if(main.create === true){
            main.btnChangeStatus.hide();
        }
        
        Ext.apply(this,{
            tbar:main.toolbar,
           bodyPadding:'10px',
+          defaultFocus:main.txtNombre,
           items:[
               main.txtCodigo,
               main.txtEstado,
@@ -92,7 +96,7 @@ Ext.define('MyApp.GestionRequerimientos.WinMantGestionRequerimientos',{
           ],
           listeners:{
               'show':function(){
-                  if(main.create == false){
+                  if(main.create === false){
                       main.loadInitValues();
                   }
               }
@@ -115,13 +119,9 @@ Ext.define('MyApp.GestionRequerimientos.WinMantGestionRequerimientos',{
                var msg = new Per.MessageBox();
                msg.data = Ext.decode(response.responseText);
                msg.success();
-               msg.on({
-                   'okButtonPressed':function(){
-                       
-                   }
-               })
+               main.fireEvent('saved');               
            }
-       })
+       });
    },
    saveModified:function(){
        var main = this;
@@ -138,23 +138,19 @@ Ext.define('MyApp.GestionRequerimientos.WinMantGestionRequerimientos',{
               var msg = new Per.MessageBox();
               msg.data = Ext.decode(response.responseText);
               msg.success();
-              msg.on({
-                  'okButtonPressed':function(){
-                      //Preparar Nuevo Registro
-                  }
-              })
+              main.fireEvent('saved');
           }
        });
    },   
    loadInitValues: function(){
        var main = this;
-       if(main.create == false && main.internal.id != null){
+       if(main.create === false && main.internal.id !== null){
            Ext.MessageBox.show({
                 title:'Informacion',
                 msg:'Obteniendo Datos',
                 icon:Ext.MessageBox.INFO,
                 progress:true
-            })
+            });
             
             Ext.Ajax.request({
                 url:base_url+'GestionRequerimientos/GestionRequerimientosController/find',
@@ -172,7 +168,7 @@ Ext.define('MyApp.GestionRequerimientos.WinMantGestionRequerimientos',{
                     main.dtFechaRegistro.setValue(dateFechaRegistro);
                     main.txtEstado.setValue(data.estado.nombre);
                     main.internal.EstadoId = data.estado.id;
-                    if(main.internal.EstadoId == 0){
+                    if(main.internal.EstadoId === 0){
                         main.btnChangeStatus.setText('Re-Activar');
                     }else{
                         main.btnChangeStatus.setText('Inactivar');

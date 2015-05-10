@@ -218,11 +218,15 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
           ]
       });
       
+      var myChkSelector = Ext.create('Ext.selection.CheckboxModel');
+      
+      
       main.gridRequerimientosFuncionales =  Ext.create('Per.GridPanel',{         
          border:false,
          resizable:true,    
          loadOnCreate:false,
-         width:350,
+         width:250,
+         height:200,
          pageSize:20,         
          src:base_url+'GestionProcesos/GestionProcesosController/getRequerimientos',
          columns:[
@@ -231,13 +235,15 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
              },
              {
                  header:'Codigo',
-                 dataIndex:'Codigo'
+                 dataIndex:'requerimientoFuncional.codigo'
              },{
                  header:'Nombre',
-                 dataIndex:'Nombre'
+                 dataIndex:'requerimientoFuncional.nombre',
+                 flex:1
              }             
          ],
-         pagingBar:true      
+         pagingBar:true,
+         selModel:myChkSelector
       });
       
       main.toolbarReqFunc = Ext.create('Ext.toolbar.Toolbar',{
@@ -249,11 +255,19 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
                       //console.log(main.internal);
                       winAddRequerimiento.internal.proceso.id = main.internal.id
                       winAddRequerimiento.show();
+                      winAddRequerimiento.on({
+                          'save':function(){
+                              main.refreshReqs();
+                          }
+                      });
+//                      winAddRequerimiento.gridRequerimientos.on({
+//                          'load':
+//                      })
                   }
               },{
                   text:'Quitar',
                   handler:function(){
-                      
+                      main.removeRequerimientos();                      
                   }
               }
           ]
@@ -313,7 +327,9 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
                  ],
                  listeners:{
                      'expand':function(){
-                         main.regreshReqs();
+                         main.refreshReqs();
+                         main.resizeRequerimientos();
+                              //refreshReqs
                      }
                  }
              }
@@ -379,7 +395,7 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
        //Resizing Height Panel
        var myComponent = main.panelMainFlujo.findParentByType('panel');    
        var newHeight = myComponent.getHeight() - myComponent.header.getHeight();       
-       main.panelMainFlujo.setHeight(newHeight);
+       main.panelRequerimientosFuncionales.setHeight(newHeight);
        //Getting width
        var myContainerWidth = myComponent.getWidth();
        
@@ -387,6 +403,9 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
        var newHeightGrid = newHeight - main.toolbarFlujo.getHeight();
        main.gridFlujoProceso.setHeight(newHeightGrid);
        main.gridFlujoProceso.setWidth(myContainerWidth);
+       
+       
+       
        
    },refreshFlujos:function(){
       var main = this;
@@ -438,6 +457,44 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
        var newHeightGrid = newHeight - main.toolbarControles.getHeight();
        main.gridControles.setHeight(newHeightGrid);
        main.gridControles.setWidth(myContainerWidth);
+   },resizeRequerimientos:function(){
+      var main = this;
+      
+       var myComponent = main.panelRequerimientosFuncionales.findParentByType('panel');    
+       var newHeight = myComponent.getHeight() - myComponent.header.getHeight();       
+       main.panelRequerimientosFuncionales.setHeight(newHeight);
+       //Getting width
+       var myContainerWidth = myComponent.getWidth();
+       
+       //Resizing Grid
+       var newHeightGrid = newHeight - main.toolbarReqFunc.getHeight();
+//      console.log(newHeightGrid);
+//      console.log(myContainerWidth);
+       main.gridRequerimientosFuncionales.setHeight(newHeightGrid);
+        main.gridRequerimientosFuncionales.setWidth(myContainerWidth);
+   },removeRequerimientos:function(){
+       var main = this;
+        var mySelModel  = main.gridRequerimientosFuncionales.getSelectionModel();         
+        var records = mySelModel.getSelection();
+        var columns = ['id'];
+        var data = Per.Store.getDataAsJSON(records,columns);
+        
+        //Save Records
+        
+        Ext.Ajax.request({
+           url:base_url+'GestionProcesos/ProcesoRequerimientoFuncional/Quitar',
+           params:{
+               Requerimientos: data
+           },
+           success:function(response){
+                //main.winHelper = Ext.create('Per.DebugHelperWindow');
+                //main.winHelper.showMsg(response.responseText);
+                main.refreshReqs();
+           },
+           failure:function(){
+               
+           }
+        });
    }   
 });
 

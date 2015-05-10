@@ -17,16 +17,16 @@ class ProcesoRequerimientoFuncionalBO extends BaseBO{
     private $ProcesoRequerimientoFuncionalMapper;
     private $Object;
     
-    public function setObject($object){
-        $this->Object = $object;
-    }
-    
+//    public function setObject($object){
+//        $this->Object = $object;
+//    }
+//    
     public function relacionar(){
         try{
             $this->load->database();
             $this->db->trans_start();
             
-            if ($this->getDmnObject()->getId() == null){
+            if ($this->getDomain()->getId() == null){
                 $this->add();
             }else{
                 $this->upd();
@@ -40,16 +40,33 @@ class ProcesoRequerimientoFuncionalBO extends BaseBO{
         }
     }
     
-    private function add(){
-        $this->ProcesoRequerimientoFuncionalMapper->insert($this->Object);
-    }
-    private function upd(){
-        $this->ProcesoRequerimientoFuncionalMapper->update($this->Object);
+    public function quitar(){
+        try{
+            $this->load->database();
+            $this->db->trans_start();
+            
+            $this->del();
+            
+            $this->db->trans_commit();
+        } catch (Exception $ex) {
+            $this->db->trans_rollback();
+            throw new Exception($ex->getMessage(),$ex->getCode());   
+        }
     }
     
-    public function getRequerimientos(){
+    private function add(){
+        $this->ProcesoRequerimientoFuncionalMapper->insert($this->getDomain());
+    }
+    private function upd(){
+        $this->ProcesoRequerimientoFuncionalMapper->update($this->getDomain());
+    }
+    private function del(){
+        $this->ProcesoRequerimientoFuncionalMapper->delete($this->getDomain());
+    }
+    
+    public function getRequerimientos($procesoId){
         $finder = new ProcesoRequerimientoFRM2();
-        $results = $finder->search();
+        $results = $finder->search(array('parProcesoId'=>$procesoId));
         return $this->getRefRequerimientos($results);
     }
     

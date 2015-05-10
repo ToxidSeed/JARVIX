@@ -21,14 +21,15 @@ class ProcesoRequerimientoFRM2 extends ProcesoRequerimientoFuncionalMapper {
         'procesorequerimientofuncional.procesoid',
         'requerimientofuncional.id as requerimientofuncionalid');
     
-    public function search(){
+    public function search($params){
         $this->load->database();
         $this->db->select($this->fields);
         $this->db->from($this->tableName);
-        $this->db->join('requerimientofuncional',$this->tableName.'.requerimientofuncionalid = requerimientofuncional.id','right');
-        $this->db->where('IFNULL(requerimientofuncional.id,0) <>',0);
+        $join = $this->tableName.'.requerimientofuncionalid = requerimientofuncional.id and IFNULL(procesorequerimientofuncional.procesoid,0) = '.$params['parProcesoId'];
+        $this->db->join('requerimientofuncional',$join,'right');        
+        //$this->db->where('IFNULL(requerimientofuncional.id,0) <>',0);
         $response = $this->db->get();
-        //echo $this->db->last_query();
+//        echo $this->db->last_query();
         $arrResponse = $this->getMultiResponse($response);
         return new ResponseModel($arrResponse,count($arrResponse));
     }

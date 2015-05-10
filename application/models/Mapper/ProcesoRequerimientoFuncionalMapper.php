@@ -52,7 +52,7 @@ class ProcesoRequerimientoFuncionalMapper extends BaseMapper{
         }        
     }
     protected function doUpdate(DomainProcesoRequerimientoFuncional $dmnObject){
-        $this->db->database();
+        $this->load->database();
         $fields['procesoid'] = $dmnObject->getProceso()->getId();
         $fields['requerimientofuncionalid'] = $dmnObject->getRequerimientoFuncional()->getId();
         $this->db->set($fields);
@@ -61,8 +61,19 @@ class ProcesoRequerimientoFuncionalMapper extends BaseMapper{
         if(!$res){
             $this->db->trans_rollback();
             throw new Exception('Error al Actualizar la tabla '.$this->tableName,-1);
-        }
-        
+        }        
+    }
+    public function delete(DomainProcesoRequerimientoFuncional $domain){
+        $this->doDelete($domain);
+    }
+    protected function doDelete(DomainProcesoRequerimientoFuncional $domain){
+        $this->load->database();
+        $this->db->where('id',$domain->getId());
+        $res = $this->db->delete($this->tableName);
+         if(!$res){
+            $this->db->trans_rollback();
+            throw new Exception('Error al borrar registros la tabla '.$this->tableName,-1);
+        }     
     }
     
     

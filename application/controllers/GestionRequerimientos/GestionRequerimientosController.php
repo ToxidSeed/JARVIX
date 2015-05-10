@@ -51,7 +51,7 @@ class GestionRequerimientosController extends BaseController{
             $this->load->model('Bussiness/RequerimientoBO','RequerimientoBO');  
             $this->RequerimientoBO->setDomain($dmnRequerimiento);
             $this->RequerimientoBO->update();
-            echo Answer::setSuccessMessage('Se Actualizó correctamente el Proyecto con nombre: '.$dmnProyecto->getNombre());            
+            echo Answer::setSuccessMessage('Se Actualizó correctamente el Proyecto con nombre: '.$dmnRequerimiento->getNombre());            
         }
         catch(Exception $ex){
             if($ex->getCode() == FORM_VALIDATION_ERRORS_CODE){

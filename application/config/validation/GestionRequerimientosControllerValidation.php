@@ -28,6 +28,13 @@ $config['Validation'] = array(
             'label' => 'estado',
             'rules' => 'required'
         )
+    ),
+    'update'=> array(
+        array(
+            'field' => 'nombre',
+            'label' => 'Nombre',
+            'rules' => 'required'
+        )
     )
 );
 ?>

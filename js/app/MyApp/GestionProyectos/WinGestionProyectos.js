@@ -8,7 +8,7 @@ Ext.define('MyApp.GestionProyectos.WinGestionProyectos',{
     width:0,
     height:0,
     floating:true,
-    autorender:true,
+    autorender:true,    
     initComponent:function(){
         var main = this;
         
@@ -29,7 +29,7 @@ Ext.define('MyApp.GestionProyectos.WinGestionProyectos',{
         
         main.txtCodigo = Ext.create('Ext.form.field.Text',{
           fieldLabel:'Codigo'
-      })
+      });
       
       main.txtNombre = Ext.create('Ext.form.field.Text',{
           fieldLabel:'Nombre'
@@ -83,14 +83,22 @@ Ext.define('MyApp.GestionProyectos.WinGestionProyectos',{
                  handler:function(){
                      main.limpiarCriterios();
                  }
+             },{
+                 text:'Ocultar',
+                 handler:function(){
+                     main.panelCriterioBusqueda.collapse();
+                 }
              }
          ] 
       });
       
       main.panelCriterioBusqueda = Ext.create('Ext.panel.Panel',{          
           region:'west', 
+          title:'Buscar Proyectos',
           bodyPadding:'10px',
           tbar:main.panelCritTbar,
+          collapsed:true,
+          collapsible:true,
           items:[
                 main.txtCodigo,
                 main.txtNombre, 
@@ -115,7 +123,8 @@ Ext.define('MyApp.GestionProyectos.WinGestionProyectos',{
                  dataIndex:'id'
              },{
                  header:'Nombre',
-                 dataIndex:'nombre'
+                 dataIndex:'nombre',
+                 flex:1
              },{
                  header:'Fecha de Registro',
                  dataIndex:'fechaRegistro'
@@ -146,6 +155,7 @@ Ext.define('MyApp.GestionProyectos.WinGestionProyectos',{
         
         Ext.apply(this,{
             layout:'border',
+            defaultFocus:main.txtNombre,
             items:[
               main.panelCriterioBusqueda,
               main.GridProyectos

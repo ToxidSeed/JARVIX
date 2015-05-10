@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 require_once BUSSINESSPATH.'BaseBO.php';
-require_once FINDERPATH.'ProcesoRequerimientoFRM1.php';
+require_once FINDERPATH.'ProcesoRequerimiento/ProcesoRequerimientoFRM1.php';
 
 
 
@@ -19,12 +19,16 @@ class ProcesoBO extends BaseBO{
     private $ProcesoRequerimientoFRM1;
     
     public function getRequerimientos($ProcConId){
-        $this->ProcesoRequerimientoFRM1 = new RequerimientoFRM1();
+        $this->ProcesoRequerimientoFRM1 = new ProcesoRequerimientoFRM1();
         $params['ProcesoId'] = $ProcConId;
         $results =  $this->ProcesoRequerimientoFRM1->search($params);
         return $this->getRefRequerimientos($results);
     }
-    private function getRefRequerimientos($response){
-        return $response;
+    private function getRefRequerimientos(ResponseModel $results){
+        $objects = $results->getResults();
+        foreach($objects as $record){
+            $record->Mapper()->getRequerimientoFuncional();
+        }        
+        return $results;
     }
 }

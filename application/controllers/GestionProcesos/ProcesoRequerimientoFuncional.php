@@ -8,6 +8,7 @@
 require_once BASECONTROLLERPATH.'BaseController.php';
 require_once DOMAINPATH.'DomainProcesoRequerimientoFuncional.php';
 require_once DOMAINPATH.'DomainProceso.php';
+require_once DOMAINPATH.'DomainRequerimiento.php';
 
 class ProcesoRequerimientoFuncional extends BaseController{
     function __construct() {
@@ -19,20 +20,21 @@ class ProcesoRequerimientoFuncional extends BaseController{
         foreach($myRequeriments as $record){
             $this->singleAsociar($record);
         }
+        $this->getAnswer()->setSuccess(true);
+        $this->getAnswer()->setMessage('Actualizado Correctamente');
+        $this->getAnswer()->setCode(0);
+        echo $this->getAnswer()->getAsJSON(); 
     }
     
     public function singleAsociar($record){
         try{
             $dmnObject = new DomainProcesoRequerimientoFuncional();
-            $dmnObject->setProceso(new DomainProceso($this->getField('procesoId')));
-            $dmnObject->setRequerimientoFuncional(new DomainRequerimiento($this->getField('requerimientoFuncionalId')));
-            $this->load->model('ProcesoFlujoBO/ProcesoRequerimientoFuncionalBO','ProcesoRequerimientoFuncionalBO');
-            $this->ProcesoRequerimientoFuncionalBO->setObject($dmnObject);
+            $dmnObject->setProceso(new DomainProceso($this->getField('ProcesoId')));
+            $dmnObject->setRequerimientoFuncional(new DomainRequerimiento($record['requerimientoFuncional.id']));
+            $this->load->model('Bussiness/ProcesoFlujoBO/ProcesoRequerimientoFuncionalBO','ProcesoRequerimientoFuncionalBO');
+            $this->ProcesoRequerimientoFuncionalBO->setDomain($dmnObject);
             $this->ProcesoRequerimientoFuncionalBO->relacionar();
-            $this->getAnswer()->setSuccess(true);
-            $this->getAnswer()->setMessage('Actualizado Correctamente');
-            $this->getAnswer()->setCode(0);
-            echo $this->getAnswer()->getAsJSON(); 
+            
             
         } catch (Exception $ex) {
             if($ex->getCode() == FORM_VALIDATION_ERRORS_CODE){
@@ -45,7 +47,8 @@ class ProcesoRequerimientoFuncional extends BaseController{
     public function getRequerimientos(){
         try{
             $this->load->model('Bussiness/ProcesoFlujoBO/ProcesoRequerimientoFuncionalBO','ProcesoRequerimientoFuncionalBO');
-            $results = $this->ProcesoRequerimientoFuncionalBO->getRequerimientos();
+            $varProcesoId = $this->getField('parProcesoId');
+            $results = $this->ProcesoRequerimientoFuncionalBO->getRequerimientos($varProcesoId);
             echo json_encode(Response::asResults($results));
         } catch (Exception $ex) {
             if($ex->getCode() == FORM_VALIDATION_ERRORS_CODE){
@@ -54,6 +57,28 @@ class ProcesoRequerimientoFuncional extends BaseController{
                 echo Answer::setFailedMessage($ex->getMessage(),$ex->getCode());
             }
         }                
-    }    
+    }
+    public function quitar(){
+        try{
+            $myRequeriments = json_decode($this->getField('Requerimientos'),true);
+            $this->load->model('Bussiness/ProcesoFlujoBO/ProcesoRequerimientoFuncionalBO','ProcesoRequerimientoFuncionalBO');
+            foreach($myRequeriments as $record){
+                $dmnObject = new DomainProcesoRequerimientoFuncional($record['id']);                       
+                $this->ProcesoRequerimientoFuncionalBO->setDomain($dmnObject);
+                $this->ProcesoRequerimientoFuncionalBO->quitar();                
+            }
+            $this->getAnswer()->setSuccess(true);
+            $this->getAnswer()->setMessage('Actualizado Correctamente');
+            $this->getAnswer()->setCode(0);
+            echo $this->getAnswer()->getAsJSON(); 
+        } catch (Exception $ex) {
+              if($ex->getCode() == FORM_VALIDATION_ERRORS_CODE){
+                echo $this->getAnswer()->getAsJSON();
+            }else{
+                echo Answer::setFailedMessage($ex->getMessage(),$ex->getCode());
+            }
+        }       
+    }
+    
 }
 ?>

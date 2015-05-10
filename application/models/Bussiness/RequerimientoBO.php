@@ -41,7 +41,8 @@ class RequerimientoBO extends BaseBO{
             $mprRequerimiento = new RequerimientoMapper();
             $dmnRequerimiento = $mprRequerimiento->find($this->domain->getId());
             $dmnRequerimiento->setNombre($this->domain->getNombre());            
-            $dmnRequerimiento->update($mprRequerimiento);            
+            $dmnRequerimiento->setDescripcion($this->domain->getDescripcion());            
+            $mprRequerimiento->update($dmnRequerimiento);            
             $this->db->trans_commit();
         }catch(Exception $ex){
             $this->db->trans_rollback();

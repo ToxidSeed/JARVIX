@@ -9,14 +9,14 @@ Ext.define('MyApp.GestionProcesos.WinAddRequerimiento',{
         proceso:{
             id:null
         }        
-    },
+    },    
     initComponent:function(){
         var main = this;
         
         main.mainTbar = Ext.create('Ext.toolbar.Toolbar',{
             items:[
                 {
-                    text:'Aceptar',
+                    text:'Agregar',
                     handler:function(){
                         main.Add();
                     }
@@ -64,7 +64,7 @@ Ext.define('MyApp.GestionProcesos.WinAddRequerimiento',{
         
         main.gridRequerimientos.on({
             'afterrender':function(){
-                main.gridRequerimientos.load();
+                main.getRequerimientos();
             }            
         });
            
@@ -144,12 +144,18 @@ Ext.define('MyApp.GestionProcesos.WinAddRequerimiento',{
                Id: null
            },
            success:function(response){
-                main.winHelper = Ext.create('Per.DebugHelperWindow');
-                main.winHelper.showMsg(response.responseText);
+                main.fireEvent('save');
+                main.getRequerimientos();
            },
            failure:function(){
                
            }
+        });
+    },
+    getRequerimientos:function(){
+        var main = this;
+        main.gridRequerimientos.load({
+            parProcesoId : main.internal.proceso.id
         });
     }
 });

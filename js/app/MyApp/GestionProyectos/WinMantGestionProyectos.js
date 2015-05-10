@@ -153,13 +153,14 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
         
         Ext.apply(this,{
            width:500,
-           height:420,                  
+           height:420,   
+           defaultFocus:main.txtNombre,
            items:[
              main.panelProyectos                        
            ],
            listeners:{
                'show':function(){                   
-                   if(main.create == false){         
+                   if(main.create === false){         
                        main.loadInitValues()
                    }
                }
