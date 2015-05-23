@@ -298,7 +298,7 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
                ]
              }
              ,
-             {
+             /*{
                  title:'Flujos',
                  items:[
                      main.panelMainFlujo
@@ -320,7 +320,7 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
                          main.resizePanelControl();
                      }
                  }
-             },{
+             },*/{
                  title:'Requerimientos Funcionales',
                  items:[
                      main.panelRequerimientosFuncionales
@@ -340,12 +340,121 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
 //            src: 'http://localhost/requerimentsManager/uploads/GestionProcesos.png'
         });
       
+      main.tbarEspecificacion = Ext.create('Ext.toolbar.Toolbar',{
+          items:[
+              {
+                  text:'Agregar'
+              },{
+                  text:'Insertar'
+              },{
+                  text:'Agregar Flujo Alternativo'
+              },{
+                  text:'Agregar Excepcion'
+              }
+          ] 
+      });
+      
+      main.gridFlujos =  Ext.create('Per.GridPanel',{             
+         border:false,         
+         region:'center',
+         loadOnCreate:false,
+         autoScroll:true,
+         width:800,
+         height:400,
+//         pageSize:20,     
+        resizable:true,
+         src:base_url+'GestionProcesos/AddProcesoFlujo/searchSteps',
+         syncRowHeight:false,
+         groupField: 'Grouper',
+         FlowInfo:{
+             NumeroFlujoPrincipal:0,
+             NumeroFlujoAlternativo:0,
+             NumeroExcepcion:0
+         },
+         WorkFlowInfo:[
+             { 
+                 TipoFlujoId:1,
+                 NumeroFlujo:1,
+                 CtdPasos:0,
+                 LastIdx:0
+             }
+         ],
+         sorters:[
+             {
+                 property:'TipoFlujoId',
+                 direction:'ASC'
+             },
+             {
+                 property:'NumeroFlujo',
+                 directorion:'ASC'
+             }
+         ],
+         sortableColumns:false,
+         columns:[ 
+              {
+                  header:'id',
+                  dataIndex:'id',
+                  hidden:true
+              } ,           
+             {
+                 header:'Flujo',
+                 dataIndex:'Grouper',
+                 hidden:true
+             },
+             {
+                 header:'Paso',
+                 dataIndex:'numeroPaso'
+             },{
+                 header:'Tipo Flujo Id',
+                 dataIndex:'tipoFlujo.id',
+                 hidden:true
+             },{
+                 header:'Nombre Flujo',
+                 dataIndex:'NombreFlujo',
+                 hidden:true
+             },{
+                 header:'Numero de Flujo',
+                 dataIndex:'numeroFlujo',
+                 hidden:true
+             },{
+                 header:'Tipo Flujo Id Referencia',
+                 dataIndex:'TipoFlujoReferenciaId',
+                 hidden:true
+             },{
+                 header:'Numero de Flujo Referencia',
+                 dataIndex:'NumeroFlujoReferencia',
+                 hidden:true
+             },{
+                 header:'Paso Referencia',
+                 dataIndex:'PasoReferencia',
+                 hidden:true
+             },{
+                 header:'Nombre Flujo Referencia',
+                 dataIndex:'NombreFlujoReferencia',
+                 hidden:true
+             },{
+                 header:'Descripcion',
+                 dataIndex:'descripcion',
+                 flex:1
+             },{
+                 header:'',
+                 dataIndex:'PasoFlujoReferenciaId',
+                 hidden:true
+             }             
+         ]
+         ,
+         features: [{ftype:'grouping'}],
+         plugins: [Ext.create('Ext.grid.plugin.CellEditing', {clicksToEdit: 1})],
+         pagingBar:true      
+      });
+      
       main.panelPrototype = Ext.create('Ext.panel.Panel',{
-          title:'Prototipo',
+          tbar:main.tbarEspecificacion,
+          title:'Especificacion de Requerimiento',
           region:'center',
           width:200,
           items:[
-              main.protoImage
+              main.gridFlujos
           ]
           
       });

@@ -25,6 +25,7 @@ class GestionRequerimientosController extends BaseController{
             $dmnRequerimiento->setEstado(new DomainEstado(1));//Estado Activo
             $dmnRequerimiento->setFechaRegistro(date(APPDATESTNFORMAT));
             $dmnRequerimiento->setFechaModificacion(date(APPDATESTNFORMAT));
+            $dmnRequerimiento->setOrden($this->getField('orden'));
             $this->load->model('Bussiness/RequerimientoBO','RequerimientoBO');
             $this->RequerimientoBO->setDomain($dmnRequerimiento);
             $this->RequerimientoBO->add();

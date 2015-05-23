@@ -15,10 +15,13 @@ Ext.define('MyApp.GestionRequerimientos.WinGestionRequerimientos',{
        main.toolbar = Ext.create('Ext.toolbar.Toolbar',{
           items:[
               {
-                  text:'Nuevo',
+                  text:'Agregar',
                   handler:function(){
                       var WinNewRequerimiento = new MyApp.GestionRequerimientos.WinMantGestionRequerimientos({
-                          title:'Nuevo Requerimiento Funcional'
+                          title:'Nuevo Requerimiento Funcional',
+                          internal:{
+                              orden:main.fnGetNextOrden()
+                          }                                    
                       });
                       WinNewRequerimiento.show();
                       WinNewRequerimiento.on({
@@ -26,6 +29,11 @@ Ext.define('MyApp.GestionRequerimientos.WinGestionRequerimientos',{
                             main.fnGetRequerimientos();
                         }
                     });
+                  },                  
+              },{
+                  text:'Insertar',
+                  handler:function(){
+                      
                   }
               }
           ] 
@@ -116,8 +124,9 @@ Ext.define('MyApp.GestionRequerimientos.WinGestionRequerimientos',{
          loadOnCreate:false,
          region:'center',
          width:200,
+         sortableColumns:false,
          pageSize:20,
-         title:'Lista de Requerimientoss',
+//         title:'Lista de Requerimientoss',
          src:base_url+'GestionRequerimientos/GestionRequerimientosController/search',
          columns:[
              {
@@ -180,7 +189,7 @@ Ext.define('MyApp.GestionRequerimientos.WinGestionRequerimientos',{
        var main = this;
        var object = {
            nombre: main.txtNombre.getValue()
-       }
+       };
        return object;
    },
    limpiarCriterios:function(){
@@ -189,6 +198,14 @@ Ext.define('MyApp.GestionRequerimientos.WinGestionRequerimientos',{
    fnGetRequerimientos:function(){
        var main = this;
        main.GridRequerimientos.load(main.getParams());
+   },
+   fnGetNextOrden:function(){
+       var main = this;
+       var nextOrden = 0;
+       //Check whether the store have rows
+       var myCtdRecords = main.GridRequerimientos.getStore().getCount();
+       nextOrden++
+       return nextOrden;
    }
 });
 

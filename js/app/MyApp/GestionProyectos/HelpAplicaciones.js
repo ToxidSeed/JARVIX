@@ -21,7 +21,10 @@ Ext.define('MyApp.GestionProyectos.HelpAplicaciones',{
                    }
                },
                {
-                   text:'Cancelar'
+                   text:'Cancelar',
+                   handler:function(){
+                       help.close();
+                   }
                }
            ]
         });

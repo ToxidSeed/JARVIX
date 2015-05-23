@@ -12,8 +12,10 @@ Ext.define('MyApp.GestionRequerimientos.WinMantGestionRequerimientos',{
    internal:{},
    initComponent:function(){
        
-       var main = this;
        
+       
+       var main = this;
+       console.log(main.internal.orden);
        main.txtCodigo = Ext.create('Ext.form.field.Text',{
           fieldLabel:'Codigo',
           disabled:true
@@ -113,7 +115,8 @@ Ext.define('MyApp.GestionRequerimientos.WinMantGestionRequerimientos',{
            params:{
                nombre:main.txtNombre.getValue(),
                codigo:main.txtCodigo.getValue(),
-               descripcion:main.txtDescripcion.getValue()
+               descripcion:main.txtDescripcion.getValue(),
+               orden:main.internal.orden
            },
            success:function(response){
                var msg = new Per.MessageBox();

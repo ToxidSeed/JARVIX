@@ -21,7 +21,8 @@ class RequerimientoMapper extends BaseMapper{
         'descripcion',
         'estadoid',
         'fecharegistro',
-        'fechamodificacion'        
+        'fechamodificacion',
+        'orden'
     );
     
     protected $uniqueValues = array(     
@@ -40,6 +41,7 @@ class RequerimientoMapper extends BaseMapper{
         $dmnRequerimiento->setEstado(new DomainEstado($record['ESTADOID']));
         $dmnRequerimiento->setFechaRegistro($record['FECHAREGISTRO']);
         $dmnRequerimiento->setFechaModificacion($record['FECHAMODIFICACION']);
+        $dmnRequerimiento->setOrden($record['ORDEN']);
         return $dmnRequerimiento;
     }
     
@@ -55,6 +57,7 @@ class RequerimientoMapper extends BaseMapper{
         $fields['estadoid'] = $dmnRequerimiento->getEstado()->getId();
         $fields['fecharegistro'] = $dmnRequerimiento->getFechaRegistro();
         $fields['fechamodificacion'] = $dmnRequerimiento->getFechaModificacion();
+        $fields['orden'] = $dmnRequerimiento->getOrden();
         $this->db->set($fields);
         $res = $this->db->insert($this->tableName);
         if(!$res){

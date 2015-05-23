@@ -17,7 +17,7 @@ class RequerimientoBO extends BaseBO{
             $this->checkObject();            
             
             //Get the current project
-                $ActualProyectoFinder = new ActualProyectoFinder();
+            $ActualProyectoFinder = new ActualProyectoFinder();
             $dmnProyectoUsuario = $ActualProyectoFinder->Get(1);
             //Setting the current Project
             $this->getDomain()->setProyecto($dmnProyectoUsuario->getProyecto());

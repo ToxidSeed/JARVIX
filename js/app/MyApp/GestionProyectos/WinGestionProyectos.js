@@ -120,7 +120,8 @@ Ext.define('MyApp.GestionProyectos.WinGestionProyectos',{
              },
              {
                  header:'Codigo',
-                 dataIndex:'id'
+                 dataIndex:'id',
+                 hidden:true
              },{
                  header:'Nombre',
                  dataIndex:'nombre',

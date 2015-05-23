@@ -15,6 +15,7 @@ class DomainRequerimiento extends BaseDomain{
     protected $estado;
     protected $fechaRegistro;
     protected $fechaModificacion;
+    protected $orden;
     
     function __construct($id = null) {
         $this->id = $id;
@@ -86,6 +87,14 @@ class DomainRequerimiento extends BaseDomain{
     public function setEstado($estado) {
         $this->estado = $estado;
     }
+    function getOrden() {
+        return $this->orden;
+    }
+
+    function setOrden($orden) {
+        $this->orden = $orden;
+    }
+
 
 
 
