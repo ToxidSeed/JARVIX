@@ -7,7 +7,7 @@ class PrincipalController extends BaseController{
         $this->load->view('Principal');
     }
     public function getSysOpcionesAplicacion(){
-        try{
+        try{            
             $this->load->model('Mapper/SysOpcionAplicacionMapper','SysOpcionAplicacionMapper');
             $myResponseModel = $this->SysOpcionAplicacionMapper->search(new Constraints());
                         

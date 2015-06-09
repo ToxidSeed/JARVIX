@@ -298,7 +298,7 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
                ]
              }
              ,
-             /*{
+             {
                  title:'Flujos',
                  items:[
                      main.panelMainFlujo
@@ -320,7 +320,7 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
                          main.resizePanelControl();
                      }
                  }
-             },*/{
+             },{
                  title:'Requerimientos Funcionales',
                  items:[
                      main.panelRequerimientosFuncionales
@@ -448,13 +448,12 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
          pagingBar:true      
       });
       
-      main.panelPrototype = Ext.create('Ext.panel.Panel',{
-          tbar:main.tbarEspecificacion,
-          title:'Especificacion de Requerimiento',
+      main.panelPrototype = Ext.create('Ext.panel.Panel',{          
+          title:'Prototipo',
           region:'center',
           width:200,
           items:[
-              main.gridFlujos
+              main.protoImage
           ]
           
       });

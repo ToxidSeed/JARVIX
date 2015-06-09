@@ -113,13 +113,16 @@ Ext.define('MyApp.GestionProcesos.WinGestionProcesos',{
                  dataIndex:'id'
              },{
                  header:'Nombre',
-                 dataIndex:'nombre'
+                 dataIndex:'nombre',
+                 flex:1
              },{
                  header:'Fecha de Registro',
-                 dataIndex:'fechaRegistro'
+                 dataIndex:'fechaRegistro',
+                 width:150
              },{
                  header:'Fecha de Actualizacion',
-                 dataIndex:'FechaActualizacion'
+                 dataIndex:'FechaActualizacion',
+                 width:150
              }             
          ],
          pagingBar:true
