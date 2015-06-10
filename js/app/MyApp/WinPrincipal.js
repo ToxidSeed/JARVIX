@@ -37,10 +37,13 @@ Ext.define('MyApp.WinPrincipal',{
         });
         
         principal.panelCentral = Ext.create('Ext.tab.Panel',{
+            id:'IDPanelCentral',
            frame:true,
            region:'center',
            split:true           
         });
+        
+        
         
         Ext.apply(this,{            
             floating:true,

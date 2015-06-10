@@ -14,6 +14,44 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
     constructor:function(parameter){
         var main = this;
         
+        //console.log(window.parent.document.getElementById('IDPanelCentral'))
+        //
+        //var principalTabPanel = window.parent.document.getElementById('IDPanelCentral')
+        // principalTabPanel.add({
+        //    xtype:'panel',
+        //    id:'xxx',
+        //    title:'title',
+        //    border:false,
+        //    frame:false,                       
+        //    closable:true,
+        //    layout:'border',
+        //    items:[
+        //        
+        //    ]                       
+        //})
+        //principalTabPanel.setActiveTab('xxx');
+        //
+        //var mainParent = main.up()
+        //console.log(mainParent)
+        
+        var comp = window.parent.Ext.getCmp('IDPanelCentral')
+        
+        comp.add({
+            xtype:'panel',
+            id:'xxx',
+            title:'title',
+            border:false,
+            frame:false,                       
+            closable:true,
+            layout:'border',
+            items:[
+                
+            ]                       
+        })
+        comp.setActiveTab('xxx');
+        
+       
+        
         if(parameter != undefined){
             if(parameter.id != null && parameter.create == false ){
                 Ext.MessageBox.show({
