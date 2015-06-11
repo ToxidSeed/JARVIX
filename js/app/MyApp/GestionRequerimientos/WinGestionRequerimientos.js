@@ -12,10 +12,23 @@ Ext.define('MyApp.GestionRequerimientos.WinGestionRequerimientos',{
    initComponent:function(){
        var main = this;
        
+         main.txtSetProject = Ext.create('Ext.form.field.Text',{
+            fieldLabel:'Proyecto',
+            width:350
+         })
+         
+         main.btnSetProject = {                              
+                                iconCls:'icon-find'
+                           }
+                           
+         //     main.tbar.add(main.txtSetProject);
+         //main.tbar.add(main.btnSetProject);
+       
        main.toolbar = Ext.create('Ext.toolbar.Toolbar',{
           items:[
               {
                   text:'Agregar',
+                  iconCls:'icon-add',
                   handler:function(){
                       var WinNewRequerimiento = new MyApp.GestionRequerimientos.WinMantGestionRequerimientos({
                           title:'Nuevo Requerimiento Funcional',
@@ -32,10 +45,13 @@ Ext.define('MyApp.GestionRequerimientos.WinGestionRequerimientos',{
                   },                  
               },{
                   text:'Insertar',
+                   iconCls:'icon-table_row_insert',
                   handler:function(){
                       
                   }
               }
+              ,main.txtSetProject
+              ,main.btnSetProject
           ] 
        });
        
@@ -87,17 +103,20 @@ Ext.define('MyApp.GestionRequerimientos.WinGestionRequerimientos',{
          items:[
              {
                  text:'Buscar',
+                 iconCls:'icon-search',
                  handler:function(){
                      
 //                     main.GridPropiedades.load(main.getParams()) 
                  }
              },{
                  text:'Limpiar',
+                 iconCls:'icon-clean',
                  handler:function(){
                      main.limpiarCriterios();
                  }
              },{
                  text:'Ocultar',
+                 iconCls:'icon-collapse',
                  handler:function(){
                      main.panelCriterioBusqueda.collapse();
                  }

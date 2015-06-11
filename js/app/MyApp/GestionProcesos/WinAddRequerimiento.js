@@ -16,13 +16,15 @@ Ext.define('MyApp.GestionProcesos.WinAddRequerimiento',{
         main.mainTbar = Ext.create('Ext.toolbar.Toolbar',{
             items:[
                 {
-                    text:'Agregar',
+                    text:'Aceptar',
+                    iconCls:'icon-accept',
                     handler:function(){
                         main.Add();
                     }
                 },
                 {
                     text:'Cancelar',
+                    iconCls:'icon-door-out',
                     handler:function(){
                         main.close();
                     }
@@ -72,11 +74,13 @@ Ext.define('MyApp.GestionProcesos.WinAddRequerimiento',{
             items:[
                 {
                     text:'Buscar',
+                    iconCls:'icon-search',
                     handler:function(){
                         
                     }
                 },{
                     text:'Ocultar',
+                    iconCls:'icon-collapse',
                     handler:function(){
                         main.panelBusqueda.collapse();
                     }

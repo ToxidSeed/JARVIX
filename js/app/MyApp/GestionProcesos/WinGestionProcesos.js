@@ -15,7 +15,8 @@ Ext.define('MyApp.GestionProcesos.WinGestionProcesos',{
        main.tbar = Ext.create('Ext.toolbar.Toolbar',{
            items:[
                {
-                   text:'Nuevo',
+                   text:'Agregar',
+                   iconCls:'icon-add',
                    handler:function(){
 //                       var WinEditar = new  MyApp.GestionProcesos.WinMantGestionProcesos();
 //                       WinEditar.show();
@@ -72,15 +73,23 @@ Ext.define('MyApp.GestionProcesos.WinGestionProcesos',{
          items:[
              {
                  text:'Buscar',
+                 iconCls:'icon-search',
                  handler:function(){
                      
 //                     main.GridPropiedades.load(main.getParams()) 
                  }
              },{
                  text:'Limpiar',
+                 iconCls:'icon-clean',
                  handler:function(){
                      main.limpiarCriterios();
                  }
+             },{
+                  text:'Ocultar',
+                  iconCls:'icon-collapse',
+                  handler:function(){
+                     
+                  }
              }
          ] 
       });
@@ -88,6 +97,8 @@ Ext.define('MyApp.GestionProcesos.WinGestionProcesos',{
       main.panelCriterioBusqueda = Ext.create('Ext.panel.Panel',{          
           region:'west', 
           bodyPadding:'10px',
+          collapsible:true,
+          title:'Criterios de Busqueda',
           tbar:main.panelCritTbar,
           items:[
                 main.txtCodigo,

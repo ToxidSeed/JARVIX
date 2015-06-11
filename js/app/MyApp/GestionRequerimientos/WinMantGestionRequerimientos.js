@@ -48,6 +48,7 @@ Ext.define('MyApp.GestionRequerimientos.WinMantGestionRequerimientos',{
        
        main.btnGuardar = Ext.create('Ext.button.Button',{
           text:'Guardar' ,
+          iconCls: 'icon-disk',
           handler:function(){
               if(main.create === true){
                   main.saveNew();
@@ -67,6 +68,7 @@ Ext.define('MyApp.GestionRequerimientos.WinMantGestionRequerimientos',{
        
        main.btnCancelar = Ext.create('Ext.button.Button',{
           text:'Cancelar',
+          iconCls: 'icon-door-out',
           handler:function(){
               main.close();
           }

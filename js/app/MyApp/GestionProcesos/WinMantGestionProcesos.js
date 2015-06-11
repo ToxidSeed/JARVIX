@@ -44,6 +44,7 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
           items:[
               {
                   text:'Guardar',
+                  iconCls:'icon-disk',
                   handler:function(){                      
                       main.panelMainData.submit({
                           success:function(response,action){                              
@@ -79,6 +80,7 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
           items:[
               {
                   text:'Agregar',
+                  iconCls:'icon-add',
                   handler:function(){
                       
                       var WinAgregarFlujo = new MyApp.GestionProcesos.WinAgregarFlujo({
@@ -95,6 +97,7 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
                   }
               },{
                   text:'Quitar',
+                  iconCls:'icon-delete',
                   handler:function(){
                       main.quitarFlujos();
                   }
@@ -195,6 +198,7 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
           items:[
               {
                   text:'Agregar',
+                  iconCls:'icon-add',
                   handler:function(){                      
                       var myWin = new MyApp.GestionProcesos.WinMantProcesosControl();  
                       myWin.internal.Proceso.id = main.internal.id;  
@@ -203,6 +207,7 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
                   }
               },{
                   text:'Quitar',
+                  iconCls:'icon-delete',
                   handler:function(){
                       
                   }
@@ -250,6 +255,7 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
           items:[
               {
                   text:'Agregar',
+                  iconCls:'icon-add',
                   handler:function(){
                       var winAddRequerimiento = Ext.create('MyApp.GestionProcesos.WinAddRequerimiento');
                       //console.log(main.internal);
@@ -266,6 +272,7 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
                   }
               },{
                   text:'Quitar',
+                  iconCls:'icon-delete',
                   handler:function(){
                       main.removeRequerimientos();                      
                   }

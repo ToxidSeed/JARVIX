@@ -15,7 +15,8 @@ Ext.define('MyApp.GestionProyectos.WinGestionProyectos',{
         main.tbar = Ext.create('Ext.toolbar.Toolbar',{
            items:[
                {
-                   text:'Nuevo',
+                   text:'Agregar',
+                   iconCls:'icon-add',
                    handler:function(){
                        var WinProyectos = new MyApp.GestionProyectos.WinMantGestionProyectos({
                             title:'Registro de Nuevo Proyecto',
@@ -74,17 +75,20 @@ Ext.define('MyApp.GestionProyectos.WinGestionProyectos',{
          items:[
              {
                  text:'Buscar',
+                 iconCls:'icon-search',
                  handler:function(){
                      
 //                     main.GridPropiedades.load(main.getParams()) 
                  }
              },{
                  text:'Limpiar',
+                 iconCls:'icon-clean',
                  handler:function(){
                      main.limpiarCriterios();
                  }
              },{
                  text:'Ocultar',
+                 iconCls:'icon-collapse',
                  handler:function(){
                      main.panelCriterioBusqueda.collapse();
                  }

@@ -35,6 +35,7 @@ Ext.define('MyApp.GestionProcesos.WinAgregarFlujo',{
           items:[
               {
                   text:'Guardar',
+                  iconCls:'icon-disk',
                   handler:function(){
                                                              
                     if(main.internal.ProcesoFlujoId == null){
@@ -45,11 +46,13 @@ Ext.define('MyApp.GestionProcesos.WinAgregarFlujo',{
                   }
               },{
                   text:'Cancelar',
+                  iconCls:'icon-door-out',
                   handler:function(){
                       main.close();
                   }
               },{
                   text:'Help',
+                  iconCls:'icon-help',
                   handler:function(){
                       
                   }
@@ -80,6 +83,7 @@ Ext.define('MyApp.GestionProcesos.WinAgregarFlujo',{
           items:[
               {
                   text:'Agregar',
+                  iconCls:'icon-add',
                   handler:function(){  
                     if (main.isNew() == true )  {
                         main.saveNew(false,true);
@@ -89,16 +93,19 @@ Ext.define('MyApp.GestionProcesos.WinAgregarFlujo',{
                   }
               },{
                   text:'Insertar',
+                  iconCls:'icon-table_row_insert',
                   handler:function(){
                       main.InsertStep();
                   }
               },{
                   text:'Agregar Flujo Alternativo',
+                  iconCls:'icon-arrow_switch',
                   handler:function(){
                       main.AddAlternateWorkFlow(); 
                   }
               },{
                   text:'Agregar Excepcion',
+                  iconCls:'icon-exception',
                   handler:function(){
                       main.AddException();
                   }

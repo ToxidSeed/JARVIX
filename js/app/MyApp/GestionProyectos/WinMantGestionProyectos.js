@@ -33,22 +33,23 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
         //
         //var mainParent = main.up()
         //console.log(mainParent)
-        
-        var comp = window.parent.Ext.getCmp('IDPanelCentral')
-        
-        comp.add({
-            xtype:'panel',
-            id:'xxx',
-            title:'title',
-            border:false,
-            frame:false,                       
-            closable:true,
-            layout:'border',
-            items:[
-                
-            ]                       
-        })
-        comp.setActiveTab('xxx');
+        //
+        //var comp = window.parent.Ext.getCmp('IDPanelCentral')
+        //
+        //comp.add({
+        //    xtype:'panel',
+        //    id:'xxx',
+        //    title:'title',
+        //    border:false,
+        //    frame:false,                       
+        //    closable:true,
+        //    layout:'border',
+        //    items:[
+        //        
+        //    ]                       
+        //})
+        //
+        //comp.setActiveTab('xxx');
         
        
         
@@ -121,6 +122,7 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
         
         main.tbar = Ext.create('Ext.toolbar.Toolbar');
         main.btnGuardar = {text:'Guardar',
+                            iconCls:'icon-disk',
                             handler:function(){
                             if(main.create == true){
                                 main.saveNew();
@@ -136,10 +138,20 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
                     main.ChangeStatus();
                 }
             }
-         });             
+         });
+         
+         
+         
+       
          
          
          main.tbar.add(main.btnChangeStatus);
+         
+         main.btnSetProjAsDefault = Ext.create('Ext.button.Button',{
+             text:'Set As Default'
+         });
+         main.tbar.add(main.btnSetProjAsDefault);
+    
                        
         if(main.create == true){
             main.btnChangeStatus.hide();
@@ -147,6 +159,7 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
         
         main.btnCancelar = {
             text:'Cancelar',
+            iconCls:'icon-door-out',
             handler:function(){
                 main.close();
             }

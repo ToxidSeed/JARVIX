@@ -2,7 +2,9 @@
 <head>
 <!--<link rel="stylesheet" type="text/css" href="../js/app/desktop/css/desktop.css">-->
 <!--<link rel="stylesheet" type="text/css" href="js/extjs/resources/ext-theme-neptune/ext-theme-neptune-all.css">-->
+<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>/css/MyAppIconStyle.css">
 <script type="text/javascript" src="<?php echo base_url();?>js/extjs/examples/shared/include-ext.js?theme=gray"></script>
+
 
 
 <script type="text/javascript">

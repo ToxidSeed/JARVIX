@@ -69,6 +69,7 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
             items:[
                 {
                     text:'Guardar',
+                    iconCls:'icon-disk',
                     handler:function(){
                         main.save();
 //                        console.log(main.txtTipoControl.getHeight());
@@ -77,7 +78,8 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
                     }
                 },
                 {
-                    text:'Cerrar',
+                    text:'Cancelar',
+                    iconCls:'icon-door-out',
                     handler:function(){
                         main.close();
                     }
