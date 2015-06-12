@@ -94,12 +94,14 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
             }
         })
         
-        main.txtDescripcion = Ext.create('Ext.form.field.TextArea',{
+        main.txtDescripcion = Ext.create('Ext.form.field.HtmlEditor',{
             fieldLabel:'Descripcion',
             width:350,
             height:200,
             anchor:'100%'
         });
+        
+        
         
         
         main.dtFechaRegistro = Ext.create('Ext.form.field.Date',{
