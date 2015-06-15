@@ -2,7 +2,7 @@
 require_once BASECONTROLLERPATH.'BaseController.php';
 
 
-class PrincipalController extends BaseController{
+class Login extends BaseController{
     function index(){
           $this->load->view('Login');
     }
