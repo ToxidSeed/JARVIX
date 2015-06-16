@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://localhost/RequerimentsManagerSrc/';
+$config['base_url']	= 'http://7.227.103.25/RequerimentsManagerSrc/';
 
 /*
 |--------------------------------------------------------------------------

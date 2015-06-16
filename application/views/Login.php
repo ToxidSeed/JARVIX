@@ -6,7 +6,7 @@
         <head>                        
             <link media="all" type="text/css" rel="stylesheet" href="./css/bootstrap.min.css">  
             <link media="all" type="text/css" rel="stylesheet" href="./css/LoginStyle.css">       
-                                    
+            <script type="text/javascript" src="<?php echo base_url();?>js/angular/angular.min.js"></script>                                    
         </head>
         <body>
             <div class="container">
