@@ -5,9 +5,14 @@
     <html>
         <head>                        
             <link media="all" type="text/css" rel="stylesheet" href="./css/bootstrap.min.css">  
-            <link media="all" type="text/css" rel="stylesheet" href="./css/LoginStyle.css">       
+            <link media="all" type="text/css" rel="stylesheet" href="./css/LoginStyle.css">
+            <script type="text/javascript">
+                    var path = '/RequerimentsManagerSrc/js/app/';
+                    base_url = '<?php echo base_url();?>'+'index.php/';                    
+            </script>  
             <script type="text/javascript" src="<?php echo base_url();?>js/angular/angular.min.js"></script>
             <script type="text/javascript" src="<?php echo base_url();?>js/app/MyApp/LoginV1.js"></script>
+             
         </head>
         <body>     
             <div class="container" ng-app="app" ng-controller="Login">

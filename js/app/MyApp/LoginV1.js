@@ -3,7 +3,7 @@ angular.module('app',[]).controller('Login',function($scope,$http){
 
         $http({
             method: 'POST',
-            url: '/endpoint',
+            url: base_url+'/endpoint',
             data: {
                     email : $scope.email,
                     password : $scope.password
