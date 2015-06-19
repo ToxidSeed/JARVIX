@@ -1,15 +1,15 @@
 <?php
 require_once BASECONTROLLERPATH.'BaseController.php';
 
-
 class Login extends BaseController{
     function index(){
           $this->load->view('Login');
     }
-    public function acceder(){
+    public function acceder(){        
         try{
-               $email = $this->getField('email');
-               print_r($email);
+              $request_body = file_get_contents('php://input');              
+              $values = json_decode($request_body,true);
+              
         }
         catch(Exception $ex){
             if($ex->getCode() == FORM_VALIDATION_ERRORS_CODE){
