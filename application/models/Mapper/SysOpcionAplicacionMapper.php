@@ -11,12 +11,12 @@ class SysOpcionAplicacionMapper extends BaseMapper{
         parent::__construct();
     }
     protected $fields = array(
-      'id',
-        'sysAplicacionId',
-        'nombre',
-        'fechaRegistro',
-        'parentid',
-        'viewloader'
+      'SysOpcionAplicacion.id',
+        'SysOpcionAplicacion.sysAplicacionId',
+        'SysOpcionAplicacion.nombre',
+        'SysOpcionAplicacion.fechaRegistro',
+        'SysOpcionAplicacion.parentid',
+        'SysOpcionAplicacion.viewloader'
     );
     
     protected $uniqueValues = array(

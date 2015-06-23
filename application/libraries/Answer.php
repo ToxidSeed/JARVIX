@@ -8,12 +8,10 @@ class Answer {
     protected $errors = array();
     protected $success;
     protected $code;
-    protected $message;
+    protected $message = array();
     protected $extradata = array();
     protected $type;
-    
-    
-    
+            
     public function setSuccess($success){
         $this->success = $success;
         return $this;
@@ -21,6 +19,9 @@ class Answer {
     public function setCode($code){
         $this->code = $code;
         return $this;
+    }
+    public function addMessage($message){
+        $this->message[] = $message;
     }
     public function setMessage($message){
         $this->message = $message;
@@ -32,18 +33,23 @@ class Answer {
         return $this;
     }
     
-    public function setAsInformation(){
-        $this->type = 'Informacion';
-    }
-    public function setAsWarning(){
-        $this->type = 'Advertencia';
-    }
+  
     
     public function getAsArray(){
+        $message = null;
+        
+        if (is_array($this->message)){
+            if(count($this->message) == 1){
+                $message = current($this->message);
+            }
+        }else{
+            $message = $this->message;
+        }
+                           
         $response = array(
                         'success' => $this->success,
                         'code'     => $this->code,
-                        'message'  => $this->message,
+                        'message'  => $message,
                         'extradata' => $this->extradata,
                         'errors'    => $this->errors,
                         'type'      => $this->type
@@ -80,6 +86,13 @@ class Answer {
         }
         return $response;
     }
+    public function addFailMessage($message,$code =-1,$JSON = true,$type = 'Error'){
+        $this->addMessage($message);
+        $this->code = $code;
+        $this->setSuccess(false);
+    }
+    
+    
     public function addFieldError($field,$errorMsg){
         if (isset ($field) && strlen($field) > 0) {
             if (isset ($errorMsg) && strlen($errorMsg) > 0) {
@@ -92,6 +105,14 @@ class Answer {
             return true;
         }
         return false;
+    }
+    public function showSuccessMessage($message,$extradata = null){
+        if($this->code == 0){
+            $this->message = $message;
+            $this->extradata = $extradata;
+        }
+        
+        echo $this->getAsJSON();
     }
 }
 

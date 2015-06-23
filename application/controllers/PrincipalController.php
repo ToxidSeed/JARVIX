@@ -4,14 +4,30 @@ require_once BASEMODELPATH.'Constraints.php';
 
 class PrincipalController extends BaseController{
     function index(){
-        $this->load->view('Principal');
+        $this->load->library('session');
+     
+        
+        
+        if($this->session->userdata('id')!= false){
+            $data = array(
+                'id' => $this->session->userdata('id'),
+                'email' => $this->session->userdata('email')
+            );            
+            $this->load->view('Principal',$data);
+        }else{
+            $this->load->view('login');
+        }                
     }
+    
+    
     public function getSysOpcionesAplicacion(){
         try{            
-            $this->load->model('Mapper/SysOpcionAplicacionMapper','SysOpcionAplicacionMapper');
-            $myResponseModel = $this->SysOpcionAplicacionMapper->search(new Constraints());
-                        
-                                   
+            $this->load->model('Mapper/Finders/SysOpcionAplicacion/SysOpcionAplicacionFRM1','SysOpcionAplicacionFRM1');
+            
+            $myResponseModel = $this->SysOpcionAplicacionFRM1->search(
+                        array('UsuarioId' => $this->getField('UsuarioId'))
+                    );
+                                                           
             $results = array();            
             foreach($myResponseModel->getResults() as $myDmnOpcionAplicacion){                                
                 $results[] = array(

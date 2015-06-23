@@ -18,6 +18,10 @@ class BaseController extends CI_Controller{
         $this->answer = new Answer();
     }   
     
+    public function index(){
+        
+    }
+    
     public function getAnswer(){
         return $this->answer;
     }
@@ -76,7 +80,7 @@ class BaseController extends CI_Controller{
 //        $formatedDate = $this->dateconvert->convert($value);
 //        return $formatedDate;
 //    }
-    
+      
          
 }
 ?>

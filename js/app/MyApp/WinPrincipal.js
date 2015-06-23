@@ -4,6 +4,7 @@
  */
 Ext.define('MyApp.WinPrincipal',{
     extend:'Ext.panel.Panel',
+    UsuarioId:null,
     initComponent:function(){
         var principal = this;
         
@@ -23,7 +24,10 @@ Ext.define('MyApp.WinPrincipal',{
            listeners:{
                'afterrender':function(){
                    Ext.Ajax.request({
-                       url:'http://localhost/RequerimentsManagerSrc/index.php/PrincipalController/getSysOpcionesAplicacion',
+                       url:base_url+'/PrincipalController/getSysOpcionesAplicacion',
+                       params:{
+                            UsuarioId:principal.UsuarioId
+                       },
                        success:function(response){                           
                             store.setRootNode(Ext.decode(response.responseText));
                         }

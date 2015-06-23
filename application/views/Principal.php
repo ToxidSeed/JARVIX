@@ -10,8 +10,8 @@
         var path = '/RequerimentsManagerSrc/js/app/';
         base_url = '<?php echo base_url();?>'+'index.php';
         DATE_W3C = '<? echo DATE_W3C; ?>';
-        
-        
+        UsuarioId = "<?php echo $id; ?>";
+                
         Ext.Loader.setPath({
         //    'Ext.ux.desktop': path+'desktop/js',
           //  MyDesktop: path+'desktop',
@@ -29,6 +29,7 @@
 //        var myDesktopApp;
         Ext.onReady(function () {           
             var WinPrincipal = new MyApp.WinPrincipal();
+            WinPrincipal.UsuarioId = UsuarioId;
             WinPrincipal.show();
             
             //Prompt Login Window
