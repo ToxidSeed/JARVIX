@@ -149,10 +149,10 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
          
          main.tbar.add(main.btnChangeStatus);
          
-         main.btnSetProjAsDefault = Ext.create('Ext.button.Button',{
+         /*main.btnSetProjAsDefault = Ext.create('Ext.button.Button',{
              text:'Set As Default'
          });
-         main.tbar.add(main.btnSetProjAsDefault);
+         main.tbar.add(main.btnSetProjAsDefault);*/
     
                        
         if(main.create == true){
@@ -160,7 +160,7 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
         }
         
         main.btnCancelar = {
-            text:'Cancelar',
+            text:'Salir',
             iconCls:'icon-door-out',
             handler:function(){
                 main.close();
