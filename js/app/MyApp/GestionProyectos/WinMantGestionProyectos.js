@@ -175,7 +175,8 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
         }
         
         main.panelProyectos = Ext.create('Ext.form.Panel',{            
-            bodyPadding:'10px',            
+            bodyPadding:'10px',
+            region:'west',
             frame:false,
             height:350,
             border:false,                        
@@ -202,14 +203,64 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
                main.dtFechaRegistro,
                main.dtFechaUltAct
             ]
-        })
+        });
+        
+        main.tbarParticipantes = Ext.create('Ext.toolbar.Toolbar',{
+            items:[
+                {
+                    text:'Agregar',
+                    iconCls:'icon-add'
+                },{
+                    text:'Quitar',
+                    iconCls:'icon-delete'
+                }
+            ]
+        });
+        
+        main.gridParticipantes =  Ext.create('Per.GridPanel',{
+            tbar:main.tbarParticipantes,
+            border:true,
+            width:'100%',
+            height:'100%',            
+            resizable:true,    
+            loadOnCreate:false,
+            src:'',
+            columns:[
+                {
+                    header:'Nombres y Apellidos',
+                    flex:1
+                }
+            ]
+        });
+        
+        main.panelInfAdicional = Ext.create('Ext.panel.Panel',{
+             region:'center',
+             //title:'Informacion de Proyecto',
+             border:true,
+             layout:'accordion',
+             items:[
+                    {
+                        title:'Participantes',
+                        items:[
+                            main.gridParticipantes
+                        ]
+                    },{
+                        title:'Requerimientos Funcionales',
+                        items:[]
+                    }
+                    ]
+        });
+        
+        
         
         Ext.apply(this,{
-           width:500,
-           height:420,   
+           width:1000,
+           height:420,
+           layout:'border',
            defaultFocus:main.txtNombre,
            items:[
-             main.panelProyectos                        
+             main.panelProyectos,
+             main.panelInfAdicional
            ],
            listeners:{
                'show':function(){                   
