@@ -10,7 +10,7 @@ Ext.define('MyApp.GestionProyectos.HelpAplicaciones',{
         
         help.txtNombreAplicacion = Ext.create('Ext.form.field.Text',{
             fieldLabel:'Nombre'
-        })
+        });
         
         help.toolBar = Ext.create('Ext.toolbar.Toolbar',{
            items:[
@@ -66,7 +66,7 @@ Ext.define('MyApp.GestionProyectos.HelpAplicaciones',{
                    help.response.nombre = record.get("nombre");
                    help.close();
                }
-        })
+        });
         
         
         Ext.apply(this,{

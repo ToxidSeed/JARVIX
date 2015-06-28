@@ -133,6 +133,7 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
                             }
                            }}
          main.tbar.add(main.btnGuardar);
+         main.tbar.add('-');
          main.btnChangeStatus = Ext.create('Ext.button.Button',{
             text:'Inactivar',
             handler:function(){
@@ -178,7 +179,7 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
             bodyPadding:'10px',
             region:'west',
             frame:false,
-            height:350,
+            width:500,
             border:false,                        
             bodyStyle:{
                  background:'transparent'
@@ -209,20 +210,24 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
             items:[
                 {
                     text:'Agregar',
-                    iconCls:'icon-add'
-                },{
+                    iconCls:'icon-add',
+                    handler:function(){
+                        main.openWinAddParticipantes();
+                    }
+                },
+                '-',
+                {
                     text:'Quitar',
                     iconCls:'icon-delete'
                 }
             ]
         });
         
-        main.gridParticipantes =  Ext.create('Per.GridPanel',{
-            tbar:main.tbarParticipantes,
+        main.gridParticipantes =  Ext.create('Per.GridPanel',{            
             border:true,
             width:'100%',
             height:'100%',            
-            resizable:true,    
+//            resizable:true,    
             loadOnCreate:false,
             src:'',
             columns:[
@@ -233,8 +238,20 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
             ]
         });
         
+        main.panelMainData = Ext.create('Ext.form.Panel',{          
+          tbar:main.tbarParticipantes,
+          border:false,
+          
+//          bodyPadding:'10px',
+          items:[
+             main.gridParticipantes
+          ]
+      });
+        
+        
         main.panelInfAdicional = Ext.create('Ext.panel.Panel',{
              region:'center',
+             width:500,
              //title:'Informacion de Proyecto',
              border:true,
              layout:'accordion',
@@ -242,7 +259,7 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
                     {
                         title:'Participantes',
                         items:[
-                            main.gridParticipantes
+                            main.panelMainData
                         ]
                     },{
                         title:'Requerimientos Funcionales',
@@ -250,9 +267,7 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
                     }
                     ]
         });
-        
-        
-        
+                        
         Ext.apply(this,{
            width:1000,
            height:420,
@@ -265,7 +280,7 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
            listeners:{
                'show':function(){                   
                    if(main.create === false){         
-                       main.loadInitValues()
+                       main.loadInitValues();
                    }
                }
            }
@@ -290,10 +305,10 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
                         //Preparar Nuevo Registro
                         main.resetToNew();
                     }
-                })
+                });
 
             }
-        })
+        });
     },saveModified:function(){
         var main = this;
         
@@ -312,7 +327,7 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
                         //Preparar Nuevo Registro
                         //main.resetToNew();
                     }
-                })
+                });
            }
         });
     },
@@ -371,8 +386,16 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
                         main.btnChangeStatus.setText('Inactivar');
                     }
                 }
-            })
+            });
         }
+    },
+    openWinAddParticipantes:function(){
+        var main = this;
+        var coor = main.panelMainData.getXY();
+        var myWin = Ext.create('MyApp.GestionProyectos.WinAddParticipantes');
+        var newXPosition = coor[0]- myWin.width;               
+        myWin.show();
+        myWin.setX(newXPosition);
     }
-})
+});
 

@@ -1,5 +1,6 @@
 <script type="text/javascript">
       Ext.require('MyApp.GestionProyectos.HelpAplicaciones');
+      Ext.require('MyApp.GestionProyectos.WinAddParticipantes');
       Ext.require('MyApp.GestionProyectos.WinGestionProyectos');
       Ext.require('MyApp.GestionProyectos.WinMantGestionProyectos');
       Ext.require('Per.MessageBox');
@@ -10,4 +11,3 @@
       });
 </script>  
 
-<!--cmespinar123-->
