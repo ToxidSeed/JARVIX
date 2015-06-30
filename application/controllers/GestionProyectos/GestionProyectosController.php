@@ -107,5 +107,16 @@ class GestionProyectosController extends BaseController{
             }
         }
     }
+    
+    public function getNoParticipantes(){
+         try{
+             $this->load->model('Mapper/Finders/SysUsuario/SysUsuarioFRM1','SysUsuarioFRM1');
+             $response = $this->SysUsuarioFRM1->search(array('nombre',$this->getField('Nombre')));
+             echo json_encode(Response::asResults($response));                
+        }catch(Exception $ex){
+            //Setting the Error Code 
+            echo $ex->getMessage();
+        }
+    }
 }
 ?>

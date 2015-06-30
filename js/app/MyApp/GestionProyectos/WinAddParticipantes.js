@@ -54,7 +54,7 @@ Ext.define('MyApp.GestionProyectos.WinAddParticipantes',{
           height:295,
           border:false,
           pageSize:20,
-          src:'',
+          src:base_url+'GestionProyectos/GestionProyectosController/getNoParticipantes',
           columns:[
               {
                   xtype:'rownumberer'
@@ -64,8 +64,14 @@ Ext.define('MyApp.GestionProyectos.WinAddParticipantes',{
                   flex:1
               }
           ],
-          pagingBar:true
+          pagingBar:true         
        });
+       
+       main.gridUsuarios.on({
+           'afterrender':function(){
+                  main.getNoParticipantes();
+              }
+       })
        
        main.tbarAsignar = Ext.create('Ext.toolbar.Toolbar',{
           items:[
@@ -103,5 +109,11 @@ Ext.define('MyApp.GestionProyectos.WinAddParticipantes',{
        });    
        
        this.callParent(arguments);
-   }   
+   },
+   getNoParticipantes:function(){
+       var main = this;
+       main.gridUsuarios.load({
+            Nombre:main.txtNombresApellidos.getValue()
+       });
+   }
 });
