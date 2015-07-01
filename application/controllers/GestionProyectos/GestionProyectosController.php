@@ -30,7 +30,12 @@ class GestionProyectosController extends BaseController{
             $this->load->model('Bussiness/ProyectoBO','ProyectoBO');  
             $this->ProyectoBO->setDomain($dmnProyecto);
             $this->ProyectoBO->add();
-            echo Answer::setSuccessMessage('Se guardo correctamente el proyecto con nombre: '.$dmnProyecto->getNombre());            
+         
+            $this->getAnswer()->setSuccess(true);
+            $this->getAnswer()->setMessage('Registrado Correctamente');
+            $this->getAnswer()->setCode(0);
+            $this->getAnswer()->AddExtraData('ProyectoId',$dmnProyecto->getId());
+            echo $this->getAnswer()->getAsJSON(); 
         }
         catch(Exception $ex){
             if($ex->getCode() == FORM_VALIDATION_ERRORS_CODE){
@@ -111,11 +116,34 @@ class GestionProyectosController extends BaseController{
     public function getNoParticipantes(){
          try{
              $this->load->model('Mapper/Finders/SysUsuario/SysUsuarioFRM1','SysUsuarioFRM1');
-             $response = $this->SysUsuarioFRM1->search(array('nombre',$this->getField('Nombre')));
+             
+             $constraints = array(
+                'Nombre' => $this->getField('Nombre'),
+                'ProyectoId' => $this->getField('ProyectoId')
+             );
+             
+             $response = $this->SysUsuarioFRM1->search($constraints);
              echo json_encode(Response::asResults($response));                
         }catch(Exception $ex){
             //Setting the Error Code 
             echo $ex->getMessage();
+        }
+    }
+    public function updParticipantes(){
+        try{
+            $varUsuariosAsignados = json_decode($this->getField('selected'),true);            
+            $varProyectoId = $this->getField('ProyectoId');
+            
+            $this->load->model('Bussiness/Proyecto/WriteParticipanteBO','WriteParticipanteBO');
+            $this->WriteParticipanteBO->write($varProyectoId,$varUsuariosAsignados);
+            $result = $this->WriteParticipanteBO->getAnswer();
+            $result->showSuccessMessage('Se Asignaron Participantes al proyecto correctamente');            
+        }catch(Exception $ex){
+            if($ex->getCode() == FORM_VALIDATION_ERRORS_CODE){
+                echo $this->getAnswer()->getAsJSON();
+            }else{
+                echo Answer::setFailedMessage($ex->getMessage(),$ex->getCode());
+            }
         }
     }
 }

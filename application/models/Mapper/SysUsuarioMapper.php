@@ -4,18 +4,19 @@
  * and open the template in the editor.
  */
 require_once BASEMODELPATH.'BaseMapper.php';
+require_once DOMAINPATH.'DomainSysUsuario.php';
 
 class SysUsuarioMapper extends BaseMapper{
     function __construct() {
         parent::__construct();
     }
     protected $fields = array(
-        'id',
-        'nombre',
-        'fecharegistro',
-        'fechaactualizacion',
-        'email',
-        'passusr'
+        'sysusuario.id',
+        'sysusuario.nombre',
+        'sysusuario.fecharegistro',
+        'sysusuario.fechaactualizacion',
+        'sysusuario.email',
+        'sysusuario.passusr'
     );
     
     protected $uniqueValues = array(

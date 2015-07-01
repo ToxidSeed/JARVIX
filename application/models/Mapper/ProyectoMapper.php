@@ -54,7 +54,8 @@ class ProyectoMapper extends BaseMapper{
         if(!$res){
             $this->db->trans_rollback();
             throw new Exception('Error al Insertar en la Base de Datos Proyecto Mapper',-1);
-        }    
+        }
+        $dmnProyecto->setId($this->db->insert_id());
     }
     public function update(DomainProyecto $dmnProyecto){
         $this->doUpdate($dmnProyecto);

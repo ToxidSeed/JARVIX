@@ -10,7 +10,11 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
     height:150,
     modal:true,
     frame:false,
-    internal:{},
+    internal:{
+        Proyecto:{
+            Id:null
+        }
+    },
     constructor:function(parameter){
         var main = this;
         
@@ -82,8 +86,10 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
             text:'...',
             handler:function(){                
                 var HelpAplicaciones = new MyApp.GestionProyectos.HelpAplicaciones();                
-                HelpAplicaciones.setPosition(0,0,true);
-                HelpAplicaciones.show();                
+                var btnXYPosition = main.btnBuscarAplicacion.getXY();
+                //HelpAplicaciones.setPosition(0,0,true);
+                HelpAplicaciones.show();
+                HelpAplicaciones.setX(btnXYPosition[0]);
                 HelpAplicaciones.on({
                     'close':function(){
                         main.txtAplicacion.setValue(HelpAplicaciones.response.nombre);
@@ -122,58 +128,47 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
             disabled:true
         });
         
-        main.tbar = Ext.create('Ext.toolbar.Toolbar');
-        main.btnGuardar = {text:'Guardar',
-                            iconCls:'icon-disk',
-                            handler:function(){
-                            if(main.create == true){
-                                main.saveNew();
-                            }else{
-                                main.saveModified();
-                            }
-                           }}
-         main.tbar.add(main.btnGuardar);
-         main.tbar.add('-');
-         main.btnChangeStatus = Ext.create('Ext.button.Button',{
-            text:'Inactivar',
-            handler:function(){
-                if(main.create == false){
-                    main.ChangeStatus();
+        main.tbar = Ext.create('Ext.toolbar.Toolbar',{
+            items:[
+                {
+                    text:'Guardar',
+                    iconCls:'icon-disk',
+                    handler:function(){
+                    if(main.create == true){
+                        main.saveNew();
+                    }else{
+                        main.saveModified();
+                    }
+                   }
+                },
+                '-',
+                {
+                    id:'IdBtnInactivar',
+                    text:'Inactivar',
+                    iconCls:'icon-stop',
+                    handler:function(){
+                        if(main.create == false){
+                            main.ChangeStatus();
+                        }
+                    }
+                },
+                {
+                    id:'IdBtnInactivarSep',
+                    xtype:'tbseparator'
+                },
+                {
+                    text:'Salir',
+                    iconCls:'icon-door-out',
+                    handler:function(){
+                        main.close();
+                    }
                 }
-            }
-         });
+                
+            ]
+        });
          
-         
-         
-       
-         
-         
-         main.tbar.add(main.btnChangeStatus);
-         
-         /*main.btnSetProjAsDefault = Ext.create('Ext.button.Button',{
-             text:'Set As Default'
-         });
-         main.tbar.add(main.btnSetProjAsDefault);*/
-    
-                       
-        if(main.create == true){
-            main.btnChangeStatus.hide();
-        }
         
-        main.btnCancelar = {
-            text:'Salir',
-            iconCls:'icon-door-out',
-            handler:function(){
-                main.close();
-            }
-        }
-        main.tbar.add(main.btnCancelar);
         
-        //Hide Controls when New
-        if(main.create == true){
-            main.dtFechaUltAct.hide();
-            main.txtEstado.hide();
-        }
         
         main.panelProyectos = Ext.create('Ext.form.Panel',{            
             bodyPadding:'10px',
@@ -209,14 +204,16 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
         main.tbarParticipantes = Ext.create('Ext.toolbar.Toolbar',{
             items:[
                 {
+                    id:'IdBtnTbarPAgregar',
                     text:'Agregar',
                     iconCls:'icon-add',
                     handler:function(){
                         main.openWinAddParticipantes();
-                    }
+                    }   
                 },
                 '-',
                 {
+                    id:'IdBtnTbarPQuitar',
                     text:'Quitar',
                     iconCls:'icon-delete'
                 }
@@ -227,7 +224,7 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
             border:true,
             width:'100%',
             height:'100%',            
-//            resizable:true,    
+            hidden:true,            
             loadOnCreate:false,
             src:'',
             columns:[
@@ -238,13 +235,22 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
             ]
         });
         
+        main.dispParticipantes = Ext.create('Ext.form.field.Display',{
+            width:'100%',
+            padding:10,
+            height:'100%',
+            hidden:true,            
+            value:'Para poder Agregar/Quitar Participantes primero se tiene que CREAR UN PROYECTO.'
+        });
+        
         main.panelMainData = Ext.create('Ext.form.Panel',{          
           tbar:main.tbarParticipantes,
           border:false,
           
 //          bodyPadding:'10px',
           items:[
-             main.gridParticipantes
+             main.gridParticipantes,
+             main.dispParticipantes
           ]
       });
         
@@ -267,6 +273,13 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
                     }
                     ]
         });
+                     
+        //Hide Controls when New
+        if(main.create == true){
+            /*main.dtFechaUltAct.hide();
+            main.txtEstado.hide();*/
+            main.showNewOptions();
+        }                     
                         
         Ext.apply(this,{
            width:1000,
@@ -296,19 +309,39 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
                 descripcion:main.txtDescripcion.getValue(),
                 aplicacionid: main.internal.AplicacionId
             },
-            success:function(response){                                                                              
+            success:function(response){
+                main.fireEvent('recordSaved');
+                main.showModifyOptions();
+                var objData = Ext.decode(response.responseText);                
+                main.internal.Proyecto.Id = objData.extradata.ProyectoId
+                main.create = false;
+                //Obtenemos los valores Guardados
+                main.loadInitValues();
+                //Mostramos los controles para modificar
+                
+                
                 var msg = new Per.MessageBox();  
                 msg.data = Ext.decode(response.responseText); 
-                msg.success();    
-                msg.on({
-                    'okButtonPressed':function(){
-                        //Preparar Nuevo Registro
-                        main.resetToNew();
-                    }
-                });
+                msg.success();                    
 
             }
         });
+    },showModifyOptions:function(){
+        var main = this;
+          main.txtEstado.show();
+          Ext.getCmp('IdBtnInactivar').show();
+          Ext.getCmp('IdBtnInactivarSep').show();
+          main.dispParticipantes.hide();
+          main.gridParticipantes.show();
+          Ext.getCmp('IdBtnTbarPAgregar').enable();
+        Ext.getCmp('IdBtnTbarPQuitar').enable();
+    },showNewOptions:function(){
+        var main = this;
+        Ext.getCmp('IdBtnInactivar').hide();
+        Ext.getCmp('IdBtnInactivarSep').hide();
+        Ext.getCmp('IdBtnTbarPAgregar').disable();
+        Ext.getCmp('IdBtnTbarPQuitar').disable();
+        main.dispParticipantes.show();
     },saveModified:function(){
         var main = this;
         
@@ -391,11 +424,14 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
     },
     openWinAddParticipantes:function(){
         var main = this;
-        var coor = main.panelMainData.getXY();
+        var coor = main.panelMainData.getXY();            
+        
+        console.log(main.internal);
+        
         var myWin = Ext.create('MyApp.GestionProyectos.WinAddParticipantes');
+        myWin.internal.Proyecto = main.internal.Proyecto
         var newXPosition = coor[0]- myWin.width;               
         myWin.show();
         myWin.setX(newXPosition);
     }
 });
-

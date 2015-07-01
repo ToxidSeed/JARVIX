@@ -60,12 +60,13 @@ class Answer {
     public function getAsJSON(){
         return json_encode($this->getAsArray());
     }
-    public static function setSuccessMessage($message,$code = 0,$JSON = true,$type = 'Informacion'){
+    public static function setSuccessMessage($message,$code = 0,$JSON = true,$type = 'Informacion',array $extradata = null){
         $response = array(
             'success' => true,
             'message' => $message,
             'code' => $code,
-            'type' => $type
+            'type' => $type,
+            'extradata' => $extradata
         );
         
         if($JSON == TRUE){

@@ -7,6 +7,7 @@
 Ext.define('MyApp.GestionProyectos.WinAddParticipantes',{
    extend:'Ext.window.Window', 
    response:{},
+   internal:{},
    initComponent:function(){
        var main = this;
        
@@ -18,6 +19,7 @@ Ext.define('MyApp.GestionProyectos.WinAddParticipantes',{
            items:[
                {
                    text:'Buscar',
+                   iconCls:'icon-search',
                    handler:function(){
                        
                    }
@@ -26,6 +28,7 @@ Ext.define('MyApp.GestionProyectos.WinAddParticipantes',{
                ,
                {
                    text:'Cancelar',
+                   iconCls:'icon-door-out',
                    handler:function(){
                        main.close();
                    }
@@ -47,6 +50,7 @@ Ext.define('MyApp.GestionProyectos.WinAddParticipantes',{
            ]
        });
        
+       var myChkGrid = new Ext.selection.CheckboxModel();
       
        main.gridUsuarios = Ext.create('Per.GridPanel',{
           loadOnCreate:false,          
@@ -59,12 +63,17 @@ Ext.define('MyApp.GestionProyectos.WinAddParticipantes',{
               {
                   xtype:'rownumberer'
               },{
-                  header:'Nombres y Apellidos',
-                  dataIndex:'Nombres',
+                  header:'identificador',
+                  dataIndex:'id',
+                  hidden:true
+               },{
+                  header:'Nombre',
+                  dataIndex:'nombre',
                   flex:1
               }
           ],
-          pagingBar:true         
+          pagingBar:true,
+          selModel:myChkGrid
        });
        
        main.gridUsuarios.on({
@@ -76,7 +85,11 @@ Ext.define('MyApp.GestionProyectos.WinAddParticipantes',{
        main.tbarAsignar = Ext.create('Ext.toolbar.Toolbar',{
           items:[
               {
-                  text:'Asignar'
+                  text:'Asignar',
+                  iconCls:'icon-basket_put',
+                  handler:function(){
+                     main.asignarParticipantes();
+                  }
               }
           ] 
        });
@@ -113,7 +126,24 @@ Ext.define('MyApp.GestionProyectos.WinAddParticipantes',{
    getNoParticipantes:function(){
        var main = this;
        main.gridUsuarios.load({
-            Nombre:main.txtNombresApellidos.getValue()
+            Nombre:main.txtNombresApellidos.getValue(),
+            ProyectoId: main.internal.Proyecto.Id
        });
+   },
+   asignarParticipantes:function(){
+      var main = this;
+      var mySelModel = main.gridUsuarios.getSelectionModel();
+      var selected = mySelModel.getSelection();
+      var records = Per.Store.getDataAsJSON(selected,('id'));
+      Ext.Ajax.request({
+         url:base_url+'GestionProyectos/GestionProyectosController/updParticipantes',
+         params:{
+            ProyectoId: main.internal.Proyecto.Id,
+            selected: records
+         },
+         success:function(response){
+            console.log(response);
+         }
+      });
    }
 });

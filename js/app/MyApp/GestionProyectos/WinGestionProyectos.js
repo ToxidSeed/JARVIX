@@ -23,6 +23,11 @@ Ext.define('MyApp.GestionProyectos.WinGestionProyectos',{
                             mainWindow: main                            
                        });
                        WinProyectos.show();
+                       WinProyectos.on({
+                            'recordSaved':function(){
+                                main.getProyectos();
+                            }
+                       });
                    }
                }
            ] 
@@ -143,7 +148,7 @@ Ext.define('MyApp.GestionProyectos.WinGestionProyectos',{
         
         main.GridProyectos.on({
           'afterrender':function(){
-              main.GridProyectos.load(main.getParams());
+              main.getProyectos();
           },
           'itemdblclick':function(grid,record,item){
             var WinProyectos = new MyApp.GestionProyectos.WinMantGestionProyectos({
@@ -170,7 +175,8 @@ Ext.define('MyApp.GestionProyectos.WinGestionProyectos',{
         
         this.callParent(arguments);
     },
-    getParams:function(){
+    
+    getProyectos:function(){
         var main = this;
         var object = {
             id:main.txtCodigo.getValue(),
@@ -180,8 +186,8 @@ Ext.define('MyApp.GestionProyectos.WinGestionProyectos',{
             fechaUltActDesde: main.dtFechaUltActDesde.getValue(),
             fechaUltActHasta:main.dtFechaUltActHasta.getValue()
         };
-        return object;
-    },
+        main.GridProyectos.load(object);
+    },    
     limpiarCriterios:function(){
         var main = this;
         main.txtCodigo.setValue(null);

@@ -9,19 +9,23 @@ Ext.define('MyApp.GestionProyectos.HelpAplicaciones',{
         var help = this;
         
         help.txtNombreAplicacion = Ext.create('Ext.form.field.Text',{
-            fieldLabel:'Nombre'
+            fieldLabel:'Nombre',
+            width:350,
         });
         
         help.toolBar = Ext.create('Ext.toolbar.Toolbar',{
            items:[
                {
                    text:'Buscar',
+                   iconCls:'icon-search',
                    handler:function(){
                        help.gridAplicaciones.load(help.getParams());
                    }
                },
+               '-',
                {
                    text:'Cancelar',
+                   iconCls:'icon-door-out',
                    handler:function(){
                        help.close();
                    }
@@ -30,8 +34,12 @@ Ext.define('MyApp.GestionProyectos.HelpAplicaciones',{
         });
         
         help.panelCriterio = Ext.create('Ext.panel.Panel',{
+          title:'Criterios',
            tbar:help.toolBar,
-           region:'west',
+           region:'north',
+           split:true,
+           collapsible:true,
+           border:false,
            bodyPadding:'10px',
            items:[
                help.txtNombreAplicacion
@@ -42,6 +50,7 @@ Ext.define('MyApp.GestionProyectos.HelpAplicaciones',{
            loadOnCreate:false,
            region:'center',
            width:200,
+           border:false,
            pageSize:20,
            title:'Lista de Aplicaciones',
            src:base_url+'Helper/HelpAplicaciones/search',
@@ -65,15 +74,18 @@ Ext.define('MyApp.GestionProyectos.HelpAplicaciones',{
                    help.response.id = record.get("id");
                    help.response.nombre = record.get("nombre");
                    help.close();
-               }
+               },
+            'afterrender':function(){
+                help.gridAplicaciones.load(help.getParams());
+            }
         });
         
         
         Ext.apply(this,{
             title:'Buscar Aplicaciones',
             layout:'border',
-            width:713,
-            height:300,
+            width:450,
+            height:600,
             modal:true,
             items:[
                 help.panelCriterio,
