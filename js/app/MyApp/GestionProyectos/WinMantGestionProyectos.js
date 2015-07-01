@@ -310,15 +310,17 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
                 aplicacionid: main.internal.AplicacionId
             },
             success:function(response){
-                main.fireEvent('recordSaved');
-                main.showModifyOptions();
                 var objData = Ext.decode(response.responseText);                
-                main.internal.Proyecto.Id = objData.extradata.ProyectoId
-                main.create = false;
-                //Obtenemos los valores Guardados
-                main.loadInitValues();
-                //Mostramos los controles para modificar
-                
+                if (objData.success == true && objData.code == 0){
+                    main.fireEvent('recordSaved');
+                    main.showModifyOptions();
+
+                    main.internal.Proyecto.Id = objData.extradata.ProyectoId
+                    main.create = false;
+                    //Obtenemos los valores Guardados
+                    main.loadInitValues();
+                    //Mostramos los controles para modificar
+                }
                 
                 var msg = new Per.MessageBox();  
                 msg.data = Ext.decode(response.responseText); 

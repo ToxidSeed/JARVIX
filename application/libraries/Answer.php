@@ -115,6 +115,10 @@ class Answer {
         
         echo $this->getAsJSON();
     }
+    
+    public function setAsWarning(){
+        $this->type = 'Advertencia';
+    }
 }
 
 
