@@ -53,11 +53,11 @@ class DomainProyecto extends BaseDomain{
     }
 
     public function getEstado() {
-        require_once MAPPERPATH.'EstadoMapper.php';   
+        /*require_once MAPPERPATH.'EstadoMapper.php';   
         if($this->mapper == true && $this->estado != null && $this->estado->getId() != null){            
            $mprEstado = new EstadoMapper();
            $this->estado = $mprEstado->find($this->estado->getId());
-        }
+        }*/
         return $this->estado;
     }
 
