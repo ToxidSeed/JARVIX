@@ -156,7 +156,9 @@ Ext.define('MyApp.GestionProyectos.WinGestionProyectos',{
                             mainWindow: main,
                             create:false,
                             internal:{
-                                id:record.get('id')
+                                Proyecto:{
+                                    Id:record.get('id')
+                                }                                
                             }
             });
             WinProyectos.show();

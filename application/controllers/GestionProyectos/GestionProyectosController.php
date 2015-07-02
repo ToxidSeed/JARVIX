@@ -146,5 +146,37 @@ class GestionProyectosController extends BaseController{
             }
         }
     }
+    
+    public function getParticipantes(){
+        try{
+            $this->load->model('Mapper/Finders/SysUsuario/SysUsuarioFRM2','SysUsuarioFRM2');
+            $response = $this->SysUsuarioFRM2->search(array('ProyectoId'=>$this->getField('ProyectoId')));
+            echo json_encode(Response::asResults($response)); 
+        }catch(Exception $ex){
+            if($ex->getCode() == FORM_VALIDATION_ERRORS_CODE){
+                echo $this->getAnswer()->getAsJSON();
+            }else{
+                echo Answer::setFailedMessage($ex->getMessage(),$ex->getCode());
+            }
+        }
+    }
+    
+    public function removeParticipantes(){
+        try{
+            $varUsuariosAsignados = json_decode($this->getField('selected'),true);            
+            $varProyectoId = $this->getField('ProyectoId');
+            
+            $this->load->model('Bussiness/Proyecto/RemoverParticipanteBO','RemoverParticipanteBO');
+            $this->RemoverParticipanteBO->quitar($varProyectoId,$varUsuariosAsignados);
+            $result = $this->RemoverParticipanteBO->getAnswer();
+            $result->showSuccessMessage('Se removio correctamente');
+        }catch(Exception $ex){
+            if($ex->getCode() == FORM_VALIDATION_ERRORS_CODE){
+                echo $this->getAnswer()->getAsJSON();
+            }else{
+                echo Answer::setFailedMessage($ex->getMessage(),$ex->getCode());
+            }
+        }
+    }
 }
 ?>

@@ -30,10 +30,12 @@ class ProyectoBO extends BaseBO{
             $this->load->database();
             $this->db->trans_start();
             
-            $this->checkObject();
+            $this->checkObject();            
+            
+            var_dump($this->domain);
             
             $mprProyecto = new ProyectoMapper();
-            $dmnCurrentProyecto = $mprProyecto->find($this->domain->getId());
+            $dmnCurrentProyecto = $mprProyecto->find($this->domain->getId());            
             $dmnCurrentProyecto->setNombre($this->domain->getNombre());            
             $mprProyecto->update($dmnCurrentProyecto);            
             $this->db->trans_commit();

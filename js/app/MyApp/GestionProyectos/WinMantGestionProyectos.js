@@ -144,7 +144,7 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
                 '-',
                 {
                     id:'IdBtnInactivar',
-                    text:'Inactivar',
+                    text:'Cancelar',
                     iconCls:'icon-stop',
                     handler:function(){
                         if(main.create == false){
@@ -154,6 +154,18 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
                 },
                 {
                     id:'IdBtnInactivarSep',
+                    xtype:'tbseparator'
+                },
+                {
+                    id:'IdBtnAprobar',
+                    text:'Aprobar',
+                    iconCls:'icon-accept',
+                    handler:function(){
+                        
+                    }
+                },
+                 {
+                    id:'IdBtnAprobarSep',
                     xtype:'tbseparator'
                 },
                 {
@@ -215,10 +227,15 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
                 {
                     id:'IdBtnTbarPQuitar',
                     text:'Quitar',
-                    iconCls:'icon-delete'
+                    iconCls:'icon-delete',
+                    handler:function(){
+                        main.removerParticipantes();
+                    }
                 }
             ]
         });
+        
+        main.selModelPart = Ext.create('Ext.selection.CheckboxModel');
         
         main.gridParticipantes =  Ext.create('Per.GridPanel',{            
             border:true,
@@ -226,11 +243,17 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
             height:'100%',            
             hidden:true,            
             loadOnCreate:false,
-            src:'',
+            src:base_url+'GestionProyectos/GestionProyectosController/getParticipantes',
+            selModel:main.selModelPart,
             columns:[
                 {
                     header:'Nombres y Apellidos',
-                    flex:1
+                    dataIndex:'nombre',
+                    flex:1        
+                },{
+                    header:'id',
+                    dataIndex:'id',
+                    hidden:true
                 }
             ]
         });
@@ -291,9 +314,12 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
              main.panelInfAdicional
            ],
            listeners:{
-               'show':function(){                   
+               'show':function(){         
+                   
                    if(main.create === false){         
                        main.loadInitValues();
+                       main.getParticipantes();
+                       main.showModifyOptions();
                    }
                }
            }
@@ -333,6 +359,8 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
           main.txtEstado.show();
           Ext.getCmp('IdBtnInactivar').show();
           Ext.getCmp('IdBtnInactivarSep').show();
+           Ext.getCmp('IdBtnAprobar').show();
+        Ext.getCmp('IdBtnAprobarSep').show();
           main.dispParticipantes.hide();
           main.gridParticipantes.show();
           Ext.getCmp('IdBtnTbarPAgregar').enable();
@@ -341,16 +369,18 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
         var main = this;
         Ext.getCmp('IdBtnInactivar').hide();
         Ext.getCmp('IdBtnInactivarSep').hide();
+        Ext.getCmp('IdBtnAprobar').hide();
+        Ext.getCmp('IdBtnAprobarSep').hide();
         Ext.getCmp('IdBtnTbarPAgregar').disable();
         Ext.getCmp('IdBtnTbarPQuitar').disable();
         main.dispParticipantes.show();
     },saveModified:function(){
-        var main = this;
+        var main = this;                        
         
         Ext.Ajax.request({
-           url:base_url+'GestionProyectos/GestionPropiedadesProyectos/update' ,
+           url:base_url+'GestionProyectos/GestionProyectosController/update' ,
            params:{
-               id:main.id,
+               id:main.internal.Proyecto.Id,
                nombre:main.txtNombre.getValue()
            },
            success:function(response){
@@ -387,18 +417,19 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
     },
     loadInitValues:function(){
         var main = this;
-        if(main.create == false && main.internal.id != null){
+        if(main.create == false && main.internal.Proyecto.Id != null){
             Ext.MessageBox.show({
                 title:'Informacion',
                 msg:'Obteniendo Datos',
                 icon:Ext.MessageBox.INFO,
                 progress:true
-            })
+            });
+
             
             Ext.Ajax.request({
                 url:base_url+'GestionProyectos/GestionProyectosController/find',
                 params:{
-                    id:main.internal.id
+                    id:main.internal.Proyecto.Id
                 },
                 success:function(response){
                     Ext.MessageBox.close();
@@ -415,25 +446,50 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
                     main.internal.EstadoId = data.estado.id
                     main.internal.id = data.id
                     
-                    if(main.internal.EstadoId == 0){
-                        main.btnChangeStatus.setText('Re-Activar');
-                    }else{
-                        main.btnChangeStatus.setText('Inactivar');
-                    }
+//                    if(main.internal.EstadoId == 0){
+//                        main.btnChangeStatus.setText('Re-Activar');
+//                    }else{
+//                        main.btnChangeStatus.setText('Inactivar');
+//                    }
                 }
             });
         }
     },
     openWinAddParticipantes:function(){
         var main = this;
-        var coor = main.panelMainData.getXY();            
-        
-        console.log(main.internal);
+        var coor = main.panelMainData.getXY();                            
         
         var myWin = Ext.create('MyApp.GestionProyectos.WinAddParticipantes');
         myWin.internal.Proyecto = main.internal.Proyecto
         var newXPosition = coor[0]- myWin.width;               
         myWin.show();
         myWin.setX(newXPosition);
+        myWin.on({
+            'DespuesAgregar':function(){
+                main.getParticipantes();
+            }
+        });
+    },
+    getParticipantes:function(){
+        var main = this;
+        main.gridParticipantes.load({
+           ProyectoId: main.internal.Proyecto.Id 
+        });                
+    },
+    removerParticipantes:function(){
+        var main = this;
+      var mySelModel = main.gridParticipantes.getSelectionModel();
+      var selected = mySelModel.getSelection();
+      var records = Per.Store.getDataAsJSON(selected,('id'));
+      Ext.Ajax.request({
+         url:base_url+'GestionProyectos/GestionProyectosController/removeParticipantes',
+         params:{
+            ProyectoId: main.internal.Proyecto.Id,
+            selected: records
+         },
+         success:function(response){
+            main.getParticipantes();
+         }
+      });
     }
 });

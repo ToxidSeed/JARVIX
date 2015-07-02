@@ -27,7 +27,7 @@ Ext.define('MyApp.GestionProyectos.WinAddParticipantes',{
               '-'
                ,
                {
-                   text:'Cancelar',
+                   text:'Salir',
                    iconCls:'icon-door-out',
                    handler:function(){
                        main.close();
@@ -86,9 +86,10 @@ Ext.define('MyApp.GestionProyectos.WinAddParticipantes',{
           items:[
               {
                   text:'Asignar',
-                  iconCls:'icon-basket_put',
+                  iconCls:'icon-user_add',
                   handler:function(){
                      main.asignarParticipantes();
+                     
                   }
               }
           ] 
@@ -142,7 +143,8 @@ Ext.define('MyApp.GestionProyectos.WinAddParticipantes',{
             selected: records
          },
          success:function(response){
-            console.log(response);
+            main.getNoParticipantes();
+            main.fireEvent('DespuesAgregar')
          }
       });
    }
