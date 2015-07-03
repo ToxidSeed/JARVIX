@@ -350,7 +350,13 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
                 
                 var msg = new Per.MessageBox();  
                 msg.data = Ext.decode(response.responseText); 
-                msg.success();                    
+                msg.success();
+                 /*msg.on({
+                    'okButtonPressed':function(){
+                        //Preparar Nuevo Registro
+                        //main.resetToNew();
+                    }
+                });*/
 
             }
         });
@@ -418,12 +424,12 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
     loadInitValues:function(){
         var main = this;
         if(main.create == false && main.internal.Proyecto.Id != null){
-            Ext.MessageBox.show({
+            /*Ext.MessageBox.show({
                 title:'Informacion',
                 msg:'Obteniendo Datos',
                 icon:Ext.MessageBox.INFO,
                 progress:true
-            });
+            });*/
 
             
             Ext.Ajax.request({
@@ -432,7 +438,7 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
                     id:main.internal.Proyecto.Id
                 },
                 success:function(response){
-                    Ext.MessageBox.close();
+                    //Ext.MessageBox.close();
                     var res = Ext.decode(response.responseText);
                     var data = res.data;
                     main.txtNombre.setValue(data.nombre);                    
