@@ -12,7 +12,8 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
     frame:false,
     internal:{
         Proyecto:{
-            Id:null
+            Id:null,
+            Nombre:null
         }
     },
     constructor:function(parameter){
@@ -493,6 +494,8 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
                     main.dtFechaUltAct.setValue(dateFechaModificacion);
                     main.internal.EstadoId = data.estado.id
                     main.internal.id = data.id
+                    main.internal.Proyecto.Nombre = data.nombre;
+                    main.internal.Proyecto.Id = data.id;
                     
 //                    if(main.internal.EstadoId == 0){
 //                        main.btnChangeStatus.setText('Re-Activar');
@@ -566,10 +569,18 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
     },
     agregarRequerimiento:function(){    
         var main = this;
-        var frameId = Ext.id(window.frameElement);
-        var currentFrame = window.parent.Ext.getCmp(frameId);        
+        //var frameId = Ext.id(window.frameElement);
+        //var currentFrame = window.parent.Ext.getCmp(frameId);        
         var comp = window.parent.Ext.getCmp('idWinPrincipal');           
-        var object = currentFrame.initialConfig.autoEl.object;
+        var object = {
+            data:{
+                id:6,
+                viewLoader:'/GestionRequerimientos/GestionRequerimientosController',  
+                nombre:'Toma de Requerimientos',
+                proyectoId: main.internal.Proyecto.Id,
+                nombreProyecto: main.internal.Proyecto.Nombre
+            }
+        }
         comp.addTabPanel(object);
         //comp.setActiveTab(object.data.id);
     }

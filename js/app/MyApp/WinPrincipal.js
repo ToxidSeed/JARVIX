@@ -69,6 +69,7 @@ Ext.define('MyApp.WinPrincipal',{
      **/
     addTabPanel:function(object){
         //console.log(base_url+object.data.viewloader);
+        console.log(object);
         var main = this;
         var tabTitle = object.data.nombre;
         main.panelCentral.add({

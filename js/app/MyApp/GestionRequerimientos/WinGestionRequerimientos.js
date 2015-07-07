@@ -9,13 +9,23 @@ Ext.define('MyApp.GestionRequerimientos.WinGestionRequerimientos',{
    height:0,
    floating:true,
    autorender:true,
+   config:{},
    initComponent:function(){
        var main = this;
+               
+        var frameId = Ext.id(window.frameElement);
+        var currentFrame = window.parent.Ext.getCmp(frameId);
+        
+        main.config = currentFrame.initialConfig.autoEl.object.data;
        
          main.txtSetProject = Ext.create('Ext.form.field.Text',{
             fieldLabel:'Proyecto',
             width:350
          })
+         
+         
+         
+         
          
          main.btnSetProject = {                              
                                 iconCls:'icon-find'
@@ -143,6 +153,7 @@ Ext.define('MyApp.GestionRequerimientos.WinGestionRequerimientos',{
          loadOnCreate:false,
          region:'center',
          width:200,
+          hidden:true,   
          sortableColumns:false,
          pageSize:20,
 //         title:'Lista de Requerimientoss',
@@ -171,8 +182,12 @@ Ext.define('MyApp.GestionRequerimientos.WinGestionRequerimientos',{
       
       
       main.GridRequerimientos.on({
-          'afterrender':function(){
-              main.fnGetRequerimientos();
+      'afterrender':function(){
+        if (main.config.proyectoId != undefined) {
+           main.txtSetProject.setValue(main.config.nombreProyecto);
+           main.fnGetRequerimientos();
+        }
+              
           },
           'itemdblclick':function(grid,record,item){
             var WinRequerimientos = new MyApp.GestionRequerimientos.WinMantGestionRequerimientos({
@@ -194,15 +209,34 @@ Ext.define('MyApp.GestionRequerimientos.WinGestionRequerimientos',{
           }
       });
       
+      main.dispRequerimientos = Ext.create('Ext.form.field.Display',{
+            width:'100%',
+            padding:10,
+            height:'100%',
+            hidden:true,            
+            value:'Seleccione un Proyecto para Gestionar los requerimientos'
+        });
+       
+       if (main.config.proyectoId != undefined) {
+         main.GridRequerimientos.show();
+         main.dispRequerimientos.hide();
+       }else{
+         main.GridRequerimientos.hide();
+         main.dispRequerimientos.show();
+       }
+       
+      
       Ext.apply(this,{
           tbar: main.toolbar,
          layout:'border' ,
          items:[
              main.panelCriterioBusqueda,
-             main.GridRequerimientos
+             main.GridRequerimientos,
+             main.dispRequerimientos
          ]
       });
-       this.callParent(arguments);
+      this.callParent(arguments);
+      
    },
    getParams:function(){
        var main = this;
