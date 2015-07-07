@@ -12,6 +12,9 @@ class GestionProyectosController extends BaseController{
     function __construct() {
         parent::__construct();
     }
+    
+    const PROYECTO_REGISTRADO = 0;
+    
     public function index(){
         $this->load->view('Base/Header.php');
         $this->load->view('GestionProyectosView.php');
@@ -26,7 +29,7 @@ class GestionProyectosController extends BaseController{
             $dmnProyecto->setDescripcion($this->getField('descripcion'));
             $dmnProyecto->setFechaRegistro(date(APPDATESTNFORMAT));
             $dmnProyecto->setFechaModificacion(date(APPDATESTNFORMAT));            
-            $dmnProyecto->setEstado(new DomainEstado(1));
+            $dmnProyecto->setEstado(new DomainEstado(self::PROYECTO_REGISTRADO));
             $this->load->model('Bussiness/ProyectoBO','ProyectoBO');  
             $this->ProyectoBO->setDomain($dmnProyecto);
             $this->ProyectoBO->add();
@@ -93,17 +96,14 @@ class GestionProyectosController extends BaseController{
         }
     }
     
-    public function ChangeStatus(){
-        try{
-            $this->formValidation(__CLASS__,'',__FUNCTION__);
-            $dmnProyecto = new DomainProyecto($this->getField('id'));
-            $dmnProyecto->setNombre($this->getField('nombre'));
-            $dmnProyecto->setEstado(new DomainEstado($this->getField('currentStatus')));
-            $dmnProyecto->setFechaModificacion(date(APPDATEFROMDBFORMAT));
-            $this->load->model('Bussiness/ProyectoBO','ProyectoBO');
-            $this->ProyectoBO->setDomain($dmnProyecto);
-            $this->ProyectoBO->ChangeStatus();
-            echo Answer::setSuccessMessage('Se ha cambiado el estado correctamente'.$dmnProyecto->getNombre());            
+    public function cancelar(){
+        try{     
+              $myDmnProyecto = new DomainProyecto();
+              $myDmnProyecto->setId($this->getField('ProyectoId'));
+              $this->load->model('Bussiness/ProyectoBO','ProyectoBO');
+              $this->ProyectoBO->cancelar($myDmnProyecto);
+              $result = $this->ProyectoBO->getAnswer();
+              $result->showSuccessMessage('Se Cancelo el proyecto correctamente');
         }catch(Exception $ex){
             if($ex->getCode() == FORM_VALIDATION_ERRORS_CODE){                
                 echo $this->getAnswer()->getAsJSON();
@@ -170,6 +170,22 @@ class GestionProyectosController extends BaseController{
             $this->RemoverParticipanteBO->quitar($varProyectoId,$varUsuariosAsignados);
             $result = $this->RemoverParticipanteBO->getAnswer();
             $result->showSuccessMessage('Se removio correctamente');
+        }catch(Exception $ex){
+            if($ex->getCode() == FORM_VALIDATION_ERRORS_CODE){
+                echo $this->getAnswer()->getAsJSON();
+            }else{
+                echo Answer::setFailedMessage($ex->getMessage(),$ex->getCode());
+            }
+        }
+    }
+    public function aprobar(){
+        try{
+            $myDmnProyecto = new DomainProyecto();
+            $myDmnProyecto->setId($this->getField('ProyectoId'));
+            $this->load->model('Bussiness/ProyectoBO','ProyectoBO');
+            $this->ProyectoBO->aprobar($myDmnProyecto);
+            $result = $this->ProyectoBO->getAnswer();
+            $result->showSuccessMessage('Se Aprobo el proyecto correctamente');
         }catch(Exception $ex){
             if($ex->getCode() == FORM_VALIDATION_ERRORS_CODE){
                 echo $this->getAnswer()->getAsJSON();

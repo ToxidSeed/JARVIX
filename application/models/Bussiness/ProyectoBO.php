@@ -8,7 +8,14 @@ require_once MAPPERPATH.'ProyectoMapper.php';
 class ProyectoBO extends BaseBO{
     function __construct() {
         parent::__construct();
+        $this->mprProyecto = new ProyectoMapper();
     }
+    
+    protected $mprProyecto;
+    
+    const PROYECTO_APROBADO = 1;
+    const PROYECTO_CANCELADO = 2;
+    
     function add(){
         try{
             $this->load->database();
@@ -32,7 +39,7 @@ class ProyectoBO extends BaseBO{
             
             $this->checkObject();            
             
-            var_dump($this->domain);
+//            var_dump($this->domain);
             
             $mprProyecto = new ProyectoMapper();
             $dmnCurrentProyecto = $mprProyecto->find($this->domain->getId());            
@@ -74,6 +81,37 @@ class ProyectoBO extends BaseBO{
         }else{
             $domain->getEstado()->setId(0); //Setting to Active
         }
+    }
+    public function aprobar(DomainProyecto $dmnParamProyecto){
+        $this->domain = $dmnParamProyecto;
+        $dmnProyecto = $this->find($this->domain->getId());
+        if ($dmnProyecto != null){
+            $dmnProyecto->setEstado(new DomainEstado(self::PROYECTO_APROBADO));
+            $this->mprProyecto->update($dmnProyecto);            
+            return true;
+        }else{
+            $this->answer->addFailMessage('El Proyecto con identificador '.$this->domain->getId().' No existe.');
+            return false;
+        }
+            
+    }
+    
+    public function cancelar(DomainProyecto $dmnParamProyecto){
+        $this->domain = $dmnParamProyecto;
+        $dmnProyecto = $this->find($this->domain->getId());
+        if ($dmnProyecto != null){
+            $dmnProyecto->setEstado(new DomainEstado(self::PROYECTO_CANCELADO));
+            $this->mprProyecto->update($dmnProyecto);            
+            return true;
+        }else{
+            $this->answer->addFailMessage('El Proyecto con identificador '.$this->domain->getId().' No existe.');
+            return false;
+        }
+    }
+    
+    private function find($ProyectoId){        
+        $dmnCurrentProyecto = $this->mprProyecto->find($ProyectoId);
+        return $dmnCurrentProyecto;
     }
 }
 ?>

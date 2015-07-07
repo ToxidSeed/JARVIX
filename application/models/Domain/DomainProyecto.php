@@ -53,18 +53,15 @@ class DomainProyecto extends BaseDomain{
     }
 
     public function getEstado() {
-        /*require_once MAPPERPATH.'EstadoMapper.php';   
+        require_once MAPPERPATH.'Estado/EstadoProyectoMapper.php';   
         if($this->mapper == true && $this->estado != null && $this->estado->getId() != null){            
-           $mprEstado = new EstadoMapper();
+           $mprEstado = new EstadoProyectoMapper();
            $this->estado = $mprEstado->find($this->estado->getId());
-        }*/
+        }
         return $this->estado;
     }
 
-    public function setEstado($estado) {
-        
-        //print_r($this->estado);
-        
+    public function setEstado($estado) {                
         $this->estado = $estado;
     }
     public function getAplicacion() {

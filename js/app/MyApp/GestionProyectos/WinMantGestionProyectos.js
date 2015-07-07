@@ -147,9 +147,7 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
                     text:'Cancelar',
                     iconCls:'icon-stop',
                     handler:function(){
-                        if(main.create == false){
-                            main.ChangeStatus();
-                        }
+                        main.cancelar();
                     }
                 },
                 {
@@ -161,7 +159,7 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
                     text:'Aprobar',
                     iconCls:'icon-accept',
                     handler:function(){
-                        
+                        main.aprobar();
                     }
                 },
                  {
@@ -277,6 +275,48 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
           ]
       });
         
+        main.gridRequerimientos =  Ext.create('Per.GridPanel',{            
+            border:true,
+            width:'100%',
+            height:'100%',            
+            hidden:true,            
+            loadOnCreate:false,
+            src:base_url+'GestionProyectos/GestionProyectosController/getRequerimientos',
+            selModel:main.selModelPart,
+            columns:[
+                {
+                    header:'Nombres y Apellidos',
+                    dataIndex:'nombre',
+                    flex:1        
+                },{
+                    header:'id',
+                    dataIndex:'id',
+                    hidden:true
+                }
+            ]
+        });
+        
+        main.tbarRequerimientos = Ext.create('Ext.toolbar.Toolbar',{
+            items:[
+                {
+                    text:'Agregar',
+                    iconCls:'icon-add',
+                    handler:function(){
+                        main.agregarRequerimiento();
+                    }
+                }
+            ] 
+        });
+        
+         main.panelRequerimientos = Ext.create('Ext.form.Panel',{          
+          tbar:main.tbarRequerimientos,
+          border:false,
+          
+//          bodyPadding:'10px',
+          items:[
+             main.gridRequerimientos
+          ]
+      });
         
         main.panelInfAdicional = Ext.create('Ext.panel.Panel',{
              region:'center',
@@ -291,8 +331,10 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
                             main.panelMainData
                         ]
                     },{
-                        title:'Requerimientos Funcionales',
-                        items:[]
+                        title:'Requerimientos',
+                        items:[
+                             main.panelRequerimientos
+                        ]
                     }
                     ]
         });
@@ -497,5 +539,38 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
             main.getParticipantes();
          }
       });
+    },
+    cancelar:function(){
+        var main = this;
+        Ext.Ajax.request({
+           url:base_url+'GestionProyectos/GestionProyectosController/cancelar',
+           params:{
+               ProyectoId: main.internal.Proyecto.Id
+           },
+           success:function(response){
+               main.loadInitValues();
+           }
+        });
+    },
+    aprobar:function(){
+        var main = this;
+        Ext.Ajax.request({
+           url:base_url+'GestionProyectos/GestionProyectosController/aprobar',
+           params:{
+               ProyectoId: main.internal.Proyecto.Id
+           },
+           success:function(response){
+               main.loadInitValues();
+           }
+        });
+    },
+    agregarRequerimiento:function(){    
+        var main = this;
+        var frameId = Ext.id(window.frameElement);
+        var currentFrame = window.parent.Ext.getCmp(frameId);        
+        var comp = window.parent.Ext.getCmp('idWinPrincipal');           
+        var object = currentFrame.initialConfig.autoEl.object;
+        comp.addTabPanel(object);
+        //comp.setActiveTab(object.data.id);
     }
 });

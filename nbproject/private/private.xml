@@ -3,9 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/controllers/Login.php</file>
+            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/js/app/MyApp/GestionProyectos/WinMantGestionProyectos.js</file>
+            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/models/Bussiness/ProyectoBO.php</file>
+            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/js/app/MyApp/WinPrincipal.js</file>
             <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/controllers/GestionProyectos/GestionProyectosController.php</file>
-            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/libraries/Answer.php</file>
-            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/controllers/Base/BaseController.php</file>
+            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/models/Bussiness/Usuario/LoginBO.php</file>
         </group>
     </open-files>
 </project-private>

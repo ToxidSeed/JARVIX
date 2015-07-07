@@ -3,7 +3,8 @@
  * and open the template in the editor.
  */
 Ext.define('MyApp.WinPrincipal',{
-    extend:'Ext.panel.Panel',
+    extend:'Ext.panel.Panel',    
+    id:'idWinPrincipal',
     UsuarioId:null,
     initComponent:function(){
         var principal = this;
@@ -82,13 +83,14 @@ Ext.define('MyApp.WinPrincipal',{
                 {
                     xtype:'component',
                     autoEl:{
-                         tag:'iframe',
+                         tag:'iframe',                         
+                         object:object,
                          frameBorder:0,
                          src:base_url+object.data.viewLoader
                      } 
                 }
             ]                       
-        })
+        });
         main.panelCentral.setActiveTab(object.data.id);
     },
     getConfigOption:function(id){
