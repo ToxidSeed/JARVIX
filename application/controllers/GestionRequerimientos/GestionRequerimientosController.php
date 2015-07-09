@@ -23,7 +23,7 @@ class GestionRequerimientosController extends BaseController{
             $dmnRequerimiento->setNombre($this->getField('nombre'));
             $dmnRequerimiento->setCodigo($this->getField('codigo'));
             $dmnRequerimiento->setDescripcion($this->getField('descripcion'));
-//            $dmnRequerimiento->setEstado(new DomainEstado(1));//Estado Activo
+            $dmnRequerimiento->setEstado(new DomainEstado(0));
             $dmnRequerimiento->setFechaRegistro(date(APPDATESTNFORMAT));
             $dmnRequerimiento->setFechaModificacion(date(APPDATESTNFORMAT));
             $dmnRequerimiento->setProyecto(new DomainProyecto($this->getField('ProyectoId')));

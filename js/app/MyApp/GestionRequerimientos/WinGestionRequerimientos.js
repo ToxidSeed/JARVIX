@@ -29,7 +29,7 @@ Ext.define('MyApp.GestionRequerimientos.WinGestionRequerimientos',{
          
          
          main.btnSetProject = {                              
-                                iconCls:'icon-find'
+                                iconCls:'icon-arrow_refresh'
                            }
                            
          //     main.tbar.add(main.txtSetProject);

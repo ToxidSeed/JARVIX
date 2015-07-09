@@ -74,7 +74,7 @@ class RequerimientoMapper extends BaseMapper{
         $fields['nombre'] = $dmnRequerimiento->getNombre();
         $fields['descripcion'] = $dmnRequerimiento->getDescripcion();
         $fields['proyectoid'] = $dmnRequerimiento->getProyecto()->getId();
-//        $fields['estadoid'] = $dmnRequerimiento->getEstado()->getId();
+        $fields['estadoid'] = $dmnRequerimiento->getEstado()->getId();
         $fields['fecharegistro'] = $dmnRequerimiento->getFechaRegistro();
         $fields['fechamodificacion'] = $dmnRequerimiento->getFechaModificacion();
         $this->db->set($fields);

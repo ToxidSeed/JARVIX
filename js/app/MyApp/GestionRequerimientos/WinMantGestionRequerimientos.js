@@ -82,9 +82,9 @@ Ext.define('MyApp.GestionRequerimientos.WinMantGestionRequerimientos',{
           ] 
        });
               
-       if(main.create === true){
-           main.btnChangeStatus.hide();
-       }
+     //  if(main.create === true){
+       //    main.btnChangeStatus.hide();
+       //}
        
        Ext.apply(this,{
            tbar:main.toolbar,
@@ -174,11 +174,11 @@ Ext.define('MyApp.GestionRequerimientos.WinMantGestionRequerimientos',{
                     main.dtFechaRegistro.setValue(dateFechaRegistro);
                     main.txtEstado.setValue(data.estado.nombre);
                     main.internal.EstadoId = data.estado.id;
-                    if(main.internal.EstadoId === 0){
+                    /*if(main.internal.EstadoId === 0){
                         main.btnChangeStatus.setText('Re-Activar');
                     }else{
                         main.btnChangeStatus.setText('Inactivar');
-                    }
+                    }*/
                 }
             })
        }
