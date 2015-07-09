@@ -17,11 +17,12 @@ Ext.define('MyApp.GestionRequerimientos.WinGestionRequerimientos',{
         var currentFrame = window.parent.Ext.getCmp(frameId);
         
         main.config = currentFrame.initialConfig.autoEl.object.data;
+        //console.log(main.config)
        
          main.txtSetProject = Ext.create('Ext.form.field.Text',{
             fieldLabel:'Proyecto',
             width:350
-         })
+         });
          
          
          
@@ -43,7 +44,8 @@ Ext.define('MyApp.GestionRequerimientos.WinGestionRequerimientos',{
                       var WinNewRequerimiento = new MyApp.GestionRequerimientos.WinMantGestionRequerimientos({
                           title:'Nuevo Requerimiento Funcional',
                           internal:{
-                              orden:main.fnGetNextOrden()
+                              orden:main.fnGetNextOrden(),
+                              ProyectoId: main.config.proyectoId
                           }                                    
                       });
                       WinNewRequerimiento.show();
@@ -164,7 +166,7 @@ Ext.define('MyApp.GestionRequerimientos.WinGestionRequerimientos',{
              },
              {
                  header:'Codigo',
-                 dataIndex:'codigo'
+                 dataIndex:'id'
              },{
                  header:'Nombre',
                  dataIndex:'nombre',
@@ -239,9 +241,11 @@ Ext.define('MyApp.GestionRequerimientos.WinGestionRequerimientos',{
       
    },
    getParams:function(){
-       var main = this;
+       var main = this;             
+       
        var object = {
-           nombre: main.txtNombre.getValue()
+           nombre: main.txtNombre.getValue(),
+           ProyectoId: main.config.proyectoId
        };
        return object;
    },

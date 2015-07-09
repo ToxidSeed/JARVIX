@@ -5,10 +5,19 @@
         <group>
             <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/controllers/Login.php</file>
             <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/js/app/MyApp/GestionProyectos/WinMantGestionProyectos.js</file>
-            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/models/Bussiness/ProyectoBO.php</file>
+            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/models/Domain/DomainRequerimiento.php</file>
             <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/js/app/MyApp/WinPrincipal.js</file>
+            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/models/Mapper/RequerimientoFinder.php</file>
+            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/models/Mapper/Estado/EstadoProyectoMapper.php</file>
             <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/controllers/GestionProyectos/GestionProyectosController.php</file>
             <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/models/Bussiness/Usuario/LoginBO.php</file>
+            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/models/Mapper/Estado/EstadoRequerimientoMapper.php</file>
+            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/js/app/MyApp/GestionRequerimientos/WinGestionRequerimientos.js</file>
+            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/models/Bussiness/RequerimientoBO.php</file>
+            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/models/Bussiness/ProyectoBO.php</file>
+            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/controllers/GestionRequerimientos/GestionRequerimientosController.php</file>
+            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/js/app/MyApp/GestionRequerimientos/WinMantGestionRequerimientos.js</file>
+            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/models/Mapper/RequerimientoMapper.php</file>
         </group>
     </open-files>
 </project-private>

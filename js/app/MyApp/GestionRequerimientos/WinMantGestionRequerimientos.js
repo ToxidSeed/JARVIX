@@ -57,17 +57,17 @@ Ext.define('MyApp.GestionRequerimientos.WinMantGestionRequerimientos',{
               }              
           }
        });
-       main.btnChangeStatus = Ext.create('Ext.button.Button',{
-          text:'Inactivar',
-          handler:function(){
-              if(main.create === false){
-                  main.ChangeStatus();
-              }
-          }
-       });
+//       main.btnChangeStatus = Ext.create('Ext.button.Button',{
+//          text:'Inactivar',
+//          handler:function(){
+//              if(main.create === false){
+//                  main.ChangeStatus();
+//              }
+//          }
+//       });
        
-       main.btnCancelar = Ext.create('Ext.button.Button',{
-          text:'Cancelar',
+       main.btnSalir = Ext.create('Ext.button.Button',{
+          text:'Salir',
           iconCls: 'icon-door-out',
           handler:function(){
               main.close();
@@ -77,8 +77,8 @@ Ext.define('MyApp.GestionRequerimientos.WinMantGestionRequerimientos',{
        main.toolbar = Ext.create('Ext.toolbar.Toolbar',{
           items:[
               main.btnGuardar,
-              main.btnChangeStatus,
-              main.btnCancelar
+//              main.btnChangeStatus,
+              main.btnSalir
           ] 
        });
               
@@ -118,7 +118,8 @@ Ext.define('MyApp.GestionRequerimientos.WinMantGestionRequerimientos',{
                nombre:main.txtNombre.getValue(),
                codigo:main.txtCodigo.getValue(),
                descripcion:main.txtDescripcion.getValue(),
-               orden:main.internal.orden
+               orden:main.internal.orden,
+               ProyectoId:main.internal.ProyectoId
            },
            success:function(response){
                var msg = new Per.MessageBox();

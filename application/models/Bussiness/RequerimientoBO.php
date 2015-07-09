@@ -17,10 +17,10 @@ class RequerimientoBO extends BaseBO{
             $this->checkObject();            
             
             //Get the current project
-            $ActualProyectoFinder = new ActualProyectoFinder();
-            $dmnProyectoUsuario = $ActualProyectoFinder->Get(1);
+//            $ActualProyectoFinder = new ActualProyectoFinder();
+//            $dmnProyectoUsuario = $ActualProyectoFinder->Get(1);
             //Setting the current Project
-            $this->getDomain()->setProyecto($dmnProyectoUsuario->getProyecto());
+            //$this->getDomain()->setProyecto($dmnProyectoUsuario->getProyecto());
             //Save requeriment
             $mprRequerimiento = new RequerimientoMapper();            
             $mprRequerimiento->insert($this->getDomain());            

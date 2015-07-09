@@ -2,6 +2,7 @@
 require_once BASECONTROLLERPATH.'BaseController.php';
 require_once DOMAINPATH.'DomainRequerimiento.php';
 require_once DOMAINPATH.'DomainEstado.php';
+require_once DOMAINPATH.'DomainProyecto.php';
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -22,9 +23,10 @@ class GestionRequerimientosController extends BaseController{
             $dmnRequerimiento->setNombre($this->getField('nombre'));
             $dmnRequerimiento->setCodigo($this->getField('codigo'));
             $dmnRequerimiento->setDescripcion($this->getField('descripcion'));
-            $dmnRequerimiento->setEstado(new DomainEstado(1));//Estado Activo
+//            $dmnRequerimiento->setEstado(new DomainEstado(1));//Estado Activo
             $dmnRequerimiento->setFechaRegistro(date(APPDATESTNFORMAT));
             $dmnRequerimiento->setFechaModificacion(date(APPDATESTNFORMAT));
+            $dmnRequerimiento->setProyecto(new DomainProyecto($this->getField('ProyectoId')));
             $dmnRequerimiento->setOrden($this->getField('orden'));
             $this->load->model('Bussiness/RequerimientoBO','RequerimientoBO');
             $this->RequerimientoBO->setDomain($dmnRequerimiento);
@@ -64,9 +66,11 @@ class GestionRequerimientosController extends BaseController{
     }
     
     public function search(){
-        $this->load->model('Mapper/RequerimientoFinder','RequerimientoFinder');
-        $this->RequerimientoFinder->setParamNombre($this->getField('nombre'));
-        $response = $this->RequerimientoFinder->getList();        
+        $this->load->model('Mapper/RequerimientoFinder','RequerimientoFinder');        
+        $response = $this->RequerimientoFinder->getList(
+                $this->getField('ProyectoId'),
+                $this->getField('nombre')
+                );        
         echo json_encode(Response::asResults($response));
     }
     
