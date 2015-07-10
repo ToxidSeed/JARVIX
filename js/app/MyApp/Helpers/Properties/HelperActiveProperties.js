@@ -15,7 +15,7 @@ Ext.define('MyApp.Helpers.Properties.HelperActiveProperties',{
         
         var selModel = new Ext.selection.CheckboxModel({
             mode:'MULTI'
-        })
+        });
         
         
        

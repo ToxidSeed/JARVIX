@@ -3,21 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/controllers/Login.php</file>
-            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/js/app/MyApp/GestionProyectos/WinMantGestionProyectos.js</file>
-            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/models/Domain/DomainRequerimiento.php</file>
-            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/js/app/MyApp/WinPrincipal.js</file>
-            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/models/Mapper/RequerimientoFinder.php</file>
-            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/models/Mapper/Estado/EstadoProyectoMapper.php</file>
-            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/controllers/GestionProyectos/GestionProyectosController.php</file>
-            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/models/Bussiness/Usuario/LoginBO.php</file>
-            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/models/Mapper/Estado/EstadoRequerimientoMapper.php</file>
-            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/js/app/MyApp/GestionRequerimientos/WinGestionRequerimientos.js</file>
-            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/models/Bussiness/RequerimientoBO.php</file>
-            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/models/Bussiness/ProyectoBO.php</file>
-            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/controllers/GestionRequerimientos/GestionRequerimientosController.php</file>
-            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/js/app/MyApp/GestionRequerimientos/WinMantGestionRequerimientos.js</file>
-            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/models/Mapper/RequerimientoMapper.php</file>
+            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/models/Mapper/Finders/SysPerfilOpcionApp/SysPerfilOpcionAppFRM1.php</file>
+            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/models/Mapper/Finders/Proyectos/ProyectoFRM1.php</file>
+            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/models/Mapper/ProyectoMapper.php</file>
+            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/controllers/Helper/HelperProyectosUsuario.php</file>
+            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/js/app/MyApp/Helpers/Proyectos/HelperProyectosUsuario.js</file>
+            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/controllers/Helper/HelpActiveProperties.php</file>
         </group>
     </open-files>
 </project-private>

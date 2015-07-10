@@ -6,7 +6,7 @@ require_once DOMAINPATH.'DomainSysUsuario.php';
 class Login extends BaseController{
     public function __construct() {        
         parent::__construct();
-        $this->load->library('session');
+        
     }
     function index(){
         //Verificar session        

@@ -1,25 +1,29 @@
 /* 
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-Ext.define('MyApp.GestionProyectos.HelpAplicaciones',{
-    extend:'Ext.window.Window', 
-    response:{},
-    initComponent:function(){
-        var help = this;
+
+Ext.define('MyApp.Helpers.Proyectos.HelperProyectosUsuario',{
+    extend:'Ext.window.Window',
+    response:{
         
-        help.txtNombreAplicacion = Ext.create('Ext.form.field.Text',{
-            fieldLabel:'Nombre',
-            width:350
+    },
+    initComponent:function(){
+        var main = this;
+        
+        main.txtNombreProyecto = Ext.create('Ext.form.field.Text',{
+           fieldLabel:'Proyecto',
+           width:350
         });
         
-        help.toolBar = Ext.create('Ext.toolbar.Toolbar',{
+        main.toolBar = Ext.create('Ext.toolbar.Toolbar',{
            items:[
                {
                    text:'Buscar',
                    iconCls:'icon-search',
                    handler:function(){
-                       help.gridAplicaciones.load(help.getParams());
+                       main.buscar();
                    }
                },
                '-',
@@ -27,33 +31,33 @@ Ext.define('MyApp.GestionProyectos.HelpAplicaciones',{
                    text:'Salir',
                    iconCls:'icon-door-out',
                    handler:function(){
-                       help.close();
+                       main.close();
                    }
                }
            ]
         });
         
-        help.panelCriterio = Ext.create('Ext.panel.Panel',{
+        main.panelCriterio = Ext.create('Ext.panel.Panel',{
           title:'Criterios',
-           tbar:help.toolBar,
+           tbar:main.toolBar,
            region:'north',
            split:true,
            collapsible:true,
            border:false,
            bodyPadding:'10px',
            items:[
-               help.txtNombreAplicacion
+               main.txtNombreProyecto
            ] 
         });
         
-        help.gridAplicaciones = Ext.create('Per.GridPanel',{
+        main.grid = Ext.create('Per.GridPanel',{
            loadOnCreate:false,
            region:'center',
            width:200,
            border:false,
            pageSize:20,
-           title:'Lista de Aplicaciones',
-           src:base_url+'Helper/HelpAplicaciones/search',
+           title:'Proyectos',
+           src:base_url+'Helper/HelperProyectosUsuario/search',
            columns:[
                {
                    xtype:'rownumberer'
@@ -69,44 +73,34 @@ Ext.define('MyApp.GestionProyectos.HelpAplicaciones',{
            pagingBar:true
         });
         
-        help.gridAplicaciones.on({
-            'itemdblclick':function(grid,record){                   
-                   help.response.id = record.get("id");
-                   help.response.nombre = record.get("nombre");
-                   help.close();
-               },
+        main.grid.on({
             'afterrender':function(){
-                help.gridAplicaciones.load(help.getParams());
+                main.buscar(); 
             }
         });
         
-        
         Ext.apply(this,{
-            title:'Buscar Aplicaciones',
+            title:'Buscar Proyectos',
             layout:'border',
-            width:450,
-            height:600,
+            width:400,
+            height:500,
             modal:true,
             items:[
-                help.panelCriterio,
-                help.gridAplicaciones
+                main.panelCriterio,
+                main.grid
             ],
             listeners:{
                 'resize':function(win,width,height){
                     
                 }
             }
-        })
-        
+        });
         this.callParent(arguments);
     },
-    getParams:function(){
+    buscar:function(){
         var main = this;
-        var object = {
-            nombre:main.txtNombreAplicacion.getValue()
-        }
-        return object;
+        main.grid.load({
+           NombreProyecto:main.txtNombreProyecto.getValue() 
+        });
     }
-})
-
-
+});

@@ -9,8 +9,22 @@ Ext.define('MyApp.GestionProcesos.WinGestionProcesos',{
    heigh:0,
    floating:true,
    autorender:true,
+   config:{},
    initComponent:function(){
        var main = this;
+       
+        main.txtSetProject = Ext.create('Ext.form.field.Text',{
+            fieldLabel:'Proyecto',
+            width:350
+         });
+         
+         
+         
+         
+         
+         main.btnSetProject = {                              
+                                iconCls:'icon-arrow_refresh'
+                           }
        
        main.tbar = Ext.create('Ext.toolbar.Toolbar',{
            items:[
@@ -22,7 +36,11 @@ Ext.define('MyApp.GestionProcesos.WinGestionProcesos',{
 //                       WinEditar.show();
                         window.open(base_url+'GestionProcesos/GestionProcesosController/addOption');
                    }
-               }
+               },
+               '-',
+                main.txtSetProject,
+                main.btnSetProject
+                
            ]
        });
        
@@ -98,6 +116,7 @@ Ext.define('MyApp.GestionProcesos.WinGestionProcesos',{
           region:'west', 
           bodyPadding:'10px',
           collapsible:true,
+          collapsed:true,
           title:'Criterios de Busqueda',
           tbar:main.panelCritTbar,
           items:[
@@ -156,13 +175,30 @@ Ext.define('MyApp.GestionProcesos.WinGestionProcesos',{
                 var url = base_url+'GestionProcesos/GestionProcesosController/updateOption/?id='+record.get('id')
                 window.open(url);
           }
-      })
+      });
+      
+        main.dispModelarRequerimientos = Ext.create('Ext.form.field.Display',{
+            width:'100%',
+            padding:10,
+            height:'100%',
+            hidden:true,            
+            value:'Seleccione un Proyecto para Modelar los Requerimientos'
+        });
+      
+      if (main.config.proyectoId != undefined) {
+         main.Grid.show();
+         main.dispModelarRequerimientos.hide();
+       }else{
+         main.Grid.hide();
+         main.dispModelarRequerimientos.show();         
+       }
       
       Ext.apply(this,{
             layout:'border',
             items:[
               main.panelCriterioBusqueda,
-              main.Grid
+              main.Grid,
+              main.dispModelarRequerimientos
             ]
             
         });

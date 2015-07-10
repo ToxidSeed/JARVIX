@@ -29,8 +29,12 @@ Ext.define('MyApp.GestionRequerimientos.WinGestionRequerimientos',{
          
          
          main.btnSetProject = {                              
-                                iconCls:'icon-arrow_refresh'
-                           }
+                                iconCls:'icon-arrow_refresh',
+                                handler:function(){
+                                    var winProyectos = new MyApp.Helpers.Proyectos.HelperProyectosUsuario();
+                                    winProyectos.show();
+                                }
+                           };
                            
          //     main.tbar.add(main.txtSetProject);
          //main.tbar.add(main.btnSetProject);
@@ -61,7 +65,8 @@ Ext.define('MyApp.GestionRequerimientos.WinGestionRequerimientos',{
                   handler:function(){
                       
                   }
-              }
+              },
+              '-'
               ,main.txtSetProject
               ,main.btnSetProject
           ] 

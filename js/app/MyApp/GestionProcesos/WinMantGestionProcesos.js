@@ -328,7 +328,7 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
                      }
                  }
              },{
-                 title:'Requerimientos Funcionales',
+                 title:'Requerimientos',
                  items:[
                      main.panelRequerimientosFuncionales
                  ],

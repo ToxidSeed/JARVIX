@@ -14,13 +14,13 @@ class ProyectoMapper extends BaseMapper{
         parent::__construct();
     }
     protected $fields = array(
-      'id',
-        'nombre',
-        'descripcion',
-        'aplicacionid',
-        'fecharegistro',
-        'fechamodificacion',
-        'estadoid'
+      'Proyecto.id',
+        'Proyecto.nombre',
+        'Proyecto.descripcion',
+        'Proyecto.aplicacionid',
+        'Proyecto.fecharegistro',
+        'Proyecto.fechamodificacion',
+        'Proyecto.estadoid'
     );
     protected $uniqueValues = array(
         array('id')

@@ -16,6 +16,7 @@ class BaseController extends CI_Controller{
         date_default_timezone_set('America/Lima');
         $this->load->helper('url');
         $this->answer = new Answer();
+        $this->load->library('session');
     }   
     
     public function index(){
