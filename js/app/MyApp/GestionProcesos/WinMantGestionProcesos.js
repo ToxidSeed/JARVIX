@@ -464,9 +464,21 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
           ]
           
       });
-           
+          
+      main.tbarMain = Ext.create('Ext.toolbar.Toolbar',{
+         items:[
+             {                 
+                 xtype: 'displayfield',
+                 fieldLabel: 'Proyecto',
+                 value:'Implementacion del sistema JARVIX'
+             }
+         ] 
+      });
+       
        Ext.apply(this,{
             layout:'border',
+            tbar:main.tbarMain,
+            title:'Proceso',
             width:200,
             border:false,
             height:200,
