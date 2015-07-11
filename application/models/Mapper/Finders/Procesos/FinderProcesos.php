@@ -11,6 +11,9 @@ class FinderProcesos extends ProcesoMapper{
         $this->load->database();
         $this->db->select($this->fields);
         $this->db->from($this->tableName);
+        if(isset($parameters['ProyectoId'])){
+            $this->db->where('proyectoid',$parameters['ProyectoId']);
+        }
         $response = $this->db->get();
         $arrResponse = $this->getMultiResponse($response);
         return new ResponseModel($arrResponse, count($arrResponse));        

@@ -29,12 +29,21 @@ Ext.define('MyApp.GestionRequerimientos.WinGestionRequerimientos',{
          
          
          main.btnSetProject = {                              
-                                iconCls:'icon-arrow_refresh',
-                                handler:function(){
-                                    var winProyectos = new MyApp.Helpers.Proyectos.HelperProyectosUsuario();
-                                    winProyectos.show();
-                                }
-                           };
+            iconCls:'icon-arrow_refresh',
+            handler:function(){
+                var winProyectos = new MyApp.Helpers.Proyectos.HelperProyectosUsuario();
+                winProyectos.show();
+                winProyectos.on({
+                    'seleccion':function(){
+                        main.config.proyectoId = winProyectos.response.Proyecto.id;
+                        main.txtSetProject.setValue(winProyectos.response.Proyecto.nombre);            
+                        main.fnGetRequerimientos();
+                        main.GridRequerimientos.show();
+                        main.dispRequerimientos.hide();
+                    }
+                });
+            }
+       };
                            
          //     main.tbar.add(main.txtSetProject);
          //main.tbar.add(main.btnSetProject);
@@ -74,7 +83,7 @@ Ext.define('MyApp.GestionRequerimientos.WinGestionRequerimientos',{
        
        main.txtCodigo = Ext.create('Ext.form.field.Text',{
            fieldLabel:'Codigo'
-       })
+       });
        
        main.txtNombre = Ext.create('Ext.form.field.Text',{
            fieldLabel:'Nombre' 

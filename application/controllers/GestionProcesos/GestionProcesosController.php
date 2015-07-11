@@ -89,7 +89,9 @@ class GestionProcesosController extends BaseController{
      */
     public function getList(){
         $this->load->model('Mapper/Finders/Procesos/FinderProcesos','FinderProcesos');
-        $response = $this->FinderProcesos->search();
+        $response = $this->FinderProcesos->search(array(
+            'ProyectoId' => $this->getField('proyectoId')
+        ));
         echo json_encode(Response::asResults($response));        
     }
     

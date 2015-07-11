@@ -8,7 +8,7 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
    width:1,
    height:1,
    maximized:true,
-   title:'Registro de Nuevo Proceso',
+//   title:'Registro de Nuevo Proceso',
    floating:true,//Importante sin esto no se muestra el panel
    internal:{
        id:null

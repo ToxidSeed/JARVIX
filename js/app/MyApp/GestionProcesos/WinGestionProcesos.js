@@ -23,8 +23,21 @@ Ext.define('MyApp.GestionProcesos.WinGestionProcesos',{
          
          
          main.btnSetProject = {                              
-                                iconCls:'icon-arrow_refresh'
-                           }
+                                iconCls:'icon-arrow_refresh',
+                                handler:function(){
+                                    var winProyectos = new MyApp.Helpers.Proyectos.HelperProyectosUsuario();
+                                    winProyectos.show();
+                                    winProyectos.on({
+                                        'seleccion':function(){
+                                            main.config.proyectoId = winProyectos.response.Proyecto.id;
+                                            main.txtSetProject.setValue(winProyectos.response.Proyecto.nombre);            
+                                            main.Grid.load(main.getParams());
+                                            main.Grid.show();
+                                            main.dispModelarRequerimientos.hide();
+                                        }
+                                    });
+                                }
+                           };
        
        main.tbar = Ext.create('Ext.toolbar.Toolbar',{
            items:[
@@ -208,8 +221,9 @@ Ext.define('MyApp.GestionProcesos.WinGestionProcesos',{
    getParams:function(){
        var main = this;
        var object = {
+           proyectoId:main.config.proyectoId,
            id:main.txtCodigo.getValue()
-       }
+       };
        return object;
    },
    limpiarCriterios:function(){

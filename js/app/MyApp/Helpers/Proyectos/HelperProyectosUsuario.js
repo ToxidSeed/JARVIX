@@ -76,6 +76,9 @@ Ext.define('MyApp.Helpers.Proyectos.HelperProyectosUsuario',{
         main.grid.on({
             'afterrender':function(){
                 main.buscar(); 
+            },
+            'itemdblclick':function(){
+                main.seleccionar();
             }
         });
         
@@ -102,5 +105,14 @@ Ext.define('MyApp.Helpers.Proyectos.HelperProyectosUsuario',{
         main.grid.load({
            NombreProyecto:main.txtNombreProyecto.getValue() 
         });
+    },
+    seleccionar:function(){
+        var main = this;
+        var selModel = main.grid.getSelectionModel();
+        var record = selModel.getSelection();
+        main.response.Proyecto = record[0].data;   
+//        console.log(main.response.Proyecto);
+        main.fireEvent('seleccion');
+        main.close();
     }
 });

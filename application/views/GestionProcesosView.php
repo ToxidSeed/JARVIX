@@ -1,5 +1,6 @@
 <script type="text/javascript">
 //      Ext.require('MyApp.GestionProyectos.HelpAplicaciones');
+      Ext.require('MyApp.Helpers.Proyectos.HelperProyectosUsuario');
       Ext.require('MyApp.GestionProcesos.WinGestionProcesos');
       //Ext.require('MyApp.GestionProcesos.WinMantGestionProcesos');
       Ext.require('Per.MessageBox');
