@@ -15,6 +15,8 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
    },
    initComponent:function(){
        var main = this;
+       
+     
 //              
       main.txtCodigo = Ext.create('Ext.form.field.Text',{
           name:'Codigo',
@@ -47,10 +49,13 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
                   iconCls:'icon-disk',
                   handler:function(){                      
                       main.panelMainData.submit({
-                          success:function(response,action){                              
-                              var data = Ext.decode(action.response.responseText);                              
-                              main.internal.id = data.extradata.ProcesoId;
+                          success:function(form,action){
+                              console.log(action.result)                                               
+                              var msg = new Per.MessageBox();
+                              msg.data = action.result;
+                              msg.data.type = 'Advertencia';
                               main.loadGeneralData();
+                              msg.success();
                           },
                           failure:function(){
                               alert('Failure');
@@ -465,12 +470,14 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
           
       });
           
+      console.log(main.internal)  
+          
       main.tbarMain = Ext.create('Ext.toolbar.Toolbar',{
          items:[
              {                 
                  xtype: 'displayfield',
                  fieldLabel: 'Proyecto',
-                 value:'Implementacion del sistema JARVIX'
+                 value: main.internal.NombreProyecto
              }
          ] 
       });

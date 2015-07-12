@@ -45,9 +45,7 @@ Ext.define('MyApp.GestionProcesos.WinGestionProcesos',{
                    text:'Agregar',
                    iconCls:'icon-add',
                    handler:function(){
-//                       var WinEditar = new  MyApp.GestionProcesos.WinMantGestionProcesos();
-//                       WinEditar.show();
-                        window.open(base_url+'GestionProcesos/GestionProcesosController/addOption');
+                        window.open(base_url+'GestionProcesos/GestionProcesosController/addOption/?proyectoid='+main.config.proyectoId );
                    }
                },
                '-',

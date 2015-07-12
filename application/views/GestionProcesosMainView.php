@@ -24,10 +24,18 @@
 
       Ext.onReady(function () {         
           //El parametro $id, se pasa como parametro cuando se carga la vista
-            var ProcesoId = <?php echo $id;?>;              
-            var WinPrincipal = new MyApp.GestionProcesos.WinMantGestionProcesos();
-            console.log(ProcesoId);
-            WinPrincipal.internal.id = ProcesoId
+            var ProcesoId = <?php echo $id;?>;
+            var ProyectoId = <?php echo $proyecto_id;?>;
+            var NombreProyecto = <?php echo "'".$nombre_proyecto."'";?>;
+            
+            var WinPrincipal = new MyApp.GestionProcesos.WinMantGestionProcesos({
+                internal:{
+                    id: ProcesoId,
+                    ProyectoId:ProyectoId,
+                    NombreProyecto: NombreProyecto
+                }
+            });
+        
             WinPrincipal.show();          
       });
 </script>  

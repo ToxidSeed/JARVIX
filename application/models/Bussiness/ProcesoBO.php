@@ -6,7 +6,7 @@
  */
 require_once BUSSINESSPATH.'BaseBO.php';
 require_once MAPPERPATH.'ProcesoMapper.php';
-require_once MAPPERPATH.'ActualProyectoFinder.php';
+
 class ProcesoBO extends BaseBO{
     function __construct() {
         parent::__construct();
@@ -17,7 +17,7 @@ class ProcesoBO extends BaseBO{
               $this->db->trans_start();
               
               $mprProceso = new ProcesoMapper();
-              $ActualProyectoFinder = new ActualProyectoFinder();
+              /*$ActualProyectoFinder = new ActualProyectoFinder();
               $dmnProyectoUsuario = $ActualProyectoFinder->Get(1);
               //Setting Additional
               $dmnProyecto = $dmnProyectoUsuario->mapper()->getProyecto();
@@ -26,7 +26,7 @@ class ProcesoBO extends BaseBO{
               $this->getDomain()->setAplicacion($dmnAplicacion);
               
               //print_r($this->getDomain());
-              //Inserting Data
+              //Inserting Data*/
               $mprProceso->insert($this->getDomain());
               
               $this->db->trans_commit();

@@ -49,7 +49,19 @@ Ext.define('Per.MessageBox',{
       var text = '<ul>';            
       for(var object in msg.data.errors){                    
           text += '<li>'+msg.data.errors[object]+'</li>';
-      }      
+      }
+      
+      //Check if variable is array or not
+      
+      if (msg.data.message.constructor === Array) {
+         for(msgs_idx in msg.data.message){
+            text += '<li>'+msg.data.message[msgs_idx]+'</li>';
+         }
+      }else{
+         text += '<li>'+msg.data.message+'</li>';
+      }
+      
+      
       text +='</ul>';
       
        Ext.MessageBox.show({

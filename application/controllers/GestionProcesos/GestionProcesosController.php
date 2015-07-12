@@ -18,8 +18,19 @@ class GestionProcesosController extends BaseController{
         $this->load->view('Base/Footer.php');
     }
     public function addOption(){        
+        //Load Proyect Information
+        try{            
+            $this->load->model('Mapper/ProyectoMapper','ProyectoMapper');
+            $dmnProyecto = $this->ProyectoMapper->find($this->getField('proyectoid'));
+            //echo json_encode(Response::asSingleObject($dmnProyecto));
+        } catch (Exception $ex) {
+            echo Answer::setFailedMessage($ex->getMessage(),$ex->getCode());
+        }
+        
         $data = array(
-            'id' => 0
+            'id' => 0,
+            'proyecto_id' => $dmnProyecto->getId(),
+            'nombre_proyecto' => $dmnProyecto->getNombre()
         );
         $this->load->view('Base/Header.php');
         $this->load->view('GestionProcesosMainView.php',$data);
@@ -37,24 +48,20 @@ class GestionProcesosController extends BaseController{
 
     public function add(){
         try{
-            $config['upload_path'] = './uploads/';
-            $config['allowed_types'] = 'gif|jpg|png';
-            $config['max_size']	= '100';
-            $config['max_width']  = '1300';
-            $config['max_height']  = '900';
-            $this->load->library('upload', $config);    
-            if ( ! $this->upload->do_upload('prototypeUpload'))
-            {
-                $error = array('error' => $this->upload->display_errors());   
-            }else{
-                $data = $this->upload->data();               
+            
+            $data = $this->cargarArchivo();
+            
+            if($data == null){
+                exit();
             }
             
             $this->formValidation(__CLASS__,'', __FUNCTION__);                        
             $dmnProceso = new DomainProceso();
             $dmnProceso->setNombre($this->getField('nombre'));
             $dmnProceso->setEstado(new DomainEstado(1));//Estado Activo
-            $fileName = base_url().'uploads/'.$data['file_name'];
+            
+            $filePath = base_url().'uploads/'.$data['file_name'];            
+            $fileName = $filePath;
             $dmnProceso->setRutaPrototipo($fileName);
             $this->load->model('Bussiness/ProcesoBO','ProcesoBO');
             $this->ProcesoBO->setDomain($dmnProceso);
@@ -72,6 +79,36 @@ class GestionProcesosController extends BaseController{
                 echo Answer::setFailedMessage($ex->getMessage(),$ex->getCode());
             }
         }
+    }
+    
+    private function cargarArchivo(){       
+            $data = NULL;
+            $error = array();
+            
+            $config['upload_path'] = './uploads/';
+            $config['allowed_types'] = 'gif|jpg|png';
+            $config['max_size']	= '2000000';
+            $config['max_width']  = '2000';
+            $config['max_height']  = '2000';
+            
+            //print_r($_FILES);
+            
+            $this->load->library('upload', $config);    
+            if ( ! $this->upload->do_upload('prototypeUpload'))
+            {
+                $error = array('error' => $this->upload->display_errors());   
+            }else{
+                $data = $this->upload->data();               
+            }
+            
+            if (count($error) > 0 ){                
+                foreach($error as $message){
+                    $this->getAnswer()->addFailMessage($message,1);
+                }
+                $this->getAnswer()->setSuccess(true);
+                echo $this->getAnswer()->getAsJSON();              
+            }
+            return $data;
     }
     
     public function find(){
