@@ -11,7 +11,8 @@ Ext.define('MyApp.GestionAplicaciones.WinGestionAplicaciones',{
         main.tbar = Ext.create('Ext.toolbar.Toolbar',{
             items:[
                 {
-                    text:'Nuevo',
+                    text:'Agregar',
+                    iconCls:'icon-add',
                     handler:function(){
                         var myWinPrincipal = new MyApp.GestionAplicaciones.WinMantGestionAplicaciones({
                             title:'Registro de Nueva Aplicacion',
@@ -70,13 +71,21 @@ Ext.define('MyApp.GestionAplicaciones.WinGestionAplicaciones',{
          items:[
              {
                  text:'Buscar',
+                 iconCls:'icon-search',
                  handler:function(){                     
                      main.GridAplicaciones.load(main.getParams()) 
                  }
              },{
                  text:'Limpiar',
+                 iconCls:'icon-clean',
                  handler:function(){
 //                     main.limpiarCriterios();
+                 }
+             },{
+                 text:'Ocultar',
+                 iconCls:'icon-collapse',
+                 handler:function(){
+                     
                  }
              }
          ] 
@@ -87,6 +96,7 @@ Ext.define('MyApp.GestionAplicaciones.WinGestionAplicaciones',{
           bodyPadding:'10px',
           title:'Criterios de Busqueda',
           collapsible:true,
+          collapsed:true,
           tbar:main.panelCritTbar,
           items:[
                 main.txtCodigo,

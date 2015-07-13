@@ -60,6 +60,7 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
                               msg.data = action.result;
                               msg.data.type = 'Advertencia';
                               main.loadGeneralData();
+                              
                               msg.success();
                           },
                           failure:function(){
@@ -100,6 +101,9 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
                       });
                       WinAgregarFlujo.on({
                             'close':function(){
+                                main.refreshFlujos();
+                            },
+                            'Guardar':function(){
                                 main.refreshFlujos();
                             }
                         })
@@ -475,7 +479,7 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
           
       });
           
-      console.log(main.internal)  
+//      console.log(main.internal)  
           
       main.tbarMain = Ext.create('Ext.toolbar.Toolbar',{
          items:[

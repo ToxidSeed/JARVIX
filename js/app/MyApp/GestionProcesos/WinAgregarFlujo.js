@@ -92,6 +92,12 @@ Ext.define('MyApp.GestionProcesos.WinAgregarFlujo',{
                     }                                                      
                   }
               },{
+                  text:'Quitar',
+                  iconCls:'icon-delete',
+                  handler:function(){
+                      
+                  }
+              },{
                   text:'Insertar',
                   iconCls:'icon-table_row_insert',
                   handler:function(){
@@ -303,6 +309,8 @@ Ext.define('MyApp.GestionProcesos.WinAgregarFlujo',{
               var msg = new Per.MessageBox();  
               msg.data = Ext.decode(response.responseText); 
               main.internal.ProcesoFlujoId = msg.data.extradata.ProcesoFlujoId;            
+
+              main.fireEvent('Guardar');  
 
               if(parSuccessMessage != false ||  msg.data.success == false){                
                   msg.success();      

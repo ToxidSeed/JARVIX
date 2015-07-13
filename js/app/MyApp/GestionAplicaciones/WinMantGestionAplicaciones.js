@@ -9,7 +9,7 @@ Ext.define('MyApp.GestionAplicaciones.WinMantGestionAplicaciones',{
    width:500,
    height:150,
    modal:true,
-   frame:false, 
+   //frame:false, 
    EstadoId:null,
    initComponent:function(){
        var main = this;
@@ -57,7 +57,9 @@ Ext.define('MyApp.GestionAplicaciones.WinMantGestionAplicaciones',{
             
       
         main.Toolbar = Ext.create('Ext.toolbar.Toolbar');
-        main.btnGuardar = {text:'Guardar',
+        main.btnGuardar = {
+                        iconCls:'icon-disk',
+                        text:'Guardar',
                             handler:function(){
                             if(main.create == true){
                                 main.saveNew();
@@ -85,7 +87,8 @@ Ext.define('MyApp.GestionAplicaciones.WinMantGestionAplicaciones',{
       
         
         main.btnCancelar =   Ext.create('Ext.button.Button',{
-            text:'Cancelar',
+            text:'Salir',
+            iconCls:'icon-door-out',
             handler:function(){
                 main.close();                            
             }
@@ -98,13 +101,14 @@ Ext.define('MyApp.GestionAplicaciones.WinMantGestionAplicaciones',{
             main.txtEstado.hide();            
         }
         
-        Ext.apply(this,{
-            width:500,
-            height:330,
-            bodyPadding:'10px',
-            tbar: main.Toolbar,
-           items:[
-               main.txtNombre,
+        main.general = Ext.create('Ext.panel.Panel',{  
+           bodyPadding:'10px',
+           border:false,
+//           width:1,
+//           height:1,
+//           region:'west',
+          items:[
+              main.txtNombre,
                main.txtEstado,
                main.txtRutaPublicacion,
                main.txtServidor,
@@ -112,18 +116,36 @@ Ext.define('MyApp.GestionAplicaciones.WinMantGestionAplicaciones',{
                main.txtUsuario,
                main.txtPassword,
                main.dtFechaRegistro,
-               main.dtFechaUltAct,                     
+               main.dtFechaUltAct,   
+          ] 
+       });
+        
+        Ext.apply(this,{
+            width:500,
+            height:330,
+//            bodyPadding:'10px',                        
+            tbar: main.Toolbar,
+           items:[
+                   main.general               
            ],
            listeners:{
                'show':function(){   
                    if(main.create == false){
                        main.loadInitValues()
                    }                    
+               },
+               'resize':function(win,w,h){                   
+                   main.redimensionar(win,w,h);
                }
            }
+           
         });
         
         this.callParent(arguments);
+   },
+   redimensionar:function(win,w,h){
+       var main = this;         
+       main.general.setHeight(h-60);
    },
    saveNew:function(){
        var main = this;

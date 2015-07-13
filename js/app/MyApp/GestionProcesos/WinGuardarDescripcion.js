@@ -73,49 +73,66 @@ Ext.define('MyApp.GestionProcesos.WinGuardarDescripcion',{
 		main.txtDescripcion = Ext.create('Ext.form.field.TextArea',{
 			fieldLabel:'Descripcion',
                         hideLabel:true,
-			height:100,
-			width:500
+                        width:1,
+                        heiht:1
 		});
 
-		main.general = Ext.create('Ext.panel.Panel',{  
-                   //bodyPadding:'10px',
-                   frame:true,
-                   border:false,
-                   items:[
-                       //main.txtPaso,
-                       main.txtDescripcion
-                   ] 
-                 });
+//		main.general = Ext.create('Ext.panel.Panel',{  
+//                   bodyPadding:'0 0 0 0',
+//                   frame:true,
+//                   border:false,
+//                   items:[
+//                       //main.txtPaso,
+//                       main.txtDescripcion
+//                   ] 
+//                 });
 
 
 
                 Ext.apply(this,{
                   //tbar:main.toolgen,
                   defaultFocus:main.txtDescripcion,  
-                  width:550,
-                  height:250,       
+                  width:500,
+                  border:false,
+                  height:200,       
                           layout:'border',
                           items:[
-                              main.general
+                              main.txtDescripcion
                           ],
                   buttons:[
                       {
                           text:'Aceptar',
-                          iconCls:'icon-accept'
+                          iconCls:'icon-accept',
+                          handler:function(){
+                              main.save();
+                          }
                       },{
                           text:'Salir',
-                          iconCls:'icon-door-out'
+                          iconCls:'icon-door-out',
+                          handler:function(){
+                              main.close();
+                          }
                       }
-                  ]
+                  ],
+                  listeners:{
+                      'resize':function(win,w,h){
+                          main.resizeComponents(win,w,h);
+                      }
+                  }
                 });
 
 		this.callParent(arguments);
                 main.LoadInitialValues();
 	},
+        resizeComponents:function(win,w,h){
+            var main = this;
+            main.txtDescripcion.setWidth(w);
+            main.txtDescripcion.setHeight(h-60);
+        },
 	saveNew:function(url){
 		var main = this;
 
-		Ext.Ajax.request({
+          Ext.Ajax.request({
           url:base_url+url,
           params:{
               ProcesoFlujoId: main.internal.procesoFlujoId,
@@ -181,5 +198,23 @@ Ext.define('MyApp.GestionProcesos.WinGuardarDescripcion',{
        LoadInitialValues:function(){
            var main = this;           
            main.txtDescripcion.setValue(main.internal.descripcion);
+       },
+       save:function(){
+           var main = this;
+           if(main.actions.AddStep != undefined && main.actions.AddStep === true){
+                main.AddStep();
+            }
+            if(main.actions.AddAlternativeWorkFlow != undefined && main.actions.AddAlternativeWorkFlow === true){
+                main.AddAlternativeWorkFlow();
+            }
+            if(main.actions.AddExceptionWorkFlow != undefined && main.actions.AddExceptionWorkFlow === true){
+                main.AddExceptionWorkFlow();
+            }
+            if(main.actions.InsertStep != undefined && main.actions.InsertStep == true){                                                
+                main.InsertStep();
+            }
+            if(main.actions.Update != undefined && main.actions.Update == true){                                                
+                main.Update();
+            }
        }
 });

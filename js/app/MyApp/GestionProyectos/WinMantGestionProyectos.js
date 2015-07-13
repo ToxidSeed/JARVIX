@@ -317,7 +317,15 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
           items:[
              main.gridRequerimientos
           ]
-      });
+            });
+           
+           
+        main.tbarPanelReq = Ext.create('Ext.toolbar.Toolbar');
+            
+         main.panelModelReq = Ext.create('Ext.form.Panel',{
+             tbar:main.tbarPanelReq,
+             border:false
+         });
         
         main.panelInfAdicional = Ext.create('Ext.panel.Panel',{
              region:'center',
@@ -335,6 +343,11 @@ Ext.define('MyApp.GestionProyectos.WinMantGestionProyectos',{
                         title:'Requerimientos',
                         items:[
                              main.panelRequerimientos
+                        ]
+                    },{
+                        title:'Modelar Requerimientos',
+                        items:[
+                             main.panelModelReq
                         ]
                     }
                     ]
