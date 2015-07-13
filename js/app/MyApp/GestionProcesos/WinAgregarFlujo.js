@@ -45,7 +45,7 @@ Ext.define('MyApp.GestionProcesos.WinAgregarFlujo',{
                     }                     
                   }
               },{
-                  text:'Cancelar',
+                  text:'Salir',
                   iconCls:'icon-door-out',
                   handler:function(){
                       main.close();

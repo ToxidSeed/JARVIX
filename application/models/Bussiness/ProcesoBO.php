@@ -16,17 +16,7 @@ class ProcesoBO extends BaseBO{
               $this->load->database();
               $this->db->trans_start();
               
-              $mprProceso = new ProcesoMapper();
-              /*$ActualProyectoFinder = new ActualProyectoFinder();
-              $dmnProyectoUsuario = $ActualProyectoFinder->Get(1);
-              //Setting Additional
-              $dmnProyecto = $dmnProyectoUsuario->mapper()->getProyecto();
-              $dmnAplicacion = $dmnProyecto->mapper()->getAplicacion();
-              $this->getDomain()->setProyecto($dmnProyecto);
-              $this->getDomain()->setAplicacion($dmnAplicacion);
-              
-              //print_r($this->getDomain());
-              //Inserting Data*/
+              $mprProceso = new ProcesoMapper();             
               $mprProceso->insert($this->getDomain());
               
               $this->db->trans_commit();

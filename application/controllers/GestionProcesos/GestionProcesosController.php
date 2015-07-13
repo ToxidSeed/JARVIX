@@ -7,6 +7,8 @@
 require_once BASECONTROLLERPATH.'BaseController.php';
 require_once DOMAINPATH.'DomainEstado.php';
 require_once DOMAINPATH.'DomainProceso.php';
+require_once DOMAINPATH.'DomainProyecto.php';
+require_once DOMAINPATH.'DomainAplicacion.php';
 
 class GestionProcesosController extends BaseController{
     function __construct() {
@@ -30,8 +32,12 @@ class GestionProcesosController extends BaseController{
         $data = array(
             'id' => 0,
             'proyecto_id' => $dmnProyecto->getId(),
-            'nombre_proyecto' => $dmnProyecto->getNombre()
+            'nombre_proyecto' => $dmnProyecto->getNombre(),
+            'aplicacion_id' => $dmnProyecto->getAplicacion()->getId()
         );
+        
+        //print_r($data);
+        //exit();
         $this->load->view('Base/Header.php');
         $this->load->view('GestionProcesosMainView.php',$data);
         $this->load->view('Base/Footer.php');
@@ -58,8 +64,10 @@ class GestionProcesosController extends BaseController{
             $this->formValidation(__CLASS__,'', __FUNCTION__);                        
             $dmnProceso = new DomainProceso();
             $dmnProceso->setNombre($this->getField('nombre'));
-            $dmnProceso->setEstado(new DomainEstado(1));//Estado Activo
-            
+            $dmnProceso->setEstado(new DomainEstado(0));//Estado Activo
+            $dmnProceso->setProyecto(new DomainProyecto($this->getField('ProyectoId')));
+            $dmnProceso->setAplicacion(new DomainAplicacion($this->getField('AplicacionId')));
+            //Setting file path
             $filePath = base_url().'uploads/'.$data['file_name'];            
             $fileName = $filePath;
             $dmnProceso->setRutaPrototipo($fileName);
@@ -114,7 +122,8 @@ class GestionProcesosController extends BaseController{
     public function find(){
         try{            
             $this->load->model('Mapper/ProcesoMapper','ProcesoMapper');
-            $dmnProceso = $this->ProcesoMapper->find($this->getField('id'));
+            $dmnProceso = $this->ProcesoMapper->find($this->getField('id'));                        
+            
             echo json_encode(Response::asSingleObject($dmnProceso));
         } catch (Exception $ex) {
             echo Answer::setFailedMessage($ex->getMessage(),$ex->getCode());

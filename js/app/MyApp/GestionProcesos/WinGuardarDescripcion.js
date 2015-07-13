@@ -37,6 +37,7 @@ Ext.define('MyApp.GestionProcesos.WinGuardarDescripcion',{
 			items:[
 				{
 					text:'Aceptar',
+                                        iconCls:'icon-accept',
 					handler:function(){
                                             
                                             if(main.actions.AddStep != undefined && main.actions.AddStep === true){
@@ -56,7 +57,8 @@ Ext.define('MyApp.GestionProcesos.WinGuardarDescripcion',{
                                             }
 					}
 				},{
-					text:'Cancelar',
+					text:'Salir',
+                                        iconCls:'icon-door-out',
 					handler:function(){
 						main.close();
 					}
@@ -70,33 +72,42 @@ Ext.define('MyApp.GestionProcesos.WinGuardarDescripcion',{
 
 		main.txtDescripcion = Ext.create('Ext.form.field.TextArea',{
 			fieldLabel:'Descripcion',
+                        hideLabel:true,
 			height:100,
 			width:500
 		});
 
 		main.general = Ext.create('Ext.panel.Panel',{  
-           bodyPadding:'10px',           
-          items:[
-              main.txtPaso,
-              main.txtDescripcion
-          ] 
-        });
+                   //bodyPadding:'10px',
+                   frame:true,
+                   border:false,
+                   items:[
+                       //main.txtPaso,
+                       main.txtDescripcion
+                   ] 
+                 });
 
 
 
-         Ext.apply(this,{
-          tbar:main.toolgen,
-          defaultFocus:main.txtDescripcion,  
-          width:550,
-          height:200,       
-	          layout:'border',
-	          items:[
-	              main.general
-	          ]		       
-	       });
-
-        
-
+                Ext.apply(this,{
+                  //tbar:main.toolgen,
+                  defaultFocus:main.txtDescripcion,  
+                  width:550,
+                  height:250,       
+                          layout:'border',
+                          items:[
+                              main.general
+                          ],
+                  buttons:[
+                      {
+                          text:'Aceptar',
+                          iconCls:'icon-accept'
+                      },{
+                          text:'Salir',
+                          iconCls:'icon-door-out'
+                      }
+                  ]
+                });
 
 		this.callParent(arguments);
                 main.LoadInitialValues();

@@ -27,12 +27,14 @@
             var ProcesoId = <?php echo $id;?>;
             var ProyectoId = <?php echo $proyecto_id;?>;
             var NombreProyecto = <?php echo "'".$nombre_proyecto."'";?>;
+            var AplicacionId = <?php echo $aplicacion_id;?>;
             
             var WinPrincipal = new MyApp.GestionProcesos.WinMantGestionProcesos({
                 internal:{
                     id: ProcesoId,
                     ProyectoId:ProyectoId,
-                    NombreProyecto: NombreProyecto
+                    NombreProyecto: NombreProyecto,
+                    AplicacionId: AplicacionId
                 }
             });
         

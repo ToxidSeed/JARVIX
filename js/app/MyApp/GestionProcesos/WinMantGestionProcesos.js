@@ -49,8 +49,13 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
                   iconCls:'icon-disk',
                   handler:function(){                      
                       main.panelMainData.submit({
+                          params:{
+                              nombre: main.txtNombre.getValue(),
+                              ProyectoId: main.internal.ProyectoId,
+                              AplicacionId: main.internal.AplicacionId
+                          },
                           success:function(form,action){
-                              console.log(action.result)                                               
+                              main.internal.id = action.result.extradata.ProcesoId;
                               var msg = new Per.MessageBox();
                               msg.data = action.result;
                               msg.data.type = 'Advertencia';
