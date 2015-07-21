@@ -23,7 +23,8 @@ class PasoFlujoMapper extends BaseMapper{
         'numeropaso',
         'descripcion',
         'responsable',
-        'numeroflujo'
+        'numeroflujo',
+        'pasoflujoreferenciaid'
     );
     
     protected $uniqueValues = array(
@@ -40,6 +41,7 @@ class PasoFlujoMapper extends BaseMapper{
         $dmnPasoFlujo->setTipoFlujo(new DomainTipoFlujo($record['TIPOFLUJOID']));
         $dmnPasoFlujo->setDescripcion($record['DESCRIPCION']);
         $dmnPasoFlujo->setResponsable($record['RESPONSABLE']);               
+        $dmnPasoFlujo->setPasoFlujoReferencia(new DomainPasoFlujo($record['PASOFLUJOREFERENCIAID']));        
         return $dmnPasoFlujo;
     }
     
@@ -58,6 +60,8 @@ class PasoFlujoMapper extends BaseMapper{
         //$fields['responsable'] = $dmnPasoFlujo->getResponsable();
         $this->db->set($fields);
         $res = $this->db->insert($this->tableName);
+
+        //echo $this->db->last_query();
         
         $dmnPasoFlujo->setId($this->db->insert_id());
         if(!$res){

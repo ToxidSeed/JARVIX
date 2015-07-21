@@ -5,12 +5,15 @@
         <group>
             <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/js/app/MyApp/GestionProcesos/WinMantGestionProcesos.js</file>
             <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/js/app/MyApp/GestionProcesos/WinAgregarFlujo.js</file>
+            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/models/Mapper/PasoFlujoMapper.php</file>
             <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/js/app/MyApp/GestionProcesos/WinGuardarDescripcion.js</file>
+            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/models/Mapper/Finders/PasoFlujo/FinderPasoFlujo.php</file>
             <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/js/app/MyApp/GestionRequerimientos/WinGestionRequerimientos.js</file>
             <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/models/Mapper/ProcesoMapper.php</file>
             <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/views/GestionProcesosMainView.php</file>
             <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/views/GestionProcesosView.php</file>
             <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/css/MyAppIconStyle.css</file>
+            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/controllers/GestionProcesos/AddProcesoFlujo.php</file>
         </group>
     </open-files>
 </project-private>

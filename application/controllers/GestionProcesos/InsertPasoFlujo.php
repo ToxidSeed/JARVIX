@@ -34,7 +34,16 @@ class InsertPasoFlujo extends BaseController{
             $dmnPasoFlujo->setTipoFlujo($dmnTipoFlujo);
             $dmnPasoFlujo->setNumeroPaso($this->getField('NumeroPaso'));           
 
+            $pasoFlujoReferenciaId = $this->getField('PasoFlujoReferenciaId');
+            
+            //Si es nulo o vacio
+            if($pasoFlujoReferenciaId != null && $pasoFlujoReferenciaId != ""){
+                $dmnPasoFlujo->setPasoFlujoReferencia(new DomainPasoFlujo($pasoFlujoReferenciaId));
+            }
+            
             $this->dmnPasoFlujo = $dmnPasoFlujo;
+            
+            //print_r($dmnPasoFlujo);
             
             $this->load->model('Bussiness/ProcesoFlujoBO/PasoFlujoInsertBO','PasoFlujoInsertBO');
             

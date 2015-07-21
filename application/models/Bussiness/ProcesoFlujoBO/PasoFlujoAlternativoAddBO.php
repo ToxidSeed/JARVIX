@@ -38,6 +38,8 @@ class PasoFlujoAlternativoAddBO extends BaseBO{
               
               $this->getInformationWorkFlowAlternative();
               
+              //print_r($this->domain);
+              
               if($this->reenumerar == true){
                   $this->reenumFlujos();
               }
@@ -89,26 +91,26 @@ class PasoFlujoAlternativoAddBO extends BaseBO{
     
 
     //Case 1
-    if($this->getInformationFromCase1() == true){
+    if($this->getInformationFromCase1() == true){        
         return;
     }
 
     //Case 2
-    if($this->getInformationFromCase2() == true){
+    if($this->getInformationFromCase2() == true){        
         return;
     }
 
     //Case 3
-    if($this->getInformationFromCase3() == true){
+    if($this->getInformationFromCase3() == true){        
         return;
     }
 
     //Case 4
-    if($this->getInformationFromCase4() == true){
+    if($this->getInformationFromCase4() == true){        
         return;
     }
 
-
+    
 
   }
     //1.- Obtener la lista de flujos alternativos
@@ -121,9 +123,7 @@ class PasoFlujoAlternativoAddBO extends BaseBO{
 
       //Escenario 1
       $this->responseWorkFlows = $this->FinderFlujos->search($dmnProcesoFlujo->getId(),$dmnTipoFlujo->getId());                   
-      
-      
-      
+                  
       if ($this->responseWorkFlows->getCount() == 0){          
           $this->domain->setNumeroFlujo(self::DEFAULTWORKFLOWNUMBER);
           $this->domain->setNumeroPaso(self::DEFAULTSTEPNUMBER);
@@ -131,19 +131,26 @@ class PasoFlujoAlternativoAddBO extends BaseBO{
       }
       return false;
   }
-  //Revisa si es que el paso que se esta intentando insertar es mayor a todos los pasos de referencia ya insertados
-  //para este tipo de flujo
-  private function getInformationFromCase2(){
+  //Revisa si es que el paso que se esta intentando insertar es mayor a todos los 
+  //pasos de referencia ya insertados para este tipo de flujo
+  private function getInformationFromCase2(){      
       $dmnPasoReferencia = $this->domain->mapper()->getPasoFlujoReferencia();
-
-
 
       $numeroPasoReferencia = $dmnPasoReferencia->getNumeroPaso();
       $steps = $this->responseWorkFlows->getResults();
       $dmnMaxPasoFlujo = end($steps);
-      if($dmnMaxPasoFlujo->getPasoFlujoReferencia() < $numeroPasoReferencia){
+      //$dmnMaxPasoFlujo->
+      
+      print_r($dmnMaxPasoFlujo->getPasoFlujoReferencia());
+      print_r($numeroPasoReferencia);     
+      
+      if($dmnMaxPasoFlujo->getPasoFlujoReferencia()->getNumeroPaso() <= $numeroPasoReferencia){
+          echo 'caso 2';
           $this->domain->setNumeroFlujo($dmnMaxPasoFlujo->getNumeroFlujo() + 1);
           $this->domain->setNumeroPaso(self::DEFAULTSTEPNUMBER);
+          
+          //print_r($this->domain);
+          
           return true;
       }
       return false;
@@ -177,7 +184,8 @@ class PasoFlujoAlternativoAddBO extends BaseBO{
       return false;
   }
 
-  /*Verificar si es que el paso de referencia que se esta agregando, ya existe dentro de los flujos alternativos*/
+  /*Verificar si es que el paso de referencia que se esta agregando, 
+   * ya existe dentro de los flujos alternativos*/
   private function getInformationFromCase4(){
       $dmnPasoReferencia = $this->domain->getPasoFlujoReferencia();
       $numeroPasoReferencia = $dmnPasoReferencia->getNumeroPaso();

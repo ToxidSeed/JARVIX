@@ -105,14 +105,32 @@ class AddProcesoFlujo extends BaseController{
         $procesoFlujoId = $this->getField('ProcesoFlujoId');
         $response = $this->FinderPasoFlujo->search($procesoFlujoId);  
 
+        //print_r($response);
+        
         foreach($response->getResults() as $myStep  ){
             $myStep->mapper()->getTipoFlujo();            
+            $dmnPasoFlujoReferencia = $myStep->mapper()->getPasoFlujoReferencia();
+            if($dmnPasoFlujoReferencia != null){
+                $dmnPasoFlujoReferencia->mapper()->getTipoFlujo();
+            }
         }
+        
+        //print_r($response);
 
+        //print_r($response->getResults());
+        
         $myArrResults = Response::asResults($response);
+        
+        //print_r($myArrResults);
 
         foreach($myArrResults['results'] as $idx => $row){                        
-            $myArrResults['results'][$idx]['Grouper'] = '('.$row['tipoFlujo']['id'].'.'.$row['numeroFlujo'].')'.'-'.$row['tipoFlujo']['nombre'];            
+            //print_r($row);
+            if ($row['tipoFlujo']['id'] == 2 || $row['tipoFlujo']['id'] == 3){
+                $myArrResults['results'][$idx]['Grouper'] = '('.$row['tipoFlujo']['id'].'.'.$row['numeroFlujo'].')'.'-'.$row['tipoFlujo']['nombre'].' al paso Nro '.$row['pasoFlujoReferencia']['numeroPaso'].' del '.$row['pasoFlujoReferencia']['tipoFlujo']['nombre'];            
+            }else{
+                $myArrResults['results'][$idx]['Grouper'] = '('.$row['tipoFlujo']['id'].'.'.$row['numeroFlujo'].')'.'-'.$row['tipoFlujo']['nombre'];            
+            }
+            
         }
 
         echo json_encode($myArrResults);             

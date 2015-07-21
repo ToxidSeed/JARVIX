@@ -130,7 +130,9 @@ Ext.define('MyApp.GestionProcesos.WinGuardarDescripcion',{
             main.txtDescripcion.setHeight(h-60);
         },
 	saveNew:function(url){
-		var main = this;
+            var main = this;
+
+         //console.log(main.internal);       
 
           Ext.Ajax.request({
           url:base_url+url,

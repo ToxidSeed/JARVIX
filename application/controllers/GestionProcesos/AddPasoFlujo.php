@@ -32,14 +32,21 @@ class AddPasoFlujo extends BaseController{
             $dmnPasoFlujo->setNumeroFlujo($this->getField('NumeroFlujo'));
             $dmnTipoFlujo = new DomainTipoFlujo($this->getField('TipoFlujo'));
             $dmnPasoFlujo->setTipoFlujo($dmnTipoFlujo);
-            $dmnPasoFlujo->setNumeroPaso($this->getField('NumeroPaso'));           
+            $dmnPasoFlujo->setNumeroPaso($this->getField('NumeroPaso'));
             
-
+            $pasoFlujoReferenciaId = $this->getField('PasoFlujoReferenciaId');
+            
+            //Si es nulo o vacio
+            if($pasoFlujoReferenciaId != null && $pasoFlujoReferenciaId != ""){
+                $dmnPasoFlujo->setPasoFlujoReferencia(new DomainPasoFlujo($pasoFlujoReferenciaId));
+            }
+            
+            //print_r($dmnPasoFlujo);
+            
             $this->dmnPasoFlujo = $dmnPasoFlujo;
             
             $this->load->model('Bussiness/ProcesoFlujoBO/PasoFlujoAddBO','PasoFlujoAddBO');
-            
-            
+                        
             $this->PasoFlujoAddBO->setDomain($dmnPasoFlujo);            
             $this->PasoFlujoAddBO->add();
             

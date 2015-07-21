@@ -202,8 +202,8 @@ Ext.define('MyApp.GestionProcesos.WinAgregarFlujo',{
                  dataIndex:'descripcion',
                  flex:1
              },{
-                 header:'',
-                 dataIndex:'PasoFlujoReferenciaId',
+                 header:'pasoFlujoReferenciaId',
+                 dataIndex:'pasoFlujoReferencia.id',
                  hidden:true
              }             
          ]
@@ -371,6 +371,8 @@ Ext.define('MyApp.GestionProcesos.WinAgregarFlujo',{
         var myRecord = mySelectionModel.getLastSelected();
         var myStore = main.gridFlujos.getStore();
 
+        //console.log(myRecord);
+
         if(myStore.getCount() > 0){
             internal = {
               procesoFlujoId:main.internal.ProcesoFlujoId,
@@ -380,8 +382,10 @@ Ext.define('MyApp.GestionProcesos.WinAgregarFlujo',{
               },
               numeroFlujo:myRecord.get("numeroFlujo"),
               numeroPaso:parseInt(myRecord.get("numeroPaso")),
-              PasoFlujoReferenciaId:null
+              pasoFlujoReferenciaId:myRecord.get("pasoFlujoReferencia.id")
             };
+            
+            //console.log(internal);
         }
         if(myStore.getCount() == 0){
             internal = {
@@ -493,7 +497,7 @@ Ext.define('MyApp.GestionProcesos.WinAgregarFlujo',{
               tipoFlujo:{
                   id:myRecord.get('tipoFlujo.id')
               },
-              pasoFlujoReferenciaId: myRecord.get('id'),
+              pasoFlujoReferenciaId: myRecord.get('pasoFlujoReferencia.id'),
               numeroFlujo:myRecord.get('numeroFlujo'),
               numeroPaso:myRecord.get('numeroPaso')
           },
