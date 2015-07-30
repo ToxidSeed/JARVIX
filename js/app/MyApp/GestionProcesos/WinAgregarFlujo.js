@@ -95,7 +95,7 @@ Ext.define('MyApp.GestionProcesos.WinAgregarFlujo',{
                   text:'Quitar',
                   iconCls:'icon-delete',
                   handler:function(){
-                      
+                      main.quitarPaso();
                   }
               },{
                   text:'Insertar',
@@ -572,5 +572,21 @@ Ext.define('MyApp.GestionProcesos.WinAgregarFlujo',{
               
           }
        });
+   },
+   quitarPaso:function(){
+       var main = this;
+       var mySelectionModel = main.gridFlujos.getSelectionModel();
+       var myRecord = mySelectionModel.getLastSelected();
+       
+       Ext.Ajax.request({
+          url:base_url+'GestionProcesos/QuitarPasoFlujo/quitar',
+          params:{              
+              pasoFlujoId:myRecord.get('id')
+          },
+          success:function(response){
+              main.reloadSteps();
+          }
+       });
+       
    }
 });

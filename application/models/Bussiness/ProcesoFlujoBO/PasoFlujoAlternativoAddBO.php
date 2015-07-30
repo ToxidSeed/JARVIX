@@ -8,11 +8,10 @@ require_once FINDERPATH.'PasoFlujo/FinderPasosPorFlujos.php';
 
 class PasoFlujoAlternativoAddBO extends BaseBO{
 	function __construct(){
-		parent::__construct();
-		$this->mprPasoFlujoMapper = new PasoFlujoMapper();
-    $this->FinderFlujos = new FinderFlujos();
-    $this->FinderPasosPorFlujos = new FinderPasosPorFlujos();
-    $this->mprPasoFlujoMapper = new PasoFlujoMapper();
+		parent::__construct();		
+                $this->FinderFlujos = new FinderFlujos();
+                $this->FinderPasosPorFlujos = new FinderPasosPorFlujos();
+                $this->mprPasoFlujoMapper = new PasoFlujoMapper();
 	}
   private $mprPasoFlujoMapper; 
   private $FinderFlujos;
