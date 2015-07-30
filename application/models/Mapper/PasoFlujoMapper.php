@@ -84,6 +84,9 @@ class PasoFlujoMapper extends BaseMapper{
         $this->db->set($fields);
         $this->db->where('id',$dmnPasoFlujo->getId());
         $res = $this->db->update($this->tableName);
+        
+        echo $this->db->last_query();
+        
         if(!$res){
             $this->db->trans_rollback();
             throw new Exception('Error al Actualizar el Detalle Proceso Flujo',-1);

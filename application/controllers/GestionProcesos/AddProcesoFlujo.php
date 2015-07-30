@@ -126,7 +126,7 @@ class AddProcesoFlujo extends BaseController{
         foreach($myArrResults['results'] as $idx => $row){                        
             //print_r($row);
             if ($row['tipoFlujo']['id'] == 2 || $row['tipoFlujo']['id'] == 3){
-                $myArrResults['results'][$idx]['Grouper'] = '('.$row['tipoFlujo']['id'].'.'.$row['numeroFlujo'].')'.'-'.$row['tipoFlujo']['nombre'].' al paso Nro '.$row['pasoFlujoReferencia']['numeroPaso'].' del '.$row['pasoFlujoReferencia']['tipoFlujo']['nombre'];            
+                $myArrResults['results'][$idx]['Grouper'] = '('.$row['tipoFlujo']['id'].'.'.$row['pasoFlujoReferencia']['numeroPaso'].'.'.$row['numeroFlujo'].')'.'-'.$row['tipoFlujo']['nombre'].' al paso Nro '.$row['pasoFlujoReferencia']['numeroPaso'].' del '.$row['pasoFlujoReferencia']['tipoFlujo']['nombre'];            
             }else{
                 $myArrResults['results'][$idx]['Grouper'] = '('.$row['tipoFlujo']['id'].'.'.$row['numeroFlujo'].')'.'-'.$row['tipoFlujo']['nombre'];            
             }

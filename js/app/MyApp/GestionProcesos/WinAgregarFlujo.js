@@ -278,7 +278,7 @@ Ext.define('MyApp.GestionProcesos.WinAgregarFlujo',{
        Ext.apply(this,{
           tbar:main.toolgen,          
           width:1000,
-          height:650,
+          height:600,
           layout:'border',
           items:[
               main.general,
