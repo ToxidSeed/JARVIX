@@ -9,6 +9,8 @@ require_once BUSSINESSPATH.'BaseBO.php';
 require_once MAPPERPATH.'PasoFlujoMapper.php';
 require_once FINDERPATH.'PasoFlujo/FinderFlujos.php';
 require_once FINDERPATH.'PasoFlujo/FinderPasosPorFlujos.php';
+require_once FINDERPATH.'PasoFlujo/PasoFlujoFRM1.php';
+require_once FINDERPATH.'PasoFlujo/PasoFlujoFRM2.php';
 /**
  * Description of PasoFlujoQuitarBO
  *
@@ -21,23 +23,65 @@ class PasoFlujoQuitarBO extends BaseBO{
 //                $this->FinderFlujos = new FinderFlujos();
 //                $this->FinderPasosPorFlujos = new FinderPasosPorFlujos();
                 $this->mprPasoFlujoMapper = new PasoFlujoMapper();
+                $this->FinderPasos = new PasoFlujoFRM1();
+                $this->FinderPasosReenumerar = new PasoFlujoFRM2();
+                
 	}
     private $mprPasoFlujoMapper; 
-    private $FinderFlujos;
+    private $FinderPasosReenumerar;
+    private $FinderPasos;
     
     public function quitar(){
         try{
             $this->load->database();
             $this->db->trans_start();
             //Verificar si es que existen flujos alternativos relacionados al paso nro 2
-            //De existir, eliminarlos antes.
-            
-            
-            $this->mprPasoFlujoMapper->delete($this->domain);
+            //De existir, eliminarlos antes    
+            $this->quitarConReferencias($this->domain->getId());
+            //
             $this->db->trans_commit();
         } catch (Exception $ex) {
             $this->db->trans_rollback();
             throw new Exception($ex->getMessage(),$ex->getCode());   
         }        
+    }
+    
+    public function quitarConReferencias(DomainPasoFlujo $dmnPasoFlujo){
+        //Obtener referencias
+        $response = $this->getReferencias($dmnPasoFlujo->getId());
+        if($response->getCount() > 0){
+            foreach($response->getResults() as $dmnPasoFlujo){
+                $this->quitarReferencias($dmnPasoFlujo->getId());
+            }
+            //Borrar el original
+            $this->mprPasoFlujoMapper->delete($dmnPasoFlujo);
+        }else{
+            $this->mprPasoFlujoMapper->delete($dmnPasoFlujo);
+        }
+    }
+    
+    public function getReferencias($id){
+        //Obtener referencias
+        $response = null;
+        $response = $this->FinderPasos->Search(
+                    array(
+                        'PasoFlujoReferenciaId' => $id
+                    )
+                );
+        return $response;
+    }
+    
+    private function reenumerar(){
+        //Reenumerar Flujo Principal
+        //Obtener solo los numeros
+        $response = $this->getPasosReenumerar();
+        //Reenumerar Flujos Afectados
+        
+    }
+    private function getPasosReenumerar(){
+        $response = $this->FinderPasosReenumerar->search(array(
+           'PasoFlujoId' => $this->domain->getProcesoFlujo()->getId() 
+        ));
+        return $response;
     }
 }

@@ -55,6 +55,6 @@ class AddPasoFlujoAlternativo extends BaseController{
                 echo Answer::setFailedMessage($ex->getMessage(),$ex->getCode());
             }
         }
-	}
+    }
 }
 ?>
