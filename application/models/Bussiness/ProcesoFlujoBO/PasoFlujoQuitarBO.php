@@ -27,6 +27,11 @@ class PasoFlujoQuitarBO extends BaseBO{
                 $this->FinderPasosReenumerar = new PasoFlujoFRM2();
                 
 	}
+	
+	const FLUJO_PRINCIPAL_ID = 1;
+	const NUMERO_FLUJO_INICIAL = 1;
+	const NUMERO_PASO_INICIAL = 1;
+	
     private $mprPasoFlujoMapper; 
     private $FinderPasosReenumerar;
     private $FinderPasos;
@@ -40,7 +45,7 @@ class PasoFlujoQuitarBO extends BaseBO{
             $this->quitarConReferencias($this->domain->getId());
             //
             $this->db->trans_commit();
-        } catch (Exception $ex) {
+        }catch(Exception $ex){
             $this->db->trans_rollback();
             throw new Exception($ex->getMessage(),$ex->getCode());   
         }        
@@ -72,15 +77,37 @@ class PasoFlujoQuitarBO extends BaseBO{
     }
     
     private function reenumerar(){
+		$varArrayFlujosReenumerar = array();
+		
         //Reenumerar Flujo Principal
+		$varTipoFlujoAct = self::FLUJO_PRINCIPAL_ID;
+		$varNumeroFlujoAct = self::NUMERO_FLUJO_INICIAL;		
+		$varNumeroPasoAct = self::NUMERO_PASO_INICIAL;
         //Obtener solo los numeros
         $response = $this->getPasosReenumerar();
         //Reenumerar Flujos Afectados
-        
+		foreach($response as $dmnPasoFlujo){
+			$varTipoFlujoAnt = $dmnPasoFlujo->getTipoFlujo();
+			$varNumeroFlujoAct = $dmnPasoFlujo->getNumeroFlujo();
+			$varNumeroPasoAct = $dmnPasoFlujo->getNumeroPaso();	
+			
+			if($dmnPasoFlujo->getTipoFlujo() == $varTipoFlujoAct &&
+			   $dmnPasoFlujo->getNumeroFlujo()  == $varNumeroFlujoAct &&
+			   $dmnPasoFlujo->getNumeroPaso() == $varNumeroPasoAct){
+				$varNumeroPasoAct++
+			}else{
+				if($dmnPasoFlujo->getTipoFlujo() != $varTipoFlujoAct){
+					$varTipoFlujoAct = $dmnPasoFlujo->getTipoFlujo();
+				}
+				if($dmnPasoFlujo->getNumeroFlujo() != $varNumeroFlujo){
+					
+				}
+			}
+		}
     }
     private function getPasosReenumerar(){
         $response = $this->FinderPasosReenumerar->search(array(
-           'PasoFlujoId' => $this->domain->getProcesoFlujo()->getId() 
+           'ProcesoFlujoId' => $this->domain->getProcesoFlujo()->getId() 
         ));
         return $response;
     }

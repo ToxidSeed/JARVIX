@@ -19,7 +19,10 @@ class PasoFlujoFRM2 extends PasoFlujoMapper{
     protected $fields = array(
          'id',
         'pasoreferenciaid',
-        'tipoflujoid'
+        'tipoflujoid',
+        'numeroflujo',
+        'numeropaso'
+        
         );
     public function search(array $filters = null){
         $this->load->database();
@@ -32,10 +35,12 @@ class PasoFlujoFRM2 extends PasoFlujoMapper{
         return new ResponseModel($arrResponse,count($arrResponse));
     }
     
-    protected function doCreateObject(array $record = null) {
+    protected function doCreateObject(array $record = null){
         $dmnPasoFlujo = new DomainPasoFlujo($record['ID']);
         $dmnPasoFlujo->setTipoFlujo(new DomainTipoFlujo($record['TIPOFLUJOID']));
         $dmnPasoFlujo->setPasoFlujoReferencia(new DomainPasoFlujo($record['PASOFLUJOREFERENCIAID']));
+        $dmnPasoFlujo->setNumeroFlujo($record['NUMEROFLUJO']);
+        $dmnPasoFlujo->setNumeroPaso($record['NUMEROPASO']);
         return $dmnPasoFlujo;
     }
 }
