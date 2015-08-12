@@ -87,23 +87,8 @@ class PasoFlujoQuitarBO extends BaseBO{
         $response = $this->getPasosReenumerar();
         //Reenumerar Flujos Afectados
 		foreach($response as $dmnPasoFlujo){
-			$varTipoFlujoAnt = $dmnPasoFlujo->getTipoFlujo();
-			$varNumeroFlujoAct = $dmnPasoFlujo->getNumeroFlujo();
-			$varNumeroPasoAct = $dmnPasoFlujo->getNumeroPaso();	
-			
-			if($dmnPasoFlujo->getTipoFlujo() == $varTipoFlujoAct &&
-			   $dmnPasoFlujo->getNumeroFlujo()  == $varNumeroFlujoAct &&
-			   $dmnPasoFlujo->getNumeroPaso() == $varNumeroPasoAct){
-				$varNumeroPasoAct++
-			}else{
-				if($dmnPasoFlujo->getTipoFlujo() != $varTipoFlujoAct){
-					$varTipoFlujoAct = $dmnPasoFlujo->getTipoFlujo();
-				}
-				if($dmnPasoFlujo->getNumeroFlujo() != $varNumeroFlujo){
-					
-				}
-			}
-		}
+			//...........$varNumeroFlujoAnt = $dmnPasoFlujo->getNumeroFlujo();
+		}		
     }
     private function getPasosReenumerar(){
         $response = $this->FinderPasosReenumerar->search(array(
