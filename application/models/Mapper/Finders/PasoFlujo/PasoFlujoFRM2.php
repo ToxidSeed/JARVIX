@@ -18,7 +18,7 @@ class PasoFlujoFRM2 extends PasoFlujoMapper{
     }
     protected $fields = array(
          'id',
-        'pasoreferenciaid',
+        'pasoflujoreferenciaid',
         'tipoflujoid',
         'numeroflujo',
         'numeropaso'

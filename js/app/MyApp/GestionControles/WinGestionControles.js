@@ -18,9 +18,15 @@ Ext.define('MyApp.GestionControles.WinGestionControles',{
            items:[
                {
                    text:'Nuevo',
+                   iconCls:'icon-add',
                    handler:function(){
                        var winNuevo = Ext.create('MyApp.GestionControles.WinMantGestionControles');
                        winNuevo.show();
+                       winNuevo.on({
+                           'saved':function(){
+                               principal.GridTablas.load(principal.getParams()) 
+                           }
+                       });
                    }
                }
            ] 
@@ -30,13 +36,21 @@ Ext.define('MyApp.GestionControles.WinGestionControles',{
            items:[
                {
                    text:'Buscar',
+                   iconCls:'icon-search',
                    handler:function(){
                       principal.GridTablas.load(principal.getParams()) 
                    }
                },{
                    text:'Limpiar',
+                   iconCls:'icon-clean',
                    handler:function(){
                        principal.limpiarCriterios();
+                   }
+               },{
+                   text:'Ocultar',
+                   iconCls:'icon-collapse',
+                   handler:function(){
+                       principal.panelCriteriosBusqueda.collapse();
                    }
                }
            ] 
@@ -88,10 +102,12 @@ Ext.define('MyApp.GestionControles.WinGestionControles',{
         
         principal.panelCriteriosBusqueda = Ext.create('Ext.panel.Panel',{
             tbar:tbarCriterioBusqueda,
+            bodyPadding:'10px',
             title:'Criterios de Busqueda',
             region:'west',            
             width:300,
             collapsible:true,
+            collapsed:true,
             height:300,            
             split:true,
             items:[
@@ -145,6 +161,11 @@ Ext.define('MyApp.GestionControles.WinGestionControles',{
                    id:record.get('id')
                });               
                winUpdate.show();
+               winUpdate.on({
+                    'saved':function(){
+                        principal.GridTablas.load(principal.getParams()) 
+                    }
+                });
             }
         })
         

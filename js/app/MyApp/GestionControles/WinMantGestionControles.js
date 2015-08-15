@@ -63,25 +63,20 @@ Ext.define('MyApp.GestionControles.WinMantGestionControles',{
         }
         
         main.tbar = Ext.create('Ext.toolbar.Toolbar');
+              
+        //main.tbar.add(main.btnNuevo);
         
-        //Falta que llame a la funcion de un nuevo registro
-        main.btnNuevo = {
-            text:'Nuevo',
-            handler:function(){
-                
-            }
-        };
-        
-        main.tbar.add(main.btnNuevo);
-        
-        main.btnGuardar = {text:'Guardar',
+        main.btnGuardar = {
+                            text:'Guardar',
+                            iconCls:'icon-disk',
                             handler:function(){
-                            if(main.create == true){
-                                main.saveNewTipoControl();
-                            }else{
-                                main.saveModifiedTipoControl();
-                            }
-                           }}
+                                if(main.create === true){
+                                    main.saveNewTipoControl();
+                                }else{
+                                    main.saveModifiedTipoControl();
+                                }                                
+                           }
+                       }
         main.tbar.add(main.btnGuardar);
         main.btnInactivar = {
                             text:'Inactivar',
@@ -95,14 +90,21 @@ Ext.define('MyApp.GestionControles.WinMantGestionControles',{
         }
         
         main.btnClose = {
-            text:'Cancelar',
+            text:'salir',
+            iconCls:'icon-door-out',
             handler:function(){
                 main.close();
             }
         };
         main.tbar.add(main.btnClose);
 
+        main.txtTecnologia = Ext.create('Ext.form.field.Text',{
+            width:350,
+            fieldLabel:'Tecnologia'
+        })
+        
         main.txtNombre = Ext.create('Ext.form.field.Text',{
+            width:350,
             fieldLabel:'Nombre'
         });
         main.dtFechaRegistro = Ext.create('Ext.form.field.Date',{
@@ -128,8 +130,11 @@ Ext.define('MyApp.GestionControles.WinMantGestionControles',{
         //@
         main.panelGeneral = Ext.create('Ext.panel.Panel',{
             bodyPadding:'10px',
+            split:true,
             region:'west',
+            width:400,
            items:[
+               main.txtTecnologia,
                main.txtNombre,
                main.dtFechaRegistro,
                main.dtFechaUltAct,
@@ -144,6 +149,7 @@ Ext.define('MyApp.GestionControles.WinMantGestionControles',{
             items:[
                 {
                     text:'Agregar',
+                    iconCls:'icon-add',
                     handler:function(){
                         main.AddProperty();
                     }
@@ -157,8 +163,8 @@ Ext.define('MyApp.GestionControles.WinMantGestionControles',{
         
         main.gridPropertiesSelect = Ext.create('Per.GridPanel',{            
             tbar:main.toolbarSelectProp,
-            title:'Propiedades Disponibles',
-            width:350,
+            //title:'Propiedades Disponibles',
+            width:'100%',
            pageSize:20,
            src:base_url+'GestionControles/GestionControlesController/GetActiveProperties',
            split:true,           
@@ -183,6 +189,7 @@ Ext.define('MyApp.GestionControles.WinMantGestionControles',{
            items:[
                {
                    text:'Quitar',
+                   iconCls:'icon-delete',
                    handler:function(){
                       main.DropLinkedProperty();
                    }
@@ -201,7 +208,7 @@ Ext.define('MyApp.GestionControles.WinMantGestionControles',{
             tbar:main.tbarProperties,
             src:base_url+'GestionControles/GestionControlesController/GetLinkedProperties',
             region:'center',
-            width:350,
+            width:'50%',
             pageSize:20,         
             selModel:main.chkSelModelDrop,
             columns:[
@@ -220,6 +227,7 @@ Ext.define('MyApp.GestionControles.WinMantGestionControles',{
            items:[
                {
                    text:'Agregar',
+                   iconCls:'icon-add',
                    handler:function(){
                        main.AddLinkedEvent();
                    }
@@ -253,6 +261,7 @@ Ext.define('MyApp.GestionControles.WinMantGestionControles',{
             items:[
                 {
                     text:'Quitar',
+                    iconCls:'icon-remove',
                     handler:function(){
                         main.DropLinkedEvent();
                     }
@@ -294,8 +303,8 @@ Ext.define('MyApp.GestionControles.WinMantGestionControles',{
                     xtype:'panel',
                     layout:'border',
                     items:[
-                        main.gridPropertiesSelect,
-                        main.gridProperties
+                        main.gridPropertiesSelect/*,
+                        main.gridProperties*/
                     ]
                    }                
                     ,{
@@ -312,7 +321,7 @@ Ext.define('MyApp.GestionControles.WinMantGestionControles',{
         //end @section
         
         Ext.apply(this,{
-            width: 1090, 
+            width: 900, 
             height: 600,
             layout:'border',
             items:[
@@ -336,8 +345,7 @@ Ext.define('MyApp.GestionControles.WinMantGestionControles',{
             })  
             main.gridEvents.load({
                 ControlId:main.internal.id
-            })
-            
+            })            
         }
         
         
@@ -363,8 +371,8 @@ Ext.define('MyApp.GestionControles.WinMantGestionControles',{
                         //Preparar Nuevo Registro
                         main.resetToNew();
                     }
-                })
-
+                });
+                main.fireEvent('saved');
             }
         })
     },
@@ -386,7 +394,8 @@ Ext.define('MyApp.GestionControles.WinMantGestionControles',{
                         //Preparar Nuevo Registro
                         main.resetToNew();
                     }
-                })
+                });
+                main.fireEvent('saved');
             },
             failure:function(response){                                
                 var msg = new Per.MessageBox();
@@ -397,6 +406,7 @@ Ext.define('MyApp.GestionControles.WinMantGestionControles',{
                        //Set Acction Here
                    }
                 });
+                main.fireEvent('saved');
             }
         })
     },
@@ -468,12 +478,14 @@ Ext.define('MyApp.GestionControles.WinMantGestionControles',{
                //Refresh
                main.gridProperties.load({                  
                        ControlId:main.internal.id                   
-               })                                
+               })
+               main.fireEvent('saved');
            },
            failure:function(response){
                var msg = new Per.MessageBox();
                msg.data = Ext.decode(response.responseText);
                msg.failure();
+               main.fireEvent('saved');
            }
         })        
     },

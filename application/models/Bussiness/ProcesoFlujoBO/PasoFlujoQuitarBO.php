@@ -42,7 +42,12 @@ class PasoFlujoQuitarBO extends BaseBO{
             $this->db->trans_start();
             //Verificar si es que existen flujos alternativos relacionados al paso nro 2
             //De existir, eliminarlos antes    
-            $this->quitarConReferencias($this->domain->getId());
+            $this->quitarConReferencias($this->domain);
+            //
+            $arrReenum = $this->buscarFlujos();
+            //print_r($arrReenum);
+            //reenumerar
+            $this->reenumerar($arrReenum);
             //
             $this->db->trans_commit();
         }catch(Exception $ex){
@@ -56,7 +61,7 @@ class PasoFlujoQuitarBO extends BaseBO{
         $response = $this->getReferencias($dmnPasoFlujo->getId());
         if($response->getCount() > 0){
             foreach($response->getResults() as $dmnPasoFlujo){
-                $this->quitarReferencias($dmnPasoFlujo->getId());
+                $this->quitarConReferencias($dmnPasoFlujo);
             }
             //Borrar el original
             $this->mprPasoFlujoMapper->delete($dmnPasoFlujo);
@@ -66,8 +71,7 @@ class PasoFlujoQuitarBO extends BaseBO{
     }
     
     public function getReferencias($id){
-        //Obtener referencias
-        $response = null;
+        //Obtener referencias        
         $response = $this->FinderPasos->Search(
                     array(
                         'PasoFlujoReferenciaId' => $id
@@ -75,22 +79,99 @@ class PasoFlujoQuitarBO extends BaseBO{
                 );
         return $response;
     }
+    private function reenumerar(array $flujos = null){        
+        foreach($flujos as $dmnPasoFlujo){
+            $dmnPasoFlujoCurr = $this->mprPasoFlujoMapper->find($dmnPasoFlujo->getId());
+            if($dmnPasoFlujoCurr){
+                $dmnPasoFlujoCurr->setNumeroPaso($dmnPasoFlujo->getNumeroPaso());
+                $dmnPasoFlujoCurr->setNumeroFlujo($dmnPasoFlujo->getNumeroFlujo());
+                $this->mprPasoFlujoMapper->update($dmnPasoFlujoCurr);
+            }
+        }
+        
+    }
     
-    private function reenumerar(){
-		$varArrayFlujosReenumerar = array();
-		
-        //Reenumerar Flujo Principal
-		$varTipoFlujoAct = self::FLUJO_PRINCIPAL_ID;
-		$varNumeroFlujoAct = self::NUMERO_FLUJO_INICIAL;		
-		$varNumeroPasoAct = self::NUMERO_PASO_INICIAL;
+    private function buscarFlujos(){
+        
+        $varArrayFlujosReenum = array();		
+        //Reenumerar Flujo Principal        
+        $varNumeroFlujoAct = 0;		
+        $varNumeroPasoAct = 0;
+        $varTipoFlujoAct = self::FLUJO_PRINCIPAL_ID;
+        $varNumeroFlujoAnt = 0;        
+        
         //Obtener solo los numeros
         $response = $this->getPasosReenumerar();
+        
+        $array = array();
+        
+        //print_r($response);
         //Reenumerar Flujos Afectados
-		foreach($response as $dmnPasoFlujo){
-			//...........$varNumeroFlujoAnt = $dmnPasoFlujo->getNumeroFlujo();
-		}		
+        //echo 'hola1';
+        foreach($response->getResults() as $dmnPasoFlujo){
+            $array[] = array(
+                'NumeroFlujo' => $dmnPasoFlujo->getNumeroFlujo(),
+                'NumeroPaso' => $dmnPasoFlujo->getNumeroPaso()
+            );
+          //  echo 'hola1';
+            if($dmnPasoFlujo->getTipoFlujo()->getId() != $varTipoFlujoAct ){
+                $varTipoFlujoAct = $dmnPasoFlujo->getTipoFlujo()->getId();   
+                $varNumeroFlujoAct = self::NUMERO_FLUJO_INICIAL;
+                $varNumeroPasoAct = self::NUMERO_PASO_INICIAL;
+            }else{
+                $this->NumerarPaso($dmnPasoFlujo->getNumeroFlujo(), $varNumeroFlujoAnt, $varNumeroFlujoAct,$varNumeroPasoAct);                    
+            }            
+            //echo 'hola2';
+            
+            //Valores anteriores
+            $varNumeroFlujoAnt = $dmnPasoFlujo->getNumeroFlujo();            
+                        //echo 'hola3';
+            $this->selecFlujosReenumerar($dmnPasoFlujo, $varTipoFlujoAct, $varNumeroFlujoAct, $varNumeroPasoAct, $varArrayFlujosReenum);      
+        }
+        //print_r($array);
+        return $varArrayFlujosReenum;
     }
+    private function selecFlujosReenumerar(DomainPasoFlujo $dmnPasoFlujo,$parTipoFlujo,$parNumeroFlujo,$parNumeroPaso,&$arrFlujosReenum){
+        /*echo 'hola';
+        echo $dmnPasoFlujo->getTipoFlujo();
+        echo '';
+        echo $dmnPasoFlujo->getNumeroFlujo();
+        echo '';
+        echo $dmnPasoFlujo->getNumeroPaso();
+        echo '';*/
+        
+        if($dmnPasoFlujo->getTipoFlujo()->getId() != $parTipoFlujo ||
+                $dmnPasoFlujo->getNumeroFlujo() != $parNumeroFlujo || 
+                $dmnPasoFlujo->getNumeroPaso() != $parNumeroPaso){
+            
+            $dmnPasoFlujo->setNumeroFlujo($parNumeroFlujo);
+            $dmnPasoFlujo->setNumeroPaso($parNumeroPaso);
+            $arrFlujosReenum[] = $dmnPasoFlujo;            
+        }
+        
+    }
+    
+    private function NumerarPaso($parNumeroFlujoEvaluar,$parNumeroFlujoAnterior,&$parNumeroFlujoActual,&$parNumeroPasoActual){
+        $array = array(
+            'NumeroFlujoEvaluar' => $parNumeroFlujoEvaluar,
+            '$parNumeroFlujoAnterior' => $parNumeroFlujoAnterior
+        );
+        
+//        print_r($array);
+        
+        if($parNumeroFlujoEvaluar != $parNumeroFlujoAnterior){
+            $parNumeroFlujoActual++;
+            $parNumeroPasoActual = self::NUMERO_PASO_INICIAL;
+        }else{
+            $parNumeroPasoActual++;
+        }        
+    }
+        
+    
     private function getPasosReenumerar(){
+        
+        //print_r($this->domain);
+        
         $response = $this->FinderPasosReenumerar->search(array(
            'ProcesoFlujoId' => $this->domain->getProcesoFlujo()->getId() 
         ));

@@ -23,6 +23,7 @@ class QuitarPasoFlujo extends BaseController{
     public function quitar(){
         try{
             $dmnPasoFlujo = new DomainPasoFlujo($this->getField('pasoFlujoId'));
+            $dmnPasoFlujo->setProcesoFlujo(new DomainProcesoFlujo($this->getField('ProcesoFlujoId')));            
             $this->load->model('Bussiness/ProcesoFlujoBO/PasoFlujoQuitarBO','PasoFlujoQuitarBO');
             $this->PasoFlujoQuitarBO->setDomain($dmnPasoFlujo);
             $this->PasoFlujoQuitarBO->quitar();

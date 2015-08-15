@@ -85,7 +85,7 @@ class PasoFlujoMapper extends BaseMapper{
         $this->db->where('id',$dmnPasoFlujo->getId());
         $res = $this->db->update($this->tableName);
         
-        echo $this->db->last_query();
+//        echo $this->db->last_query();
         
         if(!$res){
             $this->db->trans_rollback();

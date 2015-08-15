@@ -18,6 +18,7 @@ class TreeGenerator {
     
     public function __construct(array $records = null){
        foreach($records as $row){
+           //print_r($row);
            $this->addRecord($row);           
        }
        //Creando los Objetos
@@ -30,17 +31,16 @@ class TreeGenerator {
         $myRecord->setParentId($row['parentId']);
         $myRecord->setName($row['name']);
         $this->records[] = $myRecord;
+        
     }
     
-    private function myTreeForm(){
-        while(count($this->records) > 0){
-            foreach($this->records as $key =>  $myObject){
-                //Si el Identificador del nodo padre es Nulo quiere decir que es
-                //una raiz
+    private function myTreeForm(){                
+        while(count($this->records) > 0){            
+            foreach($this->records as $key =>  $myObject){                                
                 if($myObject->getParentId() == null){
                     $this->treeFormRecords[] = $myObject;
                     unset($this->records[$key]);
-                }else{
+                }else{                    
                     $success = $this->addChild($this->treeFormRecords, $myObject);
                         if($success === true){
                             unset($this->records[$key]);
@@ -105,7 +105,7 @@ class Tree{
         return $this->id;
     }
     public function setParentId($parentId){
-        $this->parenId = $parentId;
+        $this->parentId = $parentId;
     }
     public function getParentId(){
         return $this->parentId;

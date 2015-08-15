@@ -20,7 +20,7 @@ class PasoFlujoFRM1 extends PasoFlujoMapper {
         $this->load->database();
         $this->db->select($this->fields);
         $this->db->from($this->tableName);
-        $this->db->where('pasflujoreferenciaid',$filters['PasoFlujoReferenciaId']);
+        $this->db->where('pasoflujoreferenciaid',$filters['PasoFlujoReferenciaId']);
         $response = $this->db->get();
         $arrResponse = $this->getMultiResponse($response);
         return new ResponseModel($arrResponse,count($arrResponse));

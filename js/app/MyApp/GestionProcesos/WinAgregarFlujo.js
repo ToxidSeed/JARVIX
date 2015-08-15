@@ -581,7 +581,8 @@ Ext.define('MyApp.GestionProcesos.WinAgregarFlujo',{
        Ext.Ajax.request({
           url:base_url+'GestionProcesos/QuitarPasoFlujo/quitar',
           params:{              
-              pasoFlujoId:myRecord.get('id')
+              pasoFlujoId:myRecord.get('id'),
+              ProcesoFlujoId: main.internal.ProcesoFlujoId
           },
           success:function(response){
               main.reloadSteps();

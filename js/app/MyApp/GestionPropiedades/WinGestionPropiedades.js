@@ -16,6 +16,7 @@ Ext.define('MyApp.GestionPropiedades.WinGestionPropiedades',{
            items:[
                {
                    text:'Nuevo',
+                   iconCls:'icon-add',
                    handler:function(){
                        main.openMantWindow();
                    }
@@ -70,12 +71,14 @@ Ext.define('MyApp.GestionPropiedades.WinGestionPropiedades',{
          items:[
              {
                  text:'Buscar',
+                 iconCls:'icon-search',
                  handler:function(){
                      
                      main.GridPropiedades.load(main.getParams()) 
                  }
              },{
                  text:'Limpiar',
+                 iconCls:'icon-clean',
                  handler:function(){
                      main.limpiarCriterios();
                  }
@@ -84,8 +87,12 @@ Ext.define('MyApp.GestionPropiedades.WinGestionPropiedades',{
       });
       
       main.panelCriterioBusqueda = Ext.create('Ext.panel.Panel',{          
+          title:'Criterios de Busqueda',
           region:'west',
           bodyPadding:'10px', 
+          split:true,
+          collapsible:true,
+          collapsed:true,
           tbar:main.panelCritTbar,
           items:[
                 main.txtCodigo,
