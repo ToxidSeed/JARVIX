@@ -17,9 +17,9 @@ Ext.define('MyApp.Tecnologias.WinMantTecnologias',{
         console.log(main.internal);
         
         if(main.create === true){
-            main.title = 'Nueva Propiedad';
+            main.title = 'Nueva Tecnologia';
         }else{
-            main.title = 'Modificar Propiedad'
+            main.title = 'Modificar Tecnologia';
         }
         
         main.txtNombre = Ext.create('Ext.form.field.Text',{
@@ -109,7 +109,7 @@ Ext.define('MyApp.Tecnologias.WinMantTecnologias',{
         Ext.Ajax.request({
             url:base_url+'Tecnologias/Tecnologias/add',
             params:{
-                nombre: main.txtNombre.getValue()                               
+                Nombre: main.txtNombre.getValue()                               
             },
             success:function(response){                                                                              
                 main.processSuccessful();
@@ -117,14 +117,6 @@ Ext.define('MyApp.Tecnologias.WinMantTecnologias',{
                 var msg = new Per.MessageBox();  
                 msg.data = Ext.decode(response.responseText); 
                 msg.success();    
-//  
-//                msg.on({
-//                    'okButtonPressed':function(){
-//                        //Preparar Nuevo Registro
-//                        main.resetToNew();
-//                    }
-//                })
-
             }
         });
     },

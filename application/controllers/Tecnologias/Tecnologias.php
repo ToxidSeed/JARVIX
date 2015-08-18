@@ -7,7 +7,8 @@
  */
 require_once BASECONTROLLERPATH.'BaseController.php';
 require_once BASEMODELPATH.'Constraints.php';
-require_once DOMAINPATH.'DomainPropiedad.php';
+require_once DOMAINPATH.'DomainTecnologia.php';
+require_once DOMAINPATH.'DomainEstado.php';
 /*
 /**
  * Description of Tecnologias
@@ -29,8 +30,15 @@ class Tecnologias extends BaseController{
             $dmnTecnologia = new DomainTecnologia();
             $dmnTecnologia->setNombre($this->getField('Nombre'));
             $dmnTecnologia->setEstado(new DomainEstado(self::STATUS_ACTIVO));
-            $this->load->model('Mapper/TecnologiaMapper','TecnologiaMapper');
-            $this->TecnologiaMapper->insert($dmnTecnologia);
+            $this->load->model('Bussiness/TecnologiaBO','TecnologiaBO');
+            $this->TecnologiaBO->setDomain($dmnTecnologia);
+            $this->TecnologiaBO->add();
+            
+            $this->getAnswer()->setSuccess(true);
+            $this->getAnswer()->setMessage('Registrado Correctamente');
+            $this->getAnswer()->setCode(0);
+            $this->getAnswer()->AddExtraData('TecnologiaId',$dmnTecnologia->getId());
+            echo $this->getAnswer()->getAsJSON(); 
         } catch (Exception $ex) {
             if($ex->getCode() == FORM_VALIDATION_ERRORS_CODE){
                 echo $this->getAnswer()->getAsJSON();
@@ -38,5 +46,12 @@ class Tecnologias extends BaseController{
                 echo Answer::setFailedMessage($ex->getMessage(),$ex->getCode());
             }
         }
+    }
+    public function getList(){
+        $this->load->model('Mapper/Finders/Tecnologia/TecnologiaFRM1','TecnologiaFRM1');
+        $response = $this->TecnologiaFRM1->search(array(
+            'Nombre' => $this->getField('Nombre')
+        ));
+        echo json_encode(Response::asResults($response));        
     }
 }

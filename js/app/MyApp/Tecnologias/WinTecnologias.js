@@ -155,13 +155,8 @@ Ext.define('MyApp.Tecnologias.WinTecnologias',{
     },
     getParams:function(){
         var main = this;
-        var object = {
-            id:main.txtCodigo.getValue(),
-            nombre: main.txtNombre.getValue(),
-            fechaRegistroDesde: main.dtFechaRegistroDesde.getValue(),
-            fechaRegistroHasta: main.dtFechaRegistroHasta.getValue(),
-            fechaUltActDesde: main.dtFechaUltActDesde.getValue(),
-            fechaUltActHasta:main.dtFechaUltActHasta.getValue()
+        var object = {            
+            Nombre: main.txtNombre.getValue()
         };
         return object;
     },

@@ -23,7 +23,7 @@ class TecnologiaMapper extends BaseMapper{
         'estadoid'
     );
     
-    protected $table = 'Tecnologia';
+    protected $tableName = 'Tecnologia';
     
     public function insert(DomainTecnologia $dmnTecnologia){
         $this->doInsert($dmnTecnologia);
@@ -32,7 +32,7 @@ class TecnologiaMapper extends BaseMapper{
         $fields['nombre'] = $dmnTecnologia->getNombre();
         $fields['estadoid'] = $dmnTecnologia->getEstado()->getId();
         $this->db->set($fields);
-        $res = $this->db->insert($this->tableName);
+        $res = $this->db->insert($this->tableName);        
         $dmnTecnologia->setId($this->db->insert_id());
         if(!$res){
             $this->db->trans_rollback();
