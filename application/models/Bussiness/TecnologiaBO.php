@@ -35,4 +35,24 @@ class TecnologiaBO extends BaseBO{
             throw new Exception($e->getMessage(),$e->getCode());
         }
     }
+    public function update(){
+        try{
+            $this->load->database();
+            $this->db->trans_start();
+            
+            $dmnTecnologia = $this->getDomainToWrite($this->domain);
+            $this->mprTecnologia->update($dmnTecnologia);
+            
+            $this->db->trans_commit();
+        }catch(Exception $e){
+            $this->db->trans_rollback();
+            throw new Exception($e->getMessage(),$e->getCode());
+        }
+    }
+    
+    private function getDomainToWrite(DomainTecnologia $dmnTecnologia){
+        $finded = $this->mprTecnologia->find($dmnTecnologia->getId());
+        $finded->setNombre($this->domain->getNombre());        
+        return $finded;
+    }
 }

@@ -16,7 +16,9 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
    initComponent:function(){
        var main = this;
        
-     
+     main.txtNombre = Ext.create('Ext.form.field.Text',{
+        fieldLabel:'Nombre'
+     });
 //              
       main.txtCodigo = Ext.create('Ext.form.field.Text',{
           name:'Codigo',
@@ -24,11 +26,7 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
           disabled:true
       });
        
-      main.txtNombre = Ext.create('Ext.form.field.Text',{
-          name:'nombre',
-          fieldLabel:'Nombre',
-          width:350
-      });
+      
       
       main.uploadImage = Ext.create('Ext.form.field.File',{
           name:'prototypeUpload',

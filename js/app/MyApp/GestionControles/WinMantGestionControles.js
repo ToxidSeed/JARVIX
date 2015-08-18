@@ -62,6 +62,38 @@ Ext.define('MyApp.GestionControles.WinMantGestionControles',{
          
         }
         
+        main.storePicker = new Ext.create('Ext.data.Store',{
+            remoteFilter:true,  
+//            autoLoad:true,
+            fields:[
+                'id',
+                'nombre'
+            ],
+            proxy:{
+               type:'ajax',
+               url: base_url+'Comunes_Control/ControlEstado/getControlesActivos',
+               reader:{
+                   type:'json',
+                   root:'results',
+                   totalProperty:'total'
+               }
+           }
+       });
+        
+        main.txtTecnologia = Ext.create('Ext.form.ComboBox',{
+            fieldLabel: 'Tecnologia',
+            store: main.storePicker,
+            typeAhead:true,
+            queryMode: 'remote',
+            queryParam:'Nombre',
+            displayField: 'nombre',
+            enableKeyEvents:true,
+            minChars:1,
+            hideTrigger:true,
+            valueField: 'id',
+            width:350
+        });
+        
         main.tbar = Ext.create('Ext.toolbar.Toolbar');
               
         //main.tbar.add(main.btnNuevo);
@@ -98,10 +130,10 @@ Ext.define('MyApp.GestionControles.WinMantGestionControles',{
         };
         main.tbar.add(main.btnClose);
 
-        main.txtTecnologia = Ext.create('Ext.form.field.Text',{
+        /*main.txtTecnologia = Ext.create('Ext.form.field.Text',{
             width:350,
             fieldLabel:'Tecnologia'
-        })
+        })*/
         
         main.txtNombre = Ext.create('Ext.form.field.Text',{
             width:350,

@@ -47,11 +47,38 @@ class Tecnologias extends BaseController{
             }
         }
     }
+    
+    public function update(){
+      try{
+         $dmnTecnologia = new DomainTecnologia($this->getField('TecnologiaId'));
+         $dmnTecnologia->setNombre($this->getField('Nombre'));
+         $this->load->model('Bussiness/TecnologiaBO','TecnologiaBO');
+         $this->TecnologiaBO->setDomain($dmnTecnologia);
+         $this->TecnologiaBO->update();            
+         $this->getAnswer()->setSuccess(true);
+         $this->getAnswer()->setMessage('Registrado Correctamente');
+         $this->getAnswer()->setCode(0);
+         $this->getAnswer()->AddExtraData('TecnologiaId',$dmnTecnologia->getId());
+         echo $this->getAnswer()->getAsJSON(); 
+      }catch(Exception $ex){
+         if($ex->getCode() == FORM_VALIDATION_ERRORS_CODE){
+                echo $this->getAnswer()->getAsJSON();
+         }else{
+             echo Answer::setFailedMessage($ex->getMessage(),$ex->getCode());
+         }
+      }
+    }
+    
     public function getList(){
         $this->load->model('Mapper/Finders/Tecnologia/TecnologiaFRM1','TecnologiaFRM1');
         $response = $this->TecnologiaFRM1->search(array(
             'Nombre' => $this->getField('Nombre')
         ));
         echo json_encode(Response::asResults($response));        
+    }
+    public function find(){
+      $this->load->model('Mapper/TecnologiaMapper','TecnologiaMapper');
+      $dmnTecnologia = $this->TecnologiaMapper->find($this->getField('TecnologiaId'));
+      echo json_encode(Response::asSingleObject($dmnTecnologia));
     }
 }

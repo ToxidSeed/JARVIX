@@ -23,8 +23,8 @@ Ext.define('MyApp.Tecnologias.WinMantTecnologias',{
         }
         
         main.txtNombre = Ext.create('Ext.form.field.Text',{
-           fieldLabel:'Nombre' ,
-           width:300
+           fieldLabel:'Nombre',
+           width:350
         });
         
         main.dtFechaRegistro = Ext.create('Ext.form.field.Date',{
@@ -60,9 +60,9 @@ Ext.define('MyApp.Tecnologias.WinMantTecnologias',{
                                 main.suspend();
                             }
                            }}
-        if(main.create === false){
+        /*if(main.create === false){
             main.tbar.add(main.btnInactivar);
-        }
+        }*/
         
         main.btnCancelar = {
             text:'Salir',
@@ -126,8 +126,8 @@ Ext.define('MyApp.Tecnologias.WinMantTecnologias',{
         Ext.Ajax.request({
            url:base_url+'Tecnologias/Tecnologias/update' ,
            params:{
-               id:main.internal.id,
-               nombre:main.txtNombre.getValue()
+               TecnologiaId:main.internal.id,
+               Nombre:main.txtNombre.getValue()
            },
            success:function(response){
                main.processSuccessful();
@@ -149,12 +149,12 @@ Ext.define('MyApp.Tecnologias.WinMantTecnologias',{
         Ext.Ajax.request({
            url:base_url+'Tecnologias/Tecnologias/find' ,
            params:{
-               id:main.internal.id               
+               TecnologiaId:main.internal.id               
            },
            success:function(response){
-               var response = Ext.decode(response.responseText);               
-               main.txtNombre.setValue(response.data.nombre);
-               main.internal.id = response.data.id;
+               var varResponse = Ext.decode(response.responseText);               
+               main.txtNombre.setValue(varResponse.data.nombre);
+               main.internal.id = varResponse.data.id;
            }
         });
     }
