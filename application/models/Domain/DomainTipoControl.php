@@ -10,6 +10,8 @@ class DomainTipoControl extends BaseDomain{
     protected $fechaRegistro;
     protected $fechaUltAct;
     protected $estado;
+    protected $tecnologia;
+    
     function __construct($id = null) {
         $this->id = $id;
     }
@@ -44,7 +46,15 @@ class DomainTipoControl extends BaseDomain{
     function getEstado(){
         return $this->estado;
     }
-    
+    function getTecnologia() {
+        return $this->tecnologia;
+    }
+
+    function setTecnologia($tecnologia) {
+        $this->tecnologia = $tecnologia;
+    }
+
+
     
 }
 

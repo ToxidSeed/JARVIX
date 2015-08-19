@@ -71,7 +71,7 @@ Ext.define('MyApp.GestionControles.WinMantGestionControles',{
             ],
             proxy:{
                type:'ajax',
-               url: base_url+'Comunes_Control/ControlEstado/getControlesActivos',
+               url: base_url+'GestionControles/GestionControlesController/getTecnologias',
                reader:{
                    type:'json',
                    root:'results',
@@ -183,7 +183,8 @@ Ext.define('MyApp.GestionControles.WinMantGestionControles',{
                     text:'Agregar',
                     iconCls:'icon-add',
                     handler:function(){
-                        main.AddProperty();
+                        //main.AddProperty();
+                        main.AbrirVenetanaPropiedad('Agregar Propiedad');
                     }
                 }
             ] 
@@ -261,7 +262,7 @@ Ext.define('MyApp.GestionControles.WinMantGestionControles',{
                    text:'Agregar',
                    iconCls:'icon-add',
                    handler:function(){
-                       main.AddLinkedEvent();
+                       //main.AddLinkedEvent();
                    }
                }
            ] 
@@ -392,7 +393,8 @@ Ext.define('MyApp.GestionControles.WinMantGestionControles',{
         Ext.Ajax.request({
             url:base_url+'GestionControles/GestionControlesController/add',
             params:{
-                nombre: main.txtNombre.getValue()                               
+                nombre: main.txtNombre.getValue(),
+                TecnologiaId: main.txtTecnologia.getValue()
             },
             success:function(response){                                                                              
                 var msg = new Per.MessageBox();  
@@ -415,7 +417,8 @@ Ext.define('MyApp.GestionControles.WinMantGestionControles',{
             url:base_url+'GestionControles/GestionControlesController/update',
             params:{
                 nombre: main.txtNombre.getValue(),                               
-                id: main.id
+                id: main.id,
+                TecnologiaId: main.txtTecnologia.getValue()
             },
             success:function(response){                                     
                 var msg = new Per.MessageBox();  
@@ -614,5 +617,13 @@ Ext.define('MyApp.GestionControles.WinMantGestionControles',{
                msg.failure();
            }
         }) 
+    },
+    AbrirVenetanaPropiedad:function(title){
+        var main = this;
+        
+        var myWin = new MyApp.GestionControles.WinMantPropiedades({
+            title:title
+        });
+        myWin.show();
     }
 })  

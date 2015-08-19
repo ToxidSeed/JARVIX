@@ -3,6 +3,7 @@
 require_once BASEMODELPATH.'BaseMapper.php';
 require_once DOMAINPATH.'DomainTipoControl.php';
 require_once DOMAINPATH.'DomainEstado.php';
+require_once DOMAINPATH.'DomainTecnologia.php';
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -30,6 +31,7 @@ class TipoControlMapper extends BaseMapper{
         $dmnTipoControl->setFechaRegistro($record['FECHAREGISTRO']);
         $dmnTipoControl->setFechaUltAct($record['FECHAULTACT']);
         $dmnTipoControl->setEstado(new DomainEstado($record['ESTADOID']));
+        $dmnTipoControl->setTecnologia(new DomainTecnologia('TECNOLOGIAID'));
         return $dmnTipoControl;
     }
     public function insert(DomainTipoControl $dmnTipoControl){
@@ -41,6 +43,7 @@ class TipoControlMapper extends BaseMapper{
         $fields['fechaRegistro'] = $dmnTipoControl->getFechaRegistro();
         $fields['fechaultact'] = $dmnTipoControl->getFechaUltAct();
         $fields['estadoid'] = $dmnTipoControl->getEstado()->getId();
+        $fields['tecnologiaid'] = $dmnTipoControl->getTecnologia()->getId();
         $this->db->set($fields);
         $resInsert = $this->db->insert($this->tableName);
         //Recuperando el ultimo valor
@@ -60,6 +63,7 @@ class TipoControlMapper extends BaseMapper{
         $fields['nombre'] = $dmnTipoControl->getNombre();
         $fields['fechaultact'] = $dmnTipoControl->getFechaUltAct();
         $fields['estadoid'] = $dmnTipoControl->getEstado()->getId();
+        $fields['tecnologiaid'] = $dmnTipoControl->getTecnologia()->getId();
         $this->db->set($fields);
         $this->db->where('id',$dmnTipoControl->getId());
         $resUpdate = $this->db->update($this->tableName);

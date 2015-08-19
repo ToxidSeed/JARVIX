@@ -1,4 +1,6 @@
-<script type="text/javascript">
+<script type="text/javascript">    
+    Ext.require('Per.GridPanel');
+      Ext.require('MyApp.GestionControles.WinMantPropiedades');
       Ext.require('MyApp.GestionControles.WinGestionControles');
       Ext.require('MyApp.GestionControles.WinMantGestionControles');
       Ext.require('MyApp.Helpers.Properties.HelperActiveProperties');

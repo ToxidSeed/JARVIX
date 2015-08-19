@@ -39,6 +39,7 @@ class GestionControlesController extends BaseController{
             $dmnTipoControl->setFechaRegistro(date(APPDATESTNFORMAT));
             $dmnTipoControl->setFechaUltAct(date(APPDATESTNFORMAT));
             $dmnTipoControl->setEstado(new DomainEstado(1)); //1 is Active
+            $dmnTipoControl->setTecnologia(new DomainTecnologia($this->getField('TecnologiaId')));
             //Loading the instance OF BO object
             $this->load->model('Bussiness/TipoControlBO','TipoControlBO');            
             $this->TipoControlBO->setDmnTipoControl($dmnTipoControl);
@@ -61,6 +62,7 @@ class GestionControlesController extends BaseController{
             $dmnTipoControl->setNombre($this->getField('nombre'));            
             $dmnTipoControl->setFechaUltAct(date(APPDATESTNFORMAT));
             $dmnTipoControl->setEstado(new DomainEstado(1)); //1 is Active
+            $dmnTipoControl->setTecnologia(new DomainTecnologia($this->getField('TecnologiaId')));
             //Loading the instance OF BO object
             $this->load->model('Bussiness/TipoControlBO','TipoControlBO');            
             $this->TipoControlBO->setDmnTipoControl($dmnTipoControl);
@@ -141,6 +143,14 @@ class GestionControlesController extends BaseController{
             $dmnControlEvento->mapper()->getEvento();                    
         }
         
+        echo json_encode(Response::asResults($response));        
+    }
+    
+    public function getTecnologias(){
+        $this->load->model('Mapper/Finders/Tecnologia/TecnologiaFRM2','TecnologiasActivas');
+        $response = $this->TecnologiasActivas->search(array(
+            'Nombre' => $this->getField('Nombre')            
+        ));                
         echo json_encode(Response::asResults($response));        
     }
 }
