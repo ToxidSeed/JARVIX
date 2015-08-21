@@ -16,6 +16,13 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
     initComponent:function(){
         var main = this;
         
+        Ext.define('Valor', {
+            extend: 'Ext.data.Model',
+            fields: [
+                {name: 'Valor'}
+            ]
+        });
+        
         main.tbarMain = Ext.create('Ext.toolbar.Toolbar',{
            items:[
                {
@@ -23,7 +30,10 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
                    iconCls:'icon-disk'
                },{
                    text:'Salir',
-                   iconCls:'icon-door-out'
+                   iconCls:'icon-door-out',
+                   handler:function(){
+                       main.close();
+                   }
                }
            ] 
         });
@@ -32,7 +42,11 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
            items:[
                {
                    text:'Agregar',
-                   iconCls:'icon-add'
+                   iconCls:'icon-add',
+                   handler:function(){
+                       //add row
+                       main.AddValorFila();
+                   }
                },
                {
                    text:'Quitar',
@@ -66,9 +80,15 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
                },{
                    header:'Valor',
                    dataIndex:'Valor',
-                   flex:1
-               }
-           ]           
+                   flex:1,
+                   editor:{
+                       xtype:'textfield'
+                   }
+               }               
+           ],
+           plugins:[
+               Ext.create('Ext.grid.plugin.CellEditing',{clicksToEdit:1})
+           ]
         });
         
        
@@ -110,7 +130,22 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
         this.callParent(arguments);
     },
     AddValorFila:function(){
+        var main = this;
         
+        var myValor = Ext.create('Valor',{
+           Valor:null 
+        });
+        
+        var myStore = main.gridTablas.getStore();
+        var myModelAdded = myStore.add(myValor);
+        
+        var recurn = main.gridTablas.fireEvent('cellclick',{
+           cellIndex:1, 
+           record:myModelAdded,
+           rowIndex:1
+        });
+        
+        console.log(recurn);
     }
 });
 

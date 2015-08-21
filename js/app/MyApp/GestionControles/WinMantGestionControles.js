@@ -183,8 +183,11 @@ Ext.define('MyApp.GestionControles.WinMantGestionControles',{
                     text:'Agregar',
                     iconCls:'icon-add',
                     handler:function(){
-                        //main.AddProperty();
-                        main.AbrirVenetanaPropiedad('Agregar Propiedad');
+                        if(main.create === true){
+                            main.saveNewTipoControl(true);
+                        }else{
+                            main.saveModifiedTipoControl(true);
+                        }                                                
                     }
                 }
             ] 
@@ -388,7 +391,7 @@ Ext.define('MyApp.GestionControles.WinMantGestionControles',{
         var main = this;
         main.txtNombre.setValue('');
     },
-    saveNewTipoControl:function(){
+    saveNewTipoControl:function(openWindow){
         var main = this;
         Ext.Ajax.request({
             url:base_url+'GestionControles/GestionControlesController/add',
@@ -407,10 +410,15 @@ Ext.define('MyApp.GestionControles.WinMantGestionControles',{
                     }
                 });
                 main.fireEvent('saved');
+                if(msg.data.success == true){
+                    if(openWindow != 'undefined' && openWindow == true ){
+                        main.AbrirVenetanaPropiedad('Agregar Propiedad');
+                    }
+                }                                
             }
         })
     },
-    saveModifiedTipoControl:function(){
+    saveModifiedTipoControl:function(openWindow){
         var main = this;        
         
         Ext.Ajax.request({
@@ -431,6 +439,10 @@ Ext.define('MyApp.GestionControles.WinMantGestionControles',{
                     }
                 });
                 main.fireEvent('saved');
+                
+                if(openWindow != 'undefined' && openWindow == true ){
+                    main.AbrirVenetanaPropiedad('Agregar Propiedad');
+                }
             },
             failure:function(response){                                
                 var msg = new Per.MessageBox();

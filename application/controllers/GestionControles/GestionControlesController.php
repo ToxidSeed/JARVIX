@@ -3,6 +3,7 @@ require_once BASECONTROLLERPATH.'BaseController.php';
 require_once BASEMODELPATH.'Constraints.php';
 require_once DOMAINPATH.'DomainEstado.php';
 require_once DOMAINPATH.'DomainTipoControl.php';
+require_once DOMAINPATH.'DomainTecnologia.php';
 
 /*
  * To change this template, choose Tools | Templates
