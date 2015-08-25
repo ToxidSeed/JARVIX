@@ -20,9 +20,9 @@ class GestionPropiedadesController extends BaseController{
             $this->formValidation(__CLASS__,'', __FUNCTION__);
             
             $dmnPropiedad = new DomainPropiedad();
-            $dmnPropiedad->setNombre($this->getField('nombre'));
-            $dmnPropiedad->setFechaRegistro(date(APPDATESTNFORMAT));
-            $dmnPropiedad->setFechaUltAct(date(APPDATESTNFORMAT));
+            $dmnPropiedad->setNombre($this->getField('Nombre'));
+            //$dmnPropiedad->setFechaRegistro(date(APPDATESTNFORMAT));
+            //$dmnPropiedad->setFechaUltAct(date(APPDATESTNFORMAT));
             $this->load->model('Bussiness/PropiedadBO','PropiedadBO');  
             $this->PropiedadBO->setDomain($dmnPropiedad);
             $this->PropiedadBO->add();

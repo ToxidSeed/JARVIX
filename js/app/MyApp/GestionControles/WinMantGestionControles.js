@@ -399,20 +399,22 @@ Ext.define('MyApp.GestionControles.WinMantGestionControles',{
                 nombre: main.txtNombre.getValue(),
                 TecnologiaId: main.txtTecnologia.getValue()
             },
-            success:function(response){                                                                              
-                var msg = new Per.MessageBox();  
+            success:function(response){           
+                var msg = new Per.MessageBox();                  
                 msg.data = Ext.decode(response.responseText); 
-                msg.success();    
-                msg.on({
-                    'okButtonPressed':function(){
-                        //Preparar Nuevo Registro
-                        main.resetToNew();
-                    }
-                });
                 main.fireEvent('saved');
                 if(msg.data.success == true){
                     if(openWindow != 'undefined' && openWindow == true ){
                         main.AbrirVenetanaPropiedad('Agregar Propiedad');
+                    }else{
+                        
+                        msg.success();    
+                        msg.on({
+                            'okButtonPressed':function(){
+                                //Preparar Nuevo Registro
+                                main.resetToNew();
+                            }
+                        });
                     }
                 }                                
             }
@@ -428,20 +430,20 @@ Ext.define('MyApp.GestionControles.WinMantGestionControles',{
                 id: main.id,
                 TecnologiaId: main.txtTecnologia.getValue()
             },
-            success:function(response){                                     
+            success:function(response){                                                     
                 var msg = new Per.MessageBox();  
-                msg.data = Ext.decode(response.responseText); 
-                msg.success();    
-                msg.on({
-                    'okButtonPressed':function(){
-                        //Preparar Nuevo Registro
-                        main.resetToNew();
-                    }
-                });
-                main.fireEvent('saved');
-                
+                main.fireEvent('saved');                
                 if(openWindow != 'undefined' && openWindow == true ){
                     main.AbrirVenetanaPropiedad('Agregar Propiedad');
+                }else{                    
+                    msg.data = Ext.decode(response.responseText); 
+                    msg.success();    
+                    msg.on({
+                        'okButtonPressed':function(){
+                            //Preparar Nuevo Registro
+                            main.resetToNew();
+                        }
+                    });
                 }
             },
             failure:function(response){                                

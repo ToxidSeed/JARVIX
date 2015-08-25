@@ -7,21 +7,21 @@
 $config['Validation'] = array(
     'add' => array(
                     array(
-                        'field' => 'nombre',
+                        'field' => 'Nombre',
                         'label' => 'Nombre',
                         'rules' => 'required'
                     )
     ),
     'update' => array(
                     array(
-                        'field' => 'nombre',
+                        'field' => 'Nombre',
                         'label' => 'Nombre',
                         'rules' => 'required'
                     )       
     ),
     'inactivate' => array(
                     array(
-                        'field' => 'nombre',
+                        'field' => 'Nombre',
                         'label' => 'Nombre',
                         'rules' => 'required'
                     )

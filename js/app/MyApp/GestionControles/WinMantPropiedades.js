@@ -27,7 +27,10 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
            items:[
                {
                    text:'Guardar',
-                   iconCls:'icon-disk'
+                   iconCls:'icon-disk',
+                   handler:function(){
+                       main.Guardar();
+                   }
                },{
                    text:'Salir',
                    iconCls:'icon-door-out',
@@ -87,7 +90,7 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
                }               
            ],
            plugins:[
-               Ext.create('Ext.grid.plugin.CellEditing',{clicksToEdit:1})
+               Ext.create('Ext.grid.plugin.CellEditing',{clicksToEdit:1, pluginId: 'cellediting'})
            ]
         });
         
@@ -130,22 +133,37 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
         this.callParent(arguments);
     },
     AddValorFila:function(){
-        var main = this;
-        
+        var main = this;        
         var myValor = Ext.create('Valor',{
            Valor:null 
-        });
-        
+        });        
         var myStore = main.gridTablas.getStore();
-        var myModelAdded = myStore.add(myValor);
+        var myModelAdded = myStore.add(myValor);        
+        var myEditing = main.gridTablas.getPlugin('cellediting');        
+        var edit = myEditing.startEdit(myValor,1);                        
+    },
+    Guardar:function(){
+        var main = this;
         
-        var recurn = main.gridTablas.fireEvent('cellclick',{
-           cellIndex:1, 
-           record:myModelAdded,
-           rowIndex:1
+         var myStore = main.gridTablas.getStore();
+        var myRecords = myStore.getRange();
+        var myValores = Per.Store.getDataAsJSON(myRecords);
+        
+        Ext.Ajax.request({
+           url:base_url+'GestionPropiedades/GestionPropiedadesController/add',
+           params:{
+                Nombre:main.txtNombre.getValue(),
+                Descripcion: main.txtDescripcion.getValue(),
+                Valores:myValores
+           },
+           success:function(response){
+               var data = Ext.decode(response.responseText);
+               if(data.success == true){
+                   main.fireEvent('saved');
+               }
+               //console.log(data);
+           }           
         });
-        
-        console.log(recurn);
     }
 });
 
