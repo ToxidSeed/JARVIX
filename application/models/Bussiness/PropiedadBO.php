@@ -28,7 +28,7 @@ class PropiedadBO extends BaseBO{
     function setValores(array $parValores = null){
         foreach($parValores as $row){
             $dmnValores = new DomainValorPropiedad();
-            $dmnValores->setValor($row['Valor']);
+            $dmnValores->setValor($row['valor']);
             $dmnValores->setPropiedad($this->getDomain());
             $this->valores[]  = $dmnValores;
         }        
