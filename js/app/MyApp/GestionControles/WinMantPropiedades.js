@@ -19,10 +19,10 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
         
         //console.log(main.internal);
         
-        Ext.define('Valor', {
+        Ext.define('valor', {
             extend: 'Ext.data.Model',
             fields: [
-                {name: 'Valor'}
+                {name: 'valor'}
             ]
         });
         
@@ -81,14 +81,18 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
            width:'100%',
            height:170,
            border:false,
-           src: base_url+'',
+           src: base_url+'GestionPropiedades/GestionPropiedadesController/getValores',
            selModel:main.chkSelModel,
            columns:[
                {
                    xtype:'rownumberer'
                },{
-                   header:'Valor',
-                   dataIndex:'Valor',
+                  header:'id',
+                  dataIndex:'id',
+                  hidden:true
+               },{
+                   header:'valor',
+                   dataIndex:'valor',
                    flex:1,
                    editor:{
                        xtype:'textfield'
@@ -141,6 +145,7 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
                    if (main.internal.id != 'undefined' && main.internal.id > 0  ){
                         //load data
                         main.getPropiedad();
+                        main.getValores();
                     }
                }
            }
@@ -152,8 +157,8 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
     },
     AddValorFila:function(){
         var main = this;        
-        var myValor = Ext.create('Valor',{
-           Valor:null 
+        var myValor = Ext.create('valor',{
+           valor:null 
         });        
         var myStore = main.gridTablas.getStore();
         var myModelAdded = myStore.add(myValor);        
@@ -164,8 +169,10 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
         var main = this;
         
          var myStore = main.gridTablas.getStore();
-        var myRecords = myStore.getRange();
+        var myRecords = myStore.getRange();        
         var myValores = Per.Store.getDataAsJSON(myRecords);
+        
+        console.log(myValores);
         
         Ext.Ajax.request({
            url:base_url+'GestionPropiedades/GestionPropiedadesController/add',
@@ -199,8 +206,13 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
                main.internal.id = decode.data.id;
                main.txtNombre.setValue(decode.data.nombre);               
            }           
+        });        
+    },
+    getValores:function(){
+        var main = this;
+        main.gridTablas.load({
+            PropiedadId:main.internal.id
         });
-        
     }
 });
 

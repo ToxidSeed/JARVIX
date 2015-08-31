@@ -7,6 +7,7 @@
  */
 require_once BASEMODELPATH.'BaseMapper.php';
 require_once DOMAINPATH.'DomainValorPropiedad.php';
+require_once DOMAINPATH.'DomainPropiedad.php';
 /**
  * Description of ValorPropiedadMapper
  *
@@ -28,6 +29,13 @@ class ValorPropiedadMapper extends BaseMapper{
     
     public function insert($domain){
         $this->doInsert($domain);
+    }
+    
+    protected function doCreateObject(array $record = null){
+        $dmnValorPropiedad = new DomainValorPropiedad($record['ID']);
+        $dmnValorPropiedad->setValor($record['VALOR']);
+        $dmnValorPropiedad->setPropiedad(new DomainPropiedad($record['PROPIEDADID']));
+        return $dmnValorPropiedad;
     }
     
     protected function doInsert(DomainValorPropiedad $dmnValorPropiedad){

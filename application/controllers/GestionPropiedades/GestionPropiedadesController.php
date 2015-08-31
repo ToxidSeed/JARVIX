@@ -86,6 +86,16 @@ class GestionPropiedadesController extends BaseController{
         }
     }
     
+    public function getValores(){
+        $this->load->model('Mapper/Finders/ValorPropiedad/ValorPropiedadFRM1','ValorPropiedadFRM1');
+        //$this->FinderActivePropiedades->nombre = $this->input->get_post('PropiedadId');
+        $filters = array(
+            'PropiedadId' =>   $this->getField('PropiedadId')
+        );
+        $response = $this->ValorPropiedadFRM1->Search($filters) ;
+        echo json_encode(Response::asResults($response)); 
+    }
+    
     public function find(){
         try{
             $this->load->model('Mapper/PropiedadMapper','PropiedadMapper');
