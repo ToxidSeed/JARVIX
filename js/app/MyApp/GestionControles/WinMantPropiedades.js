@@ -56,7 +56,10 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
                },
                {
                    text:'Quitar',
-                   iconCls:'icon-delete'
+                   iconCls:'icon-delete',
+                   handler:function(){
+                       main.quitar();
+                   }
                } 
            ] 
         });
@@ -213,6 +216,13 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
         main.gridTablas.load({
             PropiedadId:main.internal.id
         });
+    },
+    quitar:function(){
+        var main = this;
+        var mySelModel = main.gridTablas.getSelectionModel();
+        var myStore = main.gridTablas.getStore();
+        var records = mySelModel.getSelection();
+        myStore.remove(records);
     }
 });
 
