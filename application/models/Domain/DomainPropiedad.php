@@ -11,6 +11,7 @@ class DomainPropiedad extends BaseDomain{
     protected $nombre;
     protected $fechaRegistro;
     protected $fechaUltAct;
+    protected $control;
     
     function __construct($id = null) {
         $this->id = $id;
@@ -39,5 +40,14 @@ class DomainPropiedad extends BaseDomain{
     public function getFechaUltAct(){
         return $this->fechaUltAct;
     }
+    function getControl() {
+        return $this->control;
+    }
+
+    function setControl($control) {
+        $this->control = $control;
+    }
+
+
 }
 ?>

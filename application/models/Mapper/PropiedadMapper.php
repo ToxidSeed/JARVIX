@@ -32,8 +32,10 @@ class PropiedadMapper extends BaseMapper{
         $fields['nombre'] = $dmnPropiedad->getNombre();
         $fields['fecharegistro'] = $dmnPropiedad->getFechaRegistro();
         $fields['fechaultact'] = $dmnPropiedad->getFechaUltAct();
+        $fields['controlid'] = $dmnPropiedad->getControl()->getId();
         $this->db->set($fields);
         $res = $this->db->insert($this->tableName);
+        $dmnPropiedad->setId($this->db->insert_id());
         if(!$res){
             $this->db->trans_rollback();
             throw new Exception('Error al Insertar en la Base de Datos PropiedadMapper',-1);

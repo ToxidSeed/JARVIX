@@ -1,6 +1,10 @@
 <?php
 require_once BUSSINESSPATH.'BaseBO.php';
 require_once MAPPERPATH.'PropiedadMapper.php';
+require_once MAPPERPATH.'ValorPropiedadMapper.php';
+require_once DOMAINPATH.'DomainValorPropiedad.php';
+
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -8,14 +12,28 @@ require_once MAPPERPATH.'PropiedadMapper.php';
 class PropiedadBO extends BaseBO{
     function __construct() {
         parent::__construct();
+        $this->valorPropiedadMapper = new ValorPropiedadMapper();
     }
     protected $dmnPropiedad;
+    protected $valores;
+    protected $valorPropiedadMapper;
+    
     function setDmnPropiedad(DomainPropiedad $dmnPropiedad){
         $this->dmnPropiedad = $dmnPropiedad;
     }
     function getDmnPropiedad(){
         return $this->dmnPropiedad;
     }
+    
+    function setValores(array $parValores = null){
+        foreach($parValores as $row){
+            $dmnValores = new DomainValorPropiedad();
+            $dmnValores->setValor($row['Valor']);
+            $dmnValores->setPropiedad($this->getDomain());
+            $this->valores[]  = $dmnValores;
+        }        
+    }
+    
     function add(){
         try{
             $this->load->database();
@@ -23,8 +41,14 @@ class PropiedadBO extends BaseBO{
             
             $this->checkObject();
             
-            $mprEvento = new PropiedadMapper();
-            $mprEvento->insert($this->getDomain());
+            //Por cada valor insertar un registro en valor propiedad
+            
+            $mprPropiedad = new PropiedadMapper();
+            $mprPropiedad->insert($this->getDomain());
+            
+            foreach($this->valores as $dmnValores){
+                $this->valorPropiedadMapper->insert($dmnValores);
+            }
             
             $this->db->trans_commit();
         }catch(Exception $e){

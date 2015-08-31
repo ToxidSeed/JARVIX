@@ -46,7 +46,12 @@ class GestionControlesController extends BaseController{
             $this->TipoControlBO->setDmnTipoControl($dmnTipoControl);
             //Adding the new Domain
             $this->TipoControlBO->add();
-            echo Answer::setSuccessMessage('Se guardo correctamente el tipo de control con nombre: '.$dmnTipoControl->getNombre());            
+            
+            $this->getAnswer()->setCode(0);
+            $this->getAnswer()->setSuccess(true);
+            $this->getAnswer()->setMessage('Se guardo correctamente el tipo de control con nombre: '.$dmnTipoControl->getNombre());
+            $this->getAnswer()->addExtraData('ControlId',$dmnTipoControl->getId());
+            echo $this->getAnswer()->getAsJSON();           
         }catch(Exception $ex){
             if($ex->getCode() == FORM_VALIDATION_ERRORS_CODE){                
                 echo $this->getAnswer()->getAsJSON();
@@ -119,14 +124,14 @@ class GestionControlesController extends BaseController{
     }    
     
     public function GetLinkedProperties(){
-        $this->load->model('Mapper/Finders/Controles/FinderLinkedProperties','FinderLinkedProperties');
-        $this->FinderLinkedProperties->setDmnControl(new DomainTipoControl($this->input->get_post('ControlId')));
-        $response = $this->FinderLinkedProperties->search();
-        foreach($response->getResults() as $dmnControlPropiedad){
-            $dmnControlPropiedad->mapper()->getControl();
-            $dmnControlPropiedad->mapper()->getPropiedad();
-        }
-        echo json_encode(Response::asResults($response)); 
+        $this->load->model('Mapper/Finders/Propiedad/PropiedadFRM1','PropiedadFRM1'); 
+        $response = $this->PropiedadFRM1->search(
+                    array(
+                        'ControlId' => $this->getField('ControlId'),
+                        'Nombre' => $this->getField('Nombre')
+                    )
+                );
+        echo json_encode(Response::asResults($response));         
     }
     public function getActiveEvents(){
         $this->load->model('Mapper/Finders/Controles/FinderActiveEventos','FinderActiveEventos');

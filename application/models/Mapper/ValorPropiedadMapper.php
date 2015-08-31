@@ -31,7 +31,7 @@ class ValorPropiedadMapper extends BaseMapper{
     }
     
     protected function doInsert(DomainValorPropiedad $dmnValorPropiedad){
-        $fields['valor'] = $dmnValorPropiedad->getNombre();
+        $fields['valor'] = $dmnValorPropiedad->getValor();
         $fields['propiedadid'] = $dmnValorPropiedad->getPropiedad()->getId();
         $this->db->set($fields);
         $res = $this->db->insert($this->tableName);

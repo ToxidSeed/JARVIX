@@ -2,6 +2,7 @@
 require_once BASECONTROLLERPATH.'BaseController.php';
 require_once BASEMODELPATH.'Constraints.php';
 require_once DOMAINPATH.'DomainPropiedad.php';
+require_once DOMAINPATH.'DomainTipoControl.php';
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -21,10 +22,16 @@ class GestionPropiedadesController extends BaseController{
             
             $dmnPropiedad = new DomainPropiedad();
             $dmnPropiedad->setNombre($this->getField('Nombre'));
+            $valores = json_decode($this->getField('Valores'),true);
+            
+            $dmnControl = new DomainTipoControl($this->getField('ControlId'));
+            $dmnPropiedad->setControl($dmnControl);
+                    
             //$dmnPropiedad->setFechaRegistro(date(APPDATESTNFORMAT));
             //$dmnPropiedad->setFechaUltAct(date(APPDATESTNFORMAT));
             $this->load->model('Bussiness/PropiedadBO','PropiedadBO');  
             $this->PropiedadBO->setDomain($dmnPropiedad);
+            $this->PropiedadBO->setValores($valores);
             $this->PropiedadBO->add();
             echo Answer::setSuccessMessage('Se guardo correctamente la propiedad con nombre: '.$dmnPropiedad->getNombre());            
         }
@@ -82,10 +89,10 @@ class GestionPropiedadesController extends BaseController{
     public function find(){
         try{
             $this->load->model('Mapper/PropiedadMapper','PropiedadMapper');
-            $domain = $this->PropiedadMapper->find($this->getField('id'));
+            $domain = $this->PropiedadMapper->find($this->getField('PropiedadId'));
             echo json_encode(Response::asSingleObject($domain));
         }catch(Exception $ex){
-            echo Answer::setFailedMessage($ex->getMessage(),$e->getCode());
+            echo Answer::setFailedMessage($ex->getMessage(),$ex->getCode());
         }
     }
 }

@@ -11,10 +11,13 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
     modal:true,
     autoRender:true,
     internal:{
-        id:null
+        id:null,
+        ControlId:null
     },
     initComponent:function(){
         var main = this;
+        
+        //console.log(main.internal);
         
         Ext.define('Valor', {
             extend: 'Ext.data.Model',
@@ -68,7 +71,9 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
             height:60
         });
         
-        
+         main.chkSelModel = new Ext.selection.CheckboxModel({
+            mode:'MULTI'
+        })
         
         
         main.gridTablas = Ext.create('Per.GridPanel',{            
@@ -77,6 +82,7 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
            height:170,
            border:false,
            src: base_url+'',
+           selModel:main.chkSelModel,
            columns:[
                {
                    xtype:'rownumberer'
@@ -125,11 +131,23 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
             layout:'border',
             width:600, 
             height:350,
+            defaultFocus:main.txtNombre,
            items:[
                main.panelPrincipal,
                 main.panelGrid
-           ]
+           ],
+           listeners:{
+               'show':function(){
+                   if (main.internal.id != 'undefined' && main.internal.id > 0  ){
+                        //load data
+                        main.getPropiedad();
+                    }
+               }
+           }
         });
+        
+        
+        
         this.callParent(arguments);
     },
     AddValorFila:function(){
@@ -140,7 +158,7 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
         var myStore = main.gridTablas.getStore();
         var myModelAdded = myStore.add(myValor);        
         var myEditing = main.gridTablas.getPlugin('cellediting');        
-        var edit = myEditing.startEdit(myValor,1);                        
+        var edit = myEditing.startEdit(myValor,2);                        
     },
     Guardar:function(){
         var main = this;
@@ -152,18 +170,37 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
         Ext.Ajax.request({
            url:base_url+'GestionPropiedades/GestionPropiedadesController/add',
            params:{
+                ControlId:main.internal.ControlId,
                 Nombre:main.txtNombre.getValue(),
                 Descripcion: main.txtDescripcion.getValue(),
                 Valores:myValores
            },
            success:function(response){
                var data = Ext.decode(response.responseText);
-               if(data.success == true){
+               //console.log(data);
+               if(data.success == true && data.code == 0){
                    main.fireEvent('saved');
+                   main.close();
                }
                //console.log(data);
            }           
         });
+    },
+    getPropiedad:function(){
+        var main = this;
+        
+        Ext.Ajax.request({
+           url:base_url+'GestionPropiedades/GestionPropiedadesController/find',
+           params:{
+               PropiedadId:main.internal.id
+           },
+           success:function(response){
+               var decode = Ext.decode(response.responseText);
+               main.internal.id = decode.data.id;
+               main.txtNombre.setValue(decode.data.nombre);               
+           }           
+        });
+        
     }
 });
 
