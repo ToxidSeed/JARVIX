@@ -12,7 +12,7 @@ $config['Validation'] = array(
                         'rules' => 'required'
                     )
     ),
-    'update' => array(
+    'upd' => array(
                     array(
                         'field' => 'Nombre',
                         'label' => 'Nombre',

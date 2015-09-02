@@ -15,7 +15,8 @@ class PropiedadBO extends BaseBO{
         $this->valorPropiedadMapper = new ValorPropiedadMapper();
     }
     protected $dmnPropiedad;
-    protected $valores;
+    protected $valores = array();
+    protected $valoresEliminar = array();
     protected $valorPropiedadMapper;
     
     function setDmnPropiedad(DomainPropiedad $dmnPropiedad){
@@ -32,6 +33,13 @@ class PropiedadBO extends BaseBO{
             $dmnValores->setPropiedad($this->getDomain());
             $this->valores[]  = $dmnValores;
         }        
+    }
+    
+    function setValoresEliminar(array $parValores = null){
+        foreach($parValores as $row){
+            $dmnValores = new DomainValorPropiedad($row['id']);            
+            $this->valoresEliminar[]  = $dmnValores;
+        }
     }
     
     function add(){
@@ -69,13 +77,21 @@ class PropiedadBO extends BaseBO{
             $dmnCurrentPropiedad = $mprPropiedad->find($this->domain->getId());
             $dmnCurrentPropiedad->setNombre($this->domain->getNombre());            
             $mprPropiedad->update($dmnCurrentPropiedad);            
+                 
+            
+            foreach($this->valores as $dmnValores){
+                $this->valorPropiedadMapper->insert($dmnValores);
+            }
+            
+            foreach($this->valoresEliminar as $dmnValoresEli){
+                $this->valorPropiedadMapper->delete($dmnValoresEli);
+            }
+            
             $this->db->trans_commit();
         }catch(Exception $ex){
             $this->db->trans_rollback();
             throw new Exception($ex->getMessage(),$ex->getCode());
         }
-    }
-     
-    
+    }         
 }
 ?>

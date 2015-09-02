@@ -61,7 +61,18 @@ class ValorPropiedadMapper extends BaseMapper{
         if(!$res){
             $this->db->trans_rollback();
             throw new Exception('Error al Atualizar en la base de Datos ValorPropiedadMappr',-1);
-        }
-        
+        }        
+    }
+    
+    public function delete($domain){
+        $this->doDelete($domain);
+    }
+    protected function doDelete($dmnValorPropiedad){
+        $this->db->where('id',$dmnValorPropiedad->getId());
+        $res = $this->db->delete($this->tableName);
+        if(!$res){
+            $this->db->trans_rollback();
+            throw new Exception('Error al Borrar en la base de Datos ValorPropiedadMappr',-1);
+        }      
     }
 }

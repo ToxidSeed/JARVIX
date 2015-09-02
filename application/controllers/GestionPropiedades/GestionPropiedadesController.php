@@ -16,17 +16,30 @@ class GestionPropiedadesController extends BaseController{
         $this->load->view('GestionPropiedadesView.php');
         $this->load->view('Base/Footer.php');
     }
-    public function add(){
+    public function writeRecord(){        
+        $dmnPropiedad = new DomainPropiedad($this->getField('PropiedadId'));        
+        $dmnPropiedad->setNombre($this->getField('Nombre'));
+        $valores = json_decode($this->getField('Valores'),true);
+        
+        
+        
+        $valoresEliminar = json_decode($this->getField('ValoresEliminar'),true);
+
+        
+        
+        $dmnControl = new DomainTipoControl($this->getField('ControlId'));
+        $dmnPropiedad->setControl($dmnControl);
+        
+        if($dmnPropiedad->getId() == null){
+            $this->add($dmnPropiedad,$valores);
+        }else{
+            $this->upd($dmnPropiedad,$valores,$valoresEliminar);
+        }
+    }
+    
+    public function add($dmnPropiedad,$valores){
         try{
             $this->formValidation(__CLASS__,'', __FUNCTION__);
-            
-            $dmnPropiedad = new DomainPropiedad();
-            $dmnPropiedad->setNombre($this->getField('Nombre'));
-            $valores = json_decode($this->getField('Valores'),true);
-            
-            $dmnControl = new DomainTipoControl($this->getField('ControlId'));
-            $dmnPropiedad->setControl($dmnControl);
-                    
             //$dmnPropiedad->setFechaRegistro(date(APPDATESTNFORMAT));
             //$dmnPropiedad->setFechaUltAct(date(APPDATESTNFORMAT));
             $this->load->model('Bussiness/PropiedadBO','PropiedadBO');  
@@ -44,16 +57,14 @@ class GestionPropiedadesController extends BaseController{
         }
     }
     
-    public function update(){
+    
+    public function upd($dmnPropiedad,$valores,$valoresEliminar){
         try{
-            $this->formValidation(__CLASS__,'', __FUNCTION__);
-            
-            $dmnPropiedad = new DomainPropiedad($this->getField('id'));
-            $dmnPropiedad->setNombre($this->getField('nombre'));
-            $dmnPropiedad->setFechaRegistro(date(APPDATESTNFORMAT));
-            $dmnPropiedad->setFechaUltAct(date(APPDATESTNFORMAT));
+            $this->formValidation(__CLASS__,'', __FUNCTION__);                        
             $this->load->model('Bussiness/PropiedadBO','PropiedadBO');  
             $this->PropiedadBO->setDomain($dmnPropiedad);
+            $this->PropiedadBO->setValores($valores);
+            $this->PropiedadBO->setValoresEliminar($valoresEliminar);
             $this->PropiedadBO->update();
             echo Answer::setSuccessMessage('Se Actualizó correctamente la propiedad con nombre: '.$dmnPropiedad->getNombre());            
         }

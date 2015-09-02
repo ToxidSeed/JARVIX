@@ -32,8 +32,10 @@ Ext.define('Per.Store',{
                //Cerrando el Objeto
                json +='},';
            }
-           //quitamos la ultima coma agregada
-           json = json.substr(0,json.length - 1);
+           if(json.length >  1){
+               //quitamos la ultima coma agregada
+                json = json.substr(0,json.length - 1);
+           }           
            
            //Cerramos el arreglo
            json +=']';

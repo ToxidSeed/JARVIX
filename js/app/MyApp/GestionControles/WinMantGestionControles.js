@@ -200,7 +200,7 @@ Ext.define('MyApp.GestionControles.WinMantGestionControles',{
         
         main.gridProperties = Ext.create('Per.GridPanel',{    
            loadOnCreate:false,
-           tbar:main.toolbarSelectProp,            
+           //tbar:main.toolbarSelectProp,            
            width:'100%',
            pageSize:20,
            src:base_url+'GestionControles/GestionControlesController/GetLinkedProperties',
@@ -228,23 +228,7 @@ Ext.define('MyApp.GestionControles.WinMantGestionControles',{
                 var varPropiedadId = record.get('id');
                 main.AbrirVentanaPropiedad('Modificar Propiedad',main.internal.id,varPropiedadId);
             }
-        });
-        
-        
-   
-        //@avaiable properties end
-        //@properties
-        main.tbarProperties = Ext.create('Ext.toolbar.Toolbar',{
-           items:[
-               {
-                   text:'Quitar',
-                   iconCls:'icon-delete',
-                   handler:function(){
-                      main.DropLinkedProperty();
-                   }
-               }
-           ] 
-        });
+        });                           
         
         
         //@properties end
@@ -261,46 +245,12 @@ Ext.define('MyApp.GestionControles.WinMantGestionControles',{
            ] 
         });
         
-        main.chkSelModelEvent = new Ext.selection.CheckboxModel({
-            mode:'MULTI'
-        });
-        
-        main.gridEventsSels = Ext.create('Per.GridPanel',{
-            tbar:main.tbarEventsSel,            
-            src:base_url+'GestionControles/GestionControlesController/getActiveEvents',
-            region:'west',            
-            width:350,
-            pageSize:20,  
-            selModel:main.chkSelModelEvent,
-            columns:[
-                {
-                    xtype:'rownumberer'
-                },{
-                    header:'Nombre',
-                    dataIndex:'nombre'
-                }
-            ]
-        });
-        
-        
-        main.tbarEvents = Ext.create('Ext.toolbar.Toolbar',{
-            items:[
-                {
-                    text:'Quitar',
-                    iconCls:'icon-remove',
-                    handler:function(){
-                        main.DropLinkedEvent();
-                    }
-                }
-            ]
-        });
-        
         main.chkEvent = new Ext.selection.CheckboxModel({
             mode:'MULTI'
         });
         
         main.gridEvents = Ext.create('Per.GridPanel',{
-            tbar:main.tbarEvents,
+            //tbar:main.tbarEventsSel,
             loadOnCreate:false,
             selModel:main.chkEvent,
             src:base_url+'GestionControles/GestionControlesController/GetLinkedEvents',
@@ -327,8 +277,9 @@ Ext.define('MyApp.GestionControles.WinMantGestionControles',{
             items:[{
                     title:'Propiedades',
                     xtype:'panel',
-                    layout:'border',
-                    items:[
+                    layout:'border',                    
+                    tbar:main.toolbarSelectProp,
+                    items:[                        
                         main.gridProperties/*,
                         main.gridProperties*/
                     ]
@@ -337,8 +288,8 @@ Ext.define('MyApp.GestionControles.WinMantGestionControles',{
                     title:'Eventos',
                     xtype:'panel',
                     layout:'border',
+                    tbar:main.tbarEventsSel,
                     items:[
-                        main.gridEventsSels,
                         main.gridEvents
                     ]                
                 }]

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-Ext.define('MyApp.GestionControles.WinMantPropiedades',{
+Ext.define('MyApp.GestionControles.WinMantEventos',{
     extend:'Ext.window.Window',
     create:false,
     /*width:500,
@@ -86,7 +86,7 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
            width:'100%',
            height:170,
            border:false,
-           src: base_url+'GestionPropiedades/GestionPropiedadesController/getValores',
+           src: base_url+'GestionEventos/GestionEventosController/getValores',
            selModel:main.chkSelModel,
            columns:[
                {
@@ -149,7 +149,7 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
                'show':function(){
                    if (main.internal.id != 'undefined' && main.internal.id > 0  ){
                         //load data
-                        main.getPropiedad();
+                        main.getEvento();
                         main.loadValores();
                     }
                }
@@ -180,9 +180,9 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
         console.log(myValores);
         
         Ext.Ajax.request({
-           url:base_url+'GestionPropiedades/GestionPropiedadesController/writeRecord',
+           url:base_url+'GestionEventos/GestionEventosController/writeRecord',
            params:{
-                PropiedadId:main.internal.id,
+                EventoId:main.internal.id,
                 ControlId:main.internal.ControlId,
                 Nombre:main.txtNombre.getValue(),
                 Descripcion: main.txtDescripcion.getValue(),
@@ -200,13 +200,13 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
            }           
         });
     },
-    getPropiedad:function(){
+    getEvento:function(){
         var main = this;
         
         Ext.Ajax.request({
-           url:base_url+'GestionPropiedades/GestionPropiedadesController/find',
+           url:base_url+'GestionEventos/GestionEventosController/find',
            params:{
-               PropiedadId:main.internal.id
+               EventoId:main.internal.id
            },
            success:function(response){
                var decode = Ext.decode(response.responseText);
@@ -218,7 +218,7 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
     loadValores:function(){
         var main = this;
         main.gridTablas.load({
-            PropiedadId:main.internal.id
+            EventoId:main.internal.id
         });
     },
     getValoresInsertar:function(){
