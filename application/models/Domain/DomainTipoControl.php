@@ -1,5 +1,6 @@
 <?php
 require_once BASEMODELPATH.'BaseDomain.php';
+//require_once MAPPERPATH.'TecnologiaMapper.php';
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -47,6 +48,13 @@ class DomainTipoControl extends BaseDomain{
         return $this->estado;
     }
     function getTecnologia() {
+        require_once MAPPERPATH.'TecnologiaMapper.php';        
+        if($this->mapper == true && 
+                $this->tecnologia != null &&
+                 $this->tecnologia->getId() != null ){
+                $mapper = new TecnologiaMapper();
+                $this->tecnologia = $mapper->find($this->tecnologia->getId());
+        }
         return $this->tecnologia;
     }
 

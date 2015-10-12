@@ -6,6 +6,7 @@
  */
 
 require_once CONTROLLERSPATH.'GestionControles/GestionControlesController.php';
+require_once DOMAINPATH.'DomainEvento.php';
 
 class AddLinkedEvent extends  GestionControlesController{
     function __construct() {
@@ -13,26 +14,20 @@ class AddLinkedEvent extends  GestionControlesController{
     }
     public function Add(){
         try{
-            $dmnControl = new DomainTipoControl();
-            
-            $ControlId = $this->getField('ControlId');
-            if($ControlId != null){
-                $dmnControl->setId($ControlId);
-            }else{
-                $dmnControl->setNombre($this->getField('nombre'));
-                $dmnControl->setEstado(new DomainEstado(1));
-            }
-            //
+           
+            $dmnEvento = new DomainEvento();
+            $dmnEvento->setControl(new DomainTipoControl($this->getField('ControlId')));
+            $dmnEvento->setNombre($this->getField('Nombre'));
+                    
             $this->load->model('Bussiness/ControlBO/AddLinkedEventBO','AddLinkedEventBO');
             
-            $this->AddLinkedEventBO->setDomain($dmnControl);
-            $this->RecordsToEvents();
+            $this->AddLinkedEventBO->setDomain($dmnEvento);            
             $this->AddLinkedEventBO->Add();
             
             $this->getAnswer()->setSuccess(true);
             $this->getAnswer()->setMessage('Registrado Correctamente');
             $this->getAnswer()->setCode(0);
-            $this->getAnswer()->AddExtraData('ControlId',$dmnControl->getId());                        
+            //$this->getAnswer()->AddExtraData('ControlId',$dmnControl->getId());                        
             echo $this->getAnswer()->getAsJSON();
             
         }catch(Exception $ex){
@@ -42,18 +37,7 @@ class AddLinkedEvent extends  GestionControlesController{
                 echo Answer::setFailedMessage($ex->getMessage(),$ex->getCode());
             }
         }
-    }
-    
-    private function RecordsToEvents(){
-        $records = json_decode($this->getField('records'),true);
-//        print_r($records);
-        foreach($records as $row){
-            $dmnEvento = new DomainEvento();
-            $dmnEvento->setId($row['id']);
-            $dmnEvento->setNombre($row['nombre']);
-            $this->AddLinkedEventBO->addRecord($dmnEvento);
-        }
-    }
+    }    
 }
 
 ?>

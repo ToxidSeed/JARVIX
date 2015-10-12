@@ -12,6 +12,7 @@ class DomainEvento extends BaseDomain{
     protected $fechaRegistro;
     protected $fechaUltAct;
     protected $estado;
+    protected $control;
     
     public function __construct($id = NULL) {
         $this->id = $id;
@@ -47,5 +48,14 @@ class DomainEvento extends BaseDomain{
     public function getEstado(){
         return $this->estado;
     }
+    function getControl() {
+        return $this->control;
+    }
+
+    function setControl($control) {
+        $this->control = $control;
+    }
+
+
 }
 ?>

@@ -11,8 +11,8 @@ class HelpActiveProperties extends BaseController{
     }
     public function search(){        
         $this->load->model('Mapper/Helpers/HelperPropiedades','HelperPropiedades');
-        $this->HelpAplicacionFinder->setParamNombre($this->getField('nombre'));
-        $response = $this->HelpAplicacionFinder->getList();
+        $this->HelperPropiedades->setParamNombre($this->getField('nombre'));
+        $response = $this->HelperPropiedades->getList();
         echo json_encode(Response::asResults($response));                                   
    }
 }

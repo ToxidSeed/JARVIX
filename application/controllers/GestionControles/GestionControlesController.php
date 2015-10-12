@@ -109,7 +109,8 @@ class GestionControlesController extends BaseController{
     public function find(){
         try{            
             $this->load->model('Mapper/TipoControlMapper','TipoControlMapper');
-            $dmnTipoControl = $this->TipoControlMapper->find($this->getField('id'));
+            $dmnTipoControl = $this->TipoControlMapper->find($this->getField('id'));                        
+            $dmnTipoControl->mapper()->getTecnologia();
             echo json_encode(Response::asSingleObject($dmnTipoControl));
         }catch(Exception $ex){
             echo Answer::setFailedMessage($ex->getMessage(),$ex->getCode());
@@ -141,13 +142,15 @@ class GestionControlesController extends BaseController{
     }
     
     public function GetLinkedEvents(){
-        $this->load->model('Mapper/Finders/Controles/FinderLinkedEvents','FinderLinkedEvents');
-        $this->FinderLinkedEvents->setDmnControl(new DomainTipoControl($this->input->get_post('ControlId')));
-        $response = $this->FinderLinkedEvents->search();
-        foreach($response->getResults() as $dmnControlEvento){
-            $dmnControlEvento->mapper()->getControl();
-            $dmnControlEvento->mapper()->getEvento();                    
-        }
+        $this->load->model('Mapper/Finders/Evento/FinderEventoFRM1','FinderEventoFRM1');
+        //$this->FinderEventoFRM1->setDmnControl(new DomainTipoControl($this->input->get_post('ControlId')));
+        $response = $this->FinderEventoFRM1->search(array(
+            'ControlId' => $this->getField('ControlId')
+        ));
+//        foreach($response->getResults() as $dmnControlEvento){
+//            $dmnControlEvento->mapper()->getControl();
+//            $dmnControlEvento->mapper()->getEvento();                    
+//        }
         
         echo json_encode(Response::asResults($response));        
     }

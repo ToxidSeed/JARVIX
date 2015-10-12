@@ -69,6 +69,7 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
             items:[
                 {
                     text:'Guardar',
+                    id:'btnGuardarId',
                     iconCls:'icon-disk',
                     handler:function(){
                         main.save();
@@ -248,12 +249,30 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
          } 
       });
       
+      
+     main.tbarPropiedades = Ext.create('Ext.toolbar.Toolbar',{
+        items:[
+            {
+                text:'Agregar Propiedad',
+                iconCls:'icon-add',
+                handler:function(){
+                    var w = main.mainPanel.getWidth();
+                    main.mainPanel.hide();
+                    main.panelSearchPropiedades.setWidth(w);
+                    main.panelSearchPropiedades.show();                      
+                    Ext.getCmp('btnGuardarId').disable();
+                }
+            }
+        ] 
+     });
+      
         main.mainTab = Ext.create('Ext.tab.Panel',{
             region:'center',
            items:[
                {
                    id:'tabPropiedades',
                    title:'Propiedades',
+                   tbar:main.tbarPropiedades,                   
                    items:[
                        main.gridPropiedades 
                    ]
@@ -314,6 +333,59 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
                 main.txtComentarios]
         });
         
+        main.tbarSearchPropiedades = Ext.create('Ext.toolbar.Toolbar',{
+            items:[
+                {
+                    text:'Buscar',
+                    iconCls:'icon-search',
+                    handler:function(){
+                        main.getPropiedadesSeleccionar();
+                    }
+                },{
+                    text:'Ocultar',
+                    iconCls:'icon-collapse',
+                    handler:function(){
+                        
+                    }
+                }
+            ]
+        });
+        
+        main.txtPropiedad = Ext.create('Ext.form.field.Text',{
+           fieldLabel:'Propiedad' 
+        });
+        
+        main.gridPropiedades = Ext.create('Ext.grid.property.Grid', {
+            title: 'Properties Grid',
+            width: 300,
+            renderTo: Ext.getBody(),
+            source: {
+                "(name)": "My Object",
+                "Created": Ext.Date.parse('10/15/2006', 'm/d/Y'),
+                "Available": false,
+                "Version": .01,
+                "Description": "A test object"
+            }
+        });
+        
+        main.panelSearchPropiedades = Ext.create('Ext.form.Panel',{
+              title:'Buscar Propiedades',    
+               bodyPadding:'10px',  
+               region:'west',
+              hidden:true,
+              tbar:main.tbarSearchPropiedades,
+              items:[
+                  main.txtPropiedad,
+                  main.gridPropiedades
+              ]
+        });
+        
+        main.panelSearchPropiedades.on({
+            'show':function(){
+                //Ajax Request
+            }
+        })
+        
 //        var map = new Ext.util.KeyMap(document,[
 //            {
 //                key:"abc",
@@ -333,6 +405,7 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
            defaultFocus:main.txtTipoControl,
            items:[
                 main.mainPanel,
+                main.panelSearchPropiedades,
                main.mainTab               
            ]
         });       
@@ -528,5 +601,18 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
     winEditorClose:function(){
         var main = this;
         main.myWinEditor.close();
+    },
+    getPropiedadesSeleccionar:function(){
+        var main = this;
+        Ext.Ajax.request({
+            url:base_url+'GestionProcesos/ProcesoControl/getPropiedadesActivas',
+            params:{
+                nombre:main.txtPropiedad.getValue()
+            },
+            success:function(response){
+                var data = Ext.decode(response.responseText);
+                console.log(data);
+            }
+        });
     }
 });

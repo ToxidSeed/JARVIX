@@ -17,7 +17,8 @@ class TipoControlMapper extends BaseMapper{
         'nombre',
         'fechaRegistro',
         'fechaUltAct',
-        'estadoId'
+        'estadoId',
+        'tecnologiaid'
     );
     protected $uniqueValues = array(
         array('id')
@@ -31,7 +32,7 @@ class TipoControlMapper extends BaseMapper{
         $dmnTipoControl->setFechaRegistro($record['FECHAREGISTRO']);
         $dmnTipoControl->setFechaUltAct($record['FECHAULTACT']);
         $dmnTipoControl->setEstado(new DomainEstado($record['ESTADOID']));
-        $dmnTipoControl->setTecnologia(new DomainTecnologia('TECNOLOGIAID'));
+        $dmnTipoControl->setTecnologia(new DomainTecnologia($record['TECNOLOGIAID']));
         return $dmnTipoControl;
     }
     public function insert(DomainTipoControl $dmnTipoControl){

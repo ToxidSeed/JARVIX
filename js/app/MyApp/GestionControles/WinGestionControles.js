@@ -158,7 +158,9 @@ Ext.define('MyApp.GestionControles.WinGestionControles',{
             'itemdblclick':function(grid,record,item,index){                               
                var winUpdate = Ext.create('MyApp.GestionControles.WinMantGestionControles',{
                    create:false,
-                   id:record.get('id')
+                   internal:{
+                       id:record.get('id')
+                   }                   
                });               
                winUpdate.show();
                winUpdate.on({

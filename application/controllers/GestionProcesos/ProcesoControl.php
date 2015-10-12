@@ -71,30 +71,41 @@ class ProcesoControl extends BaseController{
             }
         }
     
-    public function getPropiedades(){
-        try{
-            $this->load->model('Mapper/Finders/Procesos/FinderProcesoControlPropiedad','FinderProcesoControlPropiedad');                                    
-            $response = $this->FinderProcesoControlPropiedad->getPropiedades(
-                        $this->getField('ControlId'),
-                        $this->getField('ProcesoControlId')
-                    );                                
-            $this->getPropiedadesReferencias($response);
-            echo json_encode(Response::asResults($response));
-        } catch (Exception $ex) {
-            if($ex->getCode() == FORM_VALIDATION_ERRORS_CODE){
-                echo $this->getAnswer()->getAsJSON();
-            }else{
-                echo Answer::setFailedMessage($ex->getMessage(),$ex->getCode());
-            }
-        }        
-    }
-    private function getPropiedadesReferencias($response){
-        $objects = $response->getResults();
-        foreach($objects as $domain){
-            $domain->Mapper()->getPropiedad();
-        }
-    }
+//    public function getPropiedades(){
+//        try{
+//            $this->load->model('Mapper/Finders/Procesos/FinderProcesoControlPropiedad','FinderProcesoControlPropiedad');                                    
+//            $response = $this->FinderProcesoControlPropiedad->getPropiedades(
+//                        $this->getField('ControlId'),
+//                        $this->getField('ProcesoControlId')
+//                    );                                
+//            $this->getPropiedadesReferencias($response);
+//            echo json_encode(Response::asResults($response));
+//        } catch (Exception $ex) {
+//            if($ex->getCode() == FORM_VALIDATION_ERRORS_CODE){
+//                echo $this->getAnswer()->getAsJSON();
+//            }else{
+//                echo Answer::setFailedMessage($ex->getMessage(),$ex->getCode());
+//            }
+//        }        
+//    }
+//    private function getPropiedadesReferencias($response){
+//        $objects = $response->getResults();
+//        foreach($objects as $domain){
+//            $domain->Mapper()->getPropiedad();
+//        }
+//    }
     
+    public function getPropiedadesActivas(){
+        $this->load->model('Mapper/Finders/Propiedad/PropiedadFRM2','PropiedadFRM2');
+        $response = $this->PropiedadFRM2->search(
+                    array(
+                            'ControlId' => $this->getField('ControlId'),
+                            'Nombre' => $this->getField('nombre')
+                        )
+                );
+         echo json_encode(Response::asResults($response));
+    }    
+        
     public function getEventos(){
         try{
             $this->load->model('Mapper/Finders/Procesos/FinderProcesoControlEvento','FinderProcesoControlEvento');                                    

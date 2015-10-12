@@ -2,6 +2,7 @@
 require_once BASEMODELPATH.'BaseMapper.php';
 require_once DOMAINPATH.'DomainEvento.php';
 require_once DOMAINPATH.'DomainEstado.php';
+require_once DOMAINPATH.'DomainTipoControl.php';
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -15,7 +16,8 @@ class EventoMapper extends BaseMapper{
        'nombre',
         'fecharegistro',
         'fechaultact',
-        'estadoid'
+//        'estadoid',
+        'controlid'
     );
     protected $uniqueValues = array(
         array('id')
@@ -28,7 +30,8 @@ class EventoMapper extends BaseMapper{
         $dmnEvento->setNombre($record['NOMBRE']);
         $dmnEvento->setFechaRegistro($record['FECHAREGISTRO']);
         $dmnEvento->setFechaUltAct($record['FECHAULTACT']);
-        $dmnEvento->setEstado(new DomainEstado($record['ESTADOID']));
+//        $dmnEvento->setEstado(new DomainEstado($record['ESTADOID']));
+        $dmnEvento->setControl(new DomainTipoControl('CONTROLID'));
         return $dmnEvento;
     }
     
@@ -41,7 +44,8 @@ class EventoMapper extends BaseMapper{
         $fields['nombre'] = $dmnEvento->getNombre();
         $fields['fecharegistro'] = $dmnEvento->getFechaRegistro();
         $fields['fechaultact'] = $dmnEvento->getFechaUltAct();
-        $fields['estadoid'] = $dmnEvento->getEstado()->getId();
+        //$fields['estadoid'] = $dmnEvento->getEstado()->getId();
+        $fields['controlid'] = $dmnEvento->getControl()->getId();
         $this->db->set($fields);
         $res = $this->db->insert($this->tableName);
         if(!$res){                        
@@ -59,6 +63,7 @@ class EventoMapper extends BaseMapper{
         $fields['fecharegistro'] = $dmnEvento->getFechaRegistro();
         $fields['fechaultact'] = $dmnEvento->getFechaUltAct();
         $fields['estadoid'] = $dmnEvento->getEstado()->getId();
+        $fields['controlid'] = $dmnEvento->getControl()->getId();
         $this->db->set($fields);
         $this->db->where('id',$dmnEvento->getId());
         $res = $this->db->update($this->tableName);
