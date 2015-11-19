@@ -328,8 +328,8 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
         
         main.store_propiedades_disp = Ext.create('Ext.data.Store',{            
             fields:[
-                'PropiedadId',
-                'Nombre',
+                'id',
+                'nombre',
                 'Valor'
             ],
             proxy:{
@@ -352,13 +352,25 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
             store:main.store_propiedades_disp,
             columns:[
                 {
+                    text:'id',
+                    dataIndex:'id'
+                },
+                {
                     text:'Nombre',
-                    dataIndex:'Nombre'                    
+                    dataIndex:'nombre'                    
                 },{
                     text:'Valor',
                     dataIndex:'Valor',
+                    flex:1,
                     getEditor:function(record){
-                        console.log(record);
+                        console.log(record.get('id'));
+                        if(record.get('id') == 84){
+                            console.log(84);
+                            return Ext.create('Ext.form.field.Text');                            
+                        }else{
+                            console.log('else');
+                            return Ext.create('Ext.form.field.Date');
+                        }                        
                     }
                 }
             ],
