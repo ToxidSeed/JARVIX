@@ -22,14 +22,14 @@ class ProcesoControlPropiedadMapper extends BaseMapper{
         'procesocontrolpropiedad.procesocontrolid',
         'procesocontrolpropiedad.valor',
         'procesocontrolpropiedad.propiedadid',
-        'procesocontrolpropiedad.controlpropiedadid'
+//        'procesocontrolpropiedad.controlpropiedadid'
     );
     
     protected $uniqueValues = array(
         array('id'),
         array(
-            'procesocontrolid',
-            'controlpropiedadid'
+            'procesocontrolid'//,
+//            'controlpropiedadid'
         )
     );  
     
@@ -38,7 +38,7 @@ class ProcesoControlPropiedadMapper extends BaseMapper{
     protected function doCreateObject(array $record = null){
         $dmnProcesoControlPropiedad = new DomainProcesoControlPropiedad($record['ID']);
         $dmnProcesoControlPropiedad->setProcesoControl(new DomainProcesoControl($record['PROCESOCONTROLID']));
-        $dmnProcesoControlPropiedad->setControlPropiedad(new DomainControlPropiedad($record['CONTROLPROPIEDADID']));        
+//        $dmnProcesoControlPropiedad->setControlPropiedad(new DomainControlPropiedad($record['CONTROLPROPIEDADID']));        
         $dmnProcesoControlPropiedad->setPropiedad(new DomainPropiedad($record['PROPIEDADID']));
         $dmnProcesoControlPropiedad->setValor($record['VALOR']);
                 
@@ -54,7 +54,7 @@ class ProcesoControlPropiedadMapper extends BaseMapper{
         $fields['procesocontrolid'] = $dmnProcesoControlPropiedad->getProcesoControl()->getId();
         $fields['valor'] = $dmnProcesoControlPropiedad->getValor();
         $fields['propiedadid'] = $dmnProcesoControlPropiedad->getPropiedad()->getId();
-        $fields['controlpropiedadid'] = $dmnProcesoControlPropiedad->getControlPropiedad()->getId();
+//        $fields['controlpropiedadid'] = $dmnProcesoControlPropiedad->getControlPropiedad()->getId();
         $this->db->set($fields);
         $res = $this->db->insert($this->tableName);
         $dmnProcesoControlPropiedad->setId($this->db->insert_id());
@@ -71,7 +71,7 @@ class ProcesoControlPropiedadMapper extends BaseMapper{
     protected function doUpdate(DomainProcesoControlPropiedad $dmnProcesoControlPropiedad){
         $fields['procesocontrolid'] = $dmnProcesoControlPropiedad->getProcesoControl()->getId();
         $fields['valor'] = $dmnProcesoControlPropiedad->getValor();
-        $fields['controlpropiedadid'] = $dmnProcesoControlPropiedad->getControlPropiedad()->getId();
+//        $fields['controlpropiedadid'] = $dmnProcesoControlPropiedad->getControlPropiedad()->getId();
         $this->db->set($fields);
         $this->db->where('id',$dmnProcesoControlPropiedad->getId());
         $res = $this->db->update($this->tableName);

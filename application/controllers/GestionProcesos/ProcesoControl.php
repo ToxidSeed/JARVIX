@@ -96,6 +96,7 @@ class ProcesoControl extends BaseController{
 //    }
     
     public function getPropiedadesActivas(){
+//        $config = array();
         $this->load->model('Mapper/Finders/Propiedad/PropiedadFRM2','PropiedadFRM2');
         $response = $this->PropiedadFRM2->search(
                     array(
@@ -103,6 +104,14 @@ class ProcesoControl extends BaseController{
                             'Nombre' => $this->getField('nombre')
                         )
                 );
+        
+//        foreach($response->getResults() as $record){
+//            $config[$record->getNombre()] = "";
+//        }
+                
+        
+//        echo json_encode($config);
+        //echo json_encode(Response::asResults($config));
          echo json_encode(Response::asResults($response));
     }    
         
@@ -150,6 +159,19 @@ class ProcesoControl extends BaseController{
             }
         }  
     }
+    
+    
+     public function getValores(){
+        $this->load->model('Mapper/Finders/ValorPropiedad/ValorPropiedadFRM1','ValorPropiedadFRM1');
+        //$this->FinderActivePropiedades->nombre = $this->input->get_post('PropiedadId');
+        $filters = array(
+            'PropiedadId' =>   $this->getField('PropiedadId')
+        );
+        $response = $this->ValorPropiedadFRM1->Search($filters) ;
+        echo json_encode(Response::asResults($response)); 
+    }
+    
+    
     public function find(){
         try{            
             $this->load->model('Mapper/ProcesoControlMapper','ProcesoControlMapper');
@@ -209,7 +231,7 @@ class ProcesoControl extends BaseController{
         $dmnProcesoControlPropiedad->setValor($this->getField('Valor'));
         $dmnProcesoControlPropiedad->setPropiedad(new DomainPropiedad($this->getField('PropiedadId')));        
         $dmnProcesoControlPropiedad->setProcesoControl(new DomainProcesoControl($this->getField('ProcesoControlId')));        
-        $dmnProcesoControlPropiedad->setControlPropiedad(new DomainControlPropiedad($this->getField('ControlPropiedadId')));
+//        $dmnProcesoControlPropiedad->setControlPropiedad(new DomainControlPropiedad($this->getField('ControlPropiedadId')));
         //print_r($dmnProcesoControlPropiedad);
         $this->load->model('Bussiness/ProcesoFlujoBO/ProcesoControlBO','ProcesoControlBO');
         $this->ProcesoControlBO->addSingleProperty($dmnProcesoControlPropiedad);

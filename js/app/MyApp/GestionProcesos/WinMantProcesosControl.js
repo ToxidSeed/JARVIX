@@ -18,52 +18,12 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
             id:null
         }
     },
+    editores:{},
+    sourceConfig:{},
+    comentarios:{},
+    retirados:{},
     initComponent:function(){
-        var main = this;             
-        
-        main.myTextAreaEditor = Ext.create('Ext.form.field.TextArea',{
-            width:350,
-            height:150
-        });
-        main.myWinEditor = Ext.create('Ext.window.Window',{
-             width:350,
-             height:200,  
-             closeAction:'hide',
-             closable:false,
-             params:{
-                method:null,
-                data:{}
-             },
-             defaultFocus: main.myTextAreaEditor,
-             items:[
-                 main.myTextAreaEditor
-             ],
-             buttons:[
-                 {
-                     text:'Aceptar',
-                     handler:function(){
-                         main.addValor(main.myWinEditor.params);
-                     }
-                 },
-                 {
-                     text:'Cancelar',
-                     handler:function(){
-                         main.myWinEditor.close();
-                     }
-                 }
-             ]
-        });
-        
-        
-        
-//        Ext.util.Observable.capture(myWinEditor, function(evname) {console.log(evname, arguments);})
-        main.myWinEditor.on({
-            'deactivate':function(){
-                main.myWinEditor.close();
-            }
-        });
-             
-        
+        var main = this;                                     
         
         main.mainTbar =  Ext.create('Ext.toolbar.Toolbar',{
             items:[
@@ -73,9 +33,6 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
                     iconCls:'icon-disk',
                     handler:function(){
                         main.save();
-//                        console.log(main.txtTipoControl.getHeight());
-//                            console.log('xxx');
-//                            main.txtTipoControl.expand();
                     }
                 },
                 {
@@ -149,62 +106,57 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
             fieldLabel:'Comentarios',
             width:350
         });
+               
         
-        main.gridPropiedades = Ext.create('Per.GridPanel',{         
-         border:false,                      
-         loadOnCreate:false,
-         width:350,
-         height:400,
-         pageSize:20,         
-         src:base_url+'/GestionProcesos/ProcesoControl/getPropiedades',
-         columns:[
-             {
-                 xtype:'rownumberer'
-             },
-             {
-                 header:'Nombre',
-                 dataIndex:'propiedad.nombre'
-             },{
-                 header:'Valor',
-                 dataIndex:'valor',
-                 flex:1
-             },{
-                 header:'PropiedadId',
-                 dataIndex:'propiedad.id',
-                 hidden:true
-             },{
-                 header:'ControlPropiedad',
-                 dataIndex:'controlPropiedad.id',
-                 hidden:true
-             }             
-         ],
+        main.gridPropiedades = Ext.create('Ext.grid.property.Grid',{                 
+         //width:350,
+         height:200,
+         border:true,  
+         copy:true,
+         viewConfig:{        
+//           autoRender:true,
+//           copy:true,
+           plugins:{
+               //copy:true,
+               ptype:'gridviewdragdrop',
+               dropGroup:'myDragZone',
+               dragGroup:'myDragZone'
+           },
+           listeners:{
+               'beforedrop':function(node,data,overModel,dropPosition,dropHandlers){
+                   var varPropiedadId = data.records[0].get('name');
+                   main.gridPropiedadesDisp.removeProperty(varPropiedadId);
+                   main.gridPropiedades.sourceConfig[varPropiedadId] = main.sourceConfig[varPropiedadId];
+               }
+           }
+         },
          pagingBar:true
       });
       
+       //Ext.util.Observable.capture(main.gridPropiedades, function(){console.log(arguments)});
+       //Ext.util.Observable.capture(main.gridPropiedades.getView(), function(){console.log(arguments)});
+      
+//       main.gridPropiedades.store.addSorted(rec);
+      
       main.gridPropiedades.on({
          'itemdblclick':function(grid,record,item,index,event){
-             var propiedadName = record.get('propiedad.nombre');             
-             main.myWinEditor.setTitle(propiedadName);     
-             main.myTextAreaEditor.setValue(record.get('valor'));
-             main.myWinEditor.params = {
-                 method:'propiedad',
-                 data:{
-                     id:record.get('id'),
-                     propiedadId:record.get('propiedad.id'),
-                     controlId: main.internal.Control.id,
-                     ControlPropiedadId:record.get('controlPropiedad.id')
-                 }
+             var var_propiedad_id = record.get('name');      
+             var var_params = {
+                 propiedadId: var_propiedad_id
              };
-             main.myWinEditor.showAt(event.getX(),event.getY());
-         } 
+             main.openWinEditor(var_params);
+         },
+         'itemmouseleave':function(view){
+             //view.refresh();
+         }
       });
       
-      main.gridEventos = Ext.create('Per.GridPanel',{         
-         border:false,                      
-         loadOnCreate:false,
+      main.gridEventos = Ext.create('Ext.grid.property.Grid',{         
+        /* border:false,                      
+         loadOnCreate:false,*/
          width:350,
-         height:400,
-         pageSize:20,         
+         height:400//,
+         /*pageSize:20,         
          src:base_url+'/GestionProcesos/ProcesoControl/getEventos',
          columns:[
              {
@@ -226,8 +178,8 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
                  dataIndex:'controlEvento.id',
                  hidden:true
              }
-         ],
-         pagingBar:true
+         ],*/
+         //pagingBar:true
       });
       
       
@@ -259,12 +211,25 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
                     var w = main.mainPanel.getWidth();
                     main.mainPanel.hide();
                     main.panelSearchPropiedades.setWidth(w);
-                    main.panelSearchPropiedades.show();                      
-                    Ext.getCmp('btnGuardarId').disable();
+                    main.panelSearchPropiedades.show();                                          
                 }
             }
         ] 
      });
+      
+        main.txtSearchPropiedades = Ext.create('Ext.form.field.Text',{
+            fieldLabel:'Nombre'
+        });
+        
+        main.panelSearchPropiedades = Ext.create('Ext.panel.Panel',{
+           height:120,
+           autoScroll:true,
+           items:[
+               main.txtSearchPropiedades
+           ] 
+        });
+        
+
       
         main.mainTab = Ext.create('Ext.tab.Panel',{
             region:'center',
@@ -289,7 +254,7 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
         //Codificando cambio de tab
         main.mainTab.on({
             tabChange:function(tabPanel,newCard,oldCard){
-                main.myWinEditor.close();
+                //main.myWinEditor.close();
                 if (newCard.id === 'tabEventos'){
                     main.getEventos();
                 }
@@ -340,11 +305,14 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
                     iconCls:'icon-search',
                     handler:function(){
                         main.getPropiedadesSeleccionar();
+                        console.log(main.gridPropiedades.getXY());
                     }
                 },{
                     text:'Ocultar',
                     iconCls:'icon-collapse',
                     handler:function(){
+                        main.panelSearchPropiedades.hide();
+                        main.mainPanel.show();
                         
                     }
                 }
@@ -355,28 +323,92 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
            fieldLabel:'Propiedad' 
         });
         
-        main.gridPropiedades = Ext.create('Ext.grid.property.Grid', {
-            title: 'Properties Grid',
-            width: 300,
-            renderTo: Ext.getBody(),
-            source: {
-                "(name)": "My Object",
-                "Created": Ext.Date.parse('10/15/2006', 'm/d/Y'),
-                "Available": false,
-                "Version": .01,
-                "Description": "A test object"
+        
+        
+        
+        main.store_propiedades_disp = Ext.create('Ext.data.Store',{            
+            fields:[
+                'PropiedadId',
+                'Nombre',
+                'Valor'
+            ],
+            proxy:{
+                type:'ajax',
+                url: base_url+'GestionProcesos/ProcesoControl/getPropiedadesActivas',
+                reader:{
+                    type:'json',
+                    root:'results',
+                    totalProperty:'total'
+                }
             }
         });
         
+        
+        
+        
+        main.gridPropiedadesDisp = Ext.create('Ext.grid.Panel', {
+            title: 'Listado',            
+            width: 300,  
+            store:main.store_propiedades_disp,
+            columns:[
+                {
+                    text:'Nombre',
+                    dataIndex:'Nombre'                    
+                },{
+                    text:'Valor',
+                    dataIndex:'Valor',
+                    getEditor:function(record){
+                        console.log(record);
+                    }
+                }
+            ],
+            plugins: [
+                Ext.create('Ext.grid.plugin.CellEditing', {
+                    clicksToEdit: 1
+                })
+            ],
+            viewConfig: {
+//                //copy:false,
+//                plugins: {
+//                    ptype: 'gridviewdragdrop',                    
+//                    dragText:'Moviendo',
+//                    dragGroup:'myDragZone',
+//                    dropGroup:'myDragZone'
+//                },
+//                listeners:{
+//                    'beforedrop':function(node,data,overModel,dropPosition,dropHandlers){
+//                        var varPropiedadId = data.records[0].get('name');                                                
+//                        main.gridPropiedades.removeProperty(varPropiedadId);
+//                        //main.gridPropiedades.sourceConfig[varPropiedadId] = main.sourceConfig[varPropiedadId];
+//                    }
+//                }
+            }
+        });
+        
+//        main.gridPropiedadesDisp.on({
+//            'afterrender':function(){
+//                main.store_propiedades_disp.load(
+//                   {
+//                       params:{
+//                        ControlId: main.txtTipoControl.getValue(),
+//                        nombre:main.txtPropiedad.getValue()
+//                        }
+//                    }
+//                );
+//            }
+//        });
+        
+        
+        
         main.panelSearchPropiedades = Ext.create('Ext.form.Panel',{
-              title:'Buscar Propiedades',    
+              title:'Propiedades Disponibles',    
                bodyPadding:'10px',  
                region:'west',
               hidden:true,
               tbar:main.tbarSearchPropiedades,
               items:[
                   main.txtPropiedad,
-                  main.gridPropiedades
+                  main.gridPropiedadesDisp
               ]
         });
         
@@ -412,8 +444,8 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
         
         main.on({
             'resize':function(win,neww,newh){                
-                main.gridPropiedades.setHeight(newh-90);
-                main.gridEventos.setHeight(newh-90);
+//                main.gridPropiedades.setHeight(newh-90);
+//                main.gridEventos.setHeight(newh-90);
             },
             'show':function(){
                 main.loadControl();
@@ -503,7 +535,7 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
             ProcesoControlId: main.internal.ProcesoControl.id
         };
         
-        main.gridPropiedades.load(params);
+        //main.gridPropiedades.load(params);
     },
     getEventos:function(){
         var main = this;
@@ -516,20 +548,9 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
         main.gridEventos.load(params)
                 
     },
-    save:function(){
-        var main = this;
-        var msg = true;
-        if (main.internal.ProcesoControl.id == null) {
-            main.saveNew(msg);
-        } 
-        if (main.internal.ProcesoControl.id != null) {
-            main.modify(msg);
-        }
-        
-    },
     loadControl:function(){
         var main = this;
-        if (main.internal.ProcesoControl.id != null){
+        if (main.internal.ProcesoControl.id !== null){
             Ext.Ajax.request({
                 url:base_url+'GestionProcesos/ProcesoControl/find',
                 params:{
@@ -546,73 +567,232 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
             });
         }
     },
-    addValor:function(params){
+//    addValor:function(params){
+//        var main = this;
+//          if (params.method === 'propiedad'){
+//              main.addValorPropiedad(params);
+//          }
+//          if (params.method === 'evento'){
+//              main.addValorEvento(params);
+//          }
+//    },
+//    addValorPropiedad:function(params){
+//        var main = this;
+//        Ext.Ajax.request({
+//            url:base_url+'GestionProcesos/ProcesoControl/writePropiedad',
+//            params:{
+//                ProcesoControlPropiedadId: params.data.id,
+//                ControlId: params.data.controlId,
+//                PropiedadId: params.data.propiedadId,
+//                ProcesoControlId:main.internal.ProcesoControl.id,
+//                Valor: main.myTextAreaEditor.getValue(),
+////                ControlPropiedadId: params.data.ControlPropiedadId
+//            },
+//            success:function(response){      
+//                main.myWinEditor.close();
+//                main.txtTipoControl.disabled = true;              
+//                //main.getPropiedades();
+//                main.gridPropiedadesDisp.removeProperty(params.data.propiedadId);
+//                params.dropHandlers.processDrop();
+//                
+//            },
+//            failure:function(){
+//                params.dropHandlers.cancelDrop();
+//            }
+//        });
+//    },
+//    addValorEvento:function(params){
+//        var main = this;
+//        Ext.Ajax.request({
+//            url:base_url+'GestionProcesos/ProcesoControl/writeEvento',
+//            params:{
+//                ProcesoControlEventoId:params.data.id,
+//                ControlId: params.data.controlId,
+//                EventoId: params.data.eventoId,
+//                ProcesoControlId: main.internal.ProcesoControl.id,
+//                Valor: main.myTextAreaEditor.getValue(),
+//                ControlEventoId: params.data.ControlEventoId
+//            },
+//            success:function(response){
+//                main.myWinEditor.close();                
+//                main.getEventos();
+//            }
+//        });
+//        
+//    },
+//    winEditorClose:function(){
+//        var main = this;
+//        main.myWinEditor.close();
+//    },
+    getPropiedadesSeleccionar:function(){
         var main = this;
-          if (params.method === 'propiedad'){
-              main.addValorPropiedad(params);
-          }
-          if (params.method === 'evento'){
-              main.addValorEvento(params);
-          }
+//        Ext.Ajax.request({
+//            url:base_url+'GestionProcesos/ProcesoControl/getPropiedadesActivas',
+//            params:{
+//                ControlId: main.txtTipoControl.getValue(),
+//                nombre:main.txtPropiedad.getValue()
+//            },
+//            success:function(response){
+//                var data = Ext.decode(response.responseText);
+////                console.log(data);
+//                main.crearSourceConfig(data);
+//                
+////                main.gridPropiedades.setSource(data);
+//            }
+//        });
+
+            main.store_propiedades_disp.load(
+                {
+                    params:{
+                     ControlId: main.txtTipoControl.getValue(),
+                     nombre:main.txtPropiedad.getValue()
+                     }
+                 }
+             );
     },
-    addValorPropiedad:function(params){
-        var main = this;
-        Ext.Ajax.request({
-            url:base_url+'GestionProcesos/ProcesoControl/writePropiedad',
-            params:{
-                ProcesoControlPropiedadId: params.data.id,
-                ControlId: params.data.controlId,
-                PropiedadId: params.data.propiedadId,
-                ProcesoControlId:main.internal.ProcesoControl.id,
-                Valor: main.myTextAreaEditor.getValue(),
-                ControlPropiedadId: params.data.ControlPropiedadId
-            },
-            success:function(response){      
-                main.myWinEditor.close();
-                main.txtTipoControl.disabled = true;
-                //main.winHelper = Ext.create('Per.DebugHelperWindow');
-                //main.winHelper.showMsg(response.responseText);
-                
-//                console.log(response);
-                //Loading Properties
-                main.getPropiedades();
-            }
-        });
+    crearSourceConfig:function(data){
+        var main = this;        
+        var source = {};
+        var records = data.results;
+        for (var idx in records){
+
+            var PropiedadId = records[idx]["id"];
+            var varNombrePropiedad = records[idx]["nombre"];
+            
+            source[PropiedadId] = "";            
+            var editor = main.crearComboBoxPropiedad(PropiedadId);                                                
+            
+            main.sourceConfig[PropiedadId] = {
+                editor:editor,
+                displayName:varNombrePropiedad,
+                renderer:function(v,metadata,record){                     
+                    var store = main.editores["cm"+record.get('name')];                    
+                    store.findBy(function(record){                           
+                        if (record.get('id') === v) {                            
+                            v = record.get('valor');
+                            return true; // findby
+                        } 
+                    });
+                    return v;
+                }
+            };                        
+        }
+        main.gridPropiedadesDisp.setSource(source,main.sourceConfig);  
+        var mySelectionModel = main.gridPropiedadesDisp.getSelectionModel();
+        mySelectionModel.select(0);
     },
-    addValorEvento:function(params){
+    crearComboBoxPropiedad:function(parPropiedadId){
         var main = this;
-        Ext.Ajax.request({
-            url:base_url+'GestionProcesos/ProcesoControl/writeEvento',
-            params:{
-                ProcesoControlEventoId:params.data.id,
-                ControlId: params.data.controlId,
-                EventoId: params.data.eventoId,
-                ProcesoControlId: main.internal.ProcesoControl.id,
-                Valor: main.myTextAreaEditor.getValue(),
-                ControlEventoId: params.data.ControlEventoId
+        //main.editores[""] = 
+         main.editores["cm"+parPropiedadId] =  Ext.create('Ext.data.Store', {   
+            id:"cm"+parPropiedadId,
+            fields: ['id', 'valor'],
+            proxy:{
+                 type:'ajax',
+                 url:base_url+'GestionProcesos/ProcesoControl/getValores',
+                 reader:{
+                     type:'json',
+                     root:'results'
+                 }
             },
-            success:function(response){
-                main.myWinEditor.close();                
-                main.getEventos();
+            listeners:{
+                'beforeload':function(store,operation,eOpts){
+                    store.getProxy().extraParams = {
+                        PropiedadId:parPropiedadId  
+                    };
+                }
             }
         });
         
-    },
-    winEditorClose:function(){
-        var main = this;
-        main.myWinEditor.close();
-    },
-    getPropiedadesSeleccionar:function(){
-        var main = this;
-        Ext.Ajax.request({
-            url:base_url+'GestionProcesos/ProcesoControl/getPropiedadesActivas',
-            params:{
-                nombre:main.txtPropiedad.getValue()
-            },
-            success:function(response){
-                var data = Ext.decode(response.responseText);
-                console.log(data);
-            }
+//        console.log(main.editores);
+        
+        // Create the combo box, attached to the states data store
+        return Ext.create('Ext.form.ComboBox', {           
+            store:  main.editores["cm"+parPropiedadId],                          
+            queryMode: 'remote',
+            selectOnFocus: true,
+            queryParam:'valor',
+            displayField: 'valor',
+            valueField: 'id'          
         });
+    },
+    openWinEditor:function(object){
+        var main = this;
+        
+        main.myTextAreaEditor = Ext.create('Ext.form.field.TextArea',{
+            width:350,
+            height:150
+        });
+        main.myWinEditor = Ext.create('Ext.window.Window',{             
+             width:350,
+             height:200,  
+             title:'Comentarios',
+             //closeAction:'hide',
+//             closable:false,
+             modal:true,
+             params:{
+                method:null,
+                data:{}
+             },
+             defaultFocus: main.myTextAreaEditor,
+             items:[
+                 main.myTextAreaEditor
+             ],
+             buttons:[
+                 {
+                     text:'Aceptar',
+                     handler:function(){                         
+                         main.comentarios[object.propiedadId] = main.myTextAreaEditor.getValue();                         
+                         console.log(main.comentarios);
+                     }
+                 },
+                 {
+                     text:'Cancelar',
+                     handler:function(){
+                         main.myWinEditor.hide();
+                     }
+                 }
+             ]
+        });
+        
+        main.myWinEditor.show();
+    },
+    save:function(){
+        var main = this;
+        main.gridPropiedades.getView().refresh();
+        
+        
+        
+        Ext.Ajax.request({
+          url:base_url+'GestionProcesos/ProcesoControl/xxx',
+          params:{
+                control_id:main.internal.Control.id,
+                nombre:  main.txtNombre.getValue(),  
+                proceso_id: main.internal.Proceso.id,
+                propiedades_guardar:main.get_propiedades_guardar()
+          }
+       });
+        
+    },
+    get_propiedades_guardar:function(){
+        var main = this;
+        
+        var records = main.gridPropiedades.getStore().getRange();      
+        
+        console.log(records);
+        
+        var var_propiedad_id;
+        var var_propiedades = "[";
+        for(var idx in records){         
+            var_propiedad_id = records[idx].get('name');
+            var_propiedades+='{"PropiedadId":"'+var_propiedad_id+'",';
+            var_propiedades+='"Valor":"'+records[idx].get('value')+'",';
+            var_propiedades+='"Comentarios":"'+main.comentarios[var_propiedad_id]+'"},';
+            
+            //console.log(records[idx].getId());
+        }
+        var_propiedades = var_propiedades.slice(0,-1);
+        var_propiedades+="]";
+        return var_propiedades;
     }
 });

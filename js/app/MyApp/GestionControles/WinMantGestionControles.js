@@ -194,7 +194,12 @@ Ext.define('MyApp.GestionControles.WinMantGestionControles',{
            src:base_url+'GestionControles/GestionControlesController/GetLinkedProperties',
            split:true,           
            region:'west',
-           selModel:main.chkSelModel,
+           selModel:main.chkSelModel,           
+           viewConfig: {               
+                plugins: {                      
+                    ptype: 'gridviewdragdrop'
+                }
+            },
            columns:[
                main.rownumbererprop,{
                    header:'id',
@@ -207,6 +212,9 @@ Ext.define('MyApp.GestionControles.WinMantGestionControles',{
                }
            ]
         });
+        
+        //Ext.util.Observable.capture(main.gridProperties, function(evname) {console.log(evname, arguments);})
+        Ext.util.Observable.capture(main.gridProperties.getView(), function(evname) {console.log(evname, arguments);})
         
         main.gridProperties.on({
             'itemdblclick':function(grid,record){
