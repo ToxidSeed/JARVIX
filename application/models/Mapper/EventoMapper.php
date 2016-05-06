@@ -12,12 +12,12 @@ class EventoMapper extends BaseMapper{
         parent::__construct();
     }
     protected $fields = array(
-      'id',
-       'nombre',
-        'fecharegistro',
-        'fechaultact',
+      'evento.id',
+       'evento.nombre',
+        'evento.fecharegistro',
+        'evento.fechaultact',
 //        'estadoid',
-        'controlid'
+        'evento.controlid'
     );
     protected $uniqueValues = array(
         array('id')

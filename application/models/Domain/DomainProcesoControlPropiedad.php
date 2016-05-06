@@ -15,9 +15,10 @@ class DomainProcesoControlPropiedad extends BaseDomain{
     
     protected $id;
     protected $procesoControl;
+    protected $control;
     protected $valor;
     protected $propiedad;
-    protected $controlPropiedad;
+    
     
     function getId() {
         return $this->id;
@@ -30,10 +31,15 @@ class DomainProcesoControlPropiedad extends BaseDomain{
     function getValor() {
         return $this->valor;
     }
-
-    function getControlPropiedad() {
-        return $this->controlPropiedad;
+    function getControl() {
+        return $this->control;
     }
+
+    function setControl($control) {
+        $this->control = $control;
+    }
+
+       
 
     function setId($id) {
         $this->id = $id;
@@ -47,9 +53,7 @@ class DomainProcesoControlPropiedad extends BaseDomain{
         $this->valor = $valor;
     }
 
-    function setControlPropiedad($controlPropiedad) {
-        $this->controlPropiedad = $controlPropiedad;
-    }
+    
     public function getPropiedad() {
         require_once MAPPERPATH.'PropiedadMapper.php';        
         if($this->mapper == true && $this->propiedad != null && $this->propiedad->getId() != null){

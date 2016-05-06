@@ -19,7 +19,7 @@ Ext.define('MyApp.GestionPropiedades.WinMantGestionPropiedades',{
         if(main.create === true){
             main.title = 'Nuevo Propiedad';
         }else{
-            main.title = 'Modificar Propiedad'
+            main.title = 'Modificar Propiedad';
         }
         
         main.txtNombre = Ext.create('Ext.form.field.Text',{

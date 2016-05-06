@@ -44,8 +44,14 @@ class GestionProcesosController extends BaseController{
     }
 
     public function updateOption(){
+        $this->load->model('Mapper/ProyectoMapper','ProyectoMapper');
+        $dmnProyecto = $this->ProyectoMapper->find($this->getField('proyecto_id'));
         $data = array(
-            'id' => $this->getField('id')
+            'id' => $this->getField('id'),
+            'proyecto_id' => $dmnProyecto->getId(),
+            'nombre_proyecto' => $dmnProyecto->getNombre(),
+            'aplicacion_id'  =>  $dmnProyecto->getAplicacion()->getId()
+            
         );
         $this->load->view('Base/Header.php');
         $this->load->view('GestionProcesosMainView.php',$data);

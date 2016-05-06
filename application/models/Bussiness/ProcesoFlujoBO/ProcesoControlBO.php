@@ -19,7 +19,8 @@ class ProcesoControlBO extends BaseBO{
     }
     
 //    private $dmnProcesoControl;
-//    private $properties = array();
+    public $propiedades = array();
+    public $propiedades_borrar = array();
 //    private $events = array();
     private $ProcesoControlMapper;
     private $ProcesoControlPropiedadMapper;
@@ -92,17 +93,42 @@ class ProcesoControlBO extends BaseBO{
     //1.- Al Intentar Insertar una propiedad para un control en especifico hay que validar
     //2.- si la propiedad ya se encuentra asociada al control para el proceso en curso
     
-    public function saveProperties(){
-        foreach($this->properties as $dmnProcesoControlPropiedad){
-            $dmnProcesoControlPropiedad->setProcesoControl($this->domain);
-            if($dmnProcesoControlPropiedad->getId() == null){
+    public function add_propiedades(){
+        try{
+            $this->load->database();            
+            $this->db->trans_start();
+
+            foreach($this->propiedades as $dmnProcesoControlPropiedad){            
                 $this->addProperty($dmnProcesoControlPropiedad);
-            }else{
-                $this->updProperty($dmnProcesoControlPropiedad);
             }
+
+            $this->db->trans_commit(); 
+        } catch (Exception $ex) {
+            $this->db->trans_rollback();
+            throw new Exception($ex->getMessage(),$ex->getCode());   
         }
     }
     
+    
+    //Realiza el borrado de las propiedades
+    //consideraciones
+    public function del_propiedades(){
+          try{
+            $this->load->database();            
+            $this->db->trans_start();
+
+            foreach($this->propiedades as $dmnProcesoControlPropiedad){            
+                $this->delProperty($dmnProcesoControlPropiedad);
+            }
+
+            $this->db->trans_commit(); 
+        } catch (Exception $ex) {
+            $this->db->trans_rollback();
+            throw new Exception($ex->getMessage(),$ex->getCode());   
+        }
+    }
+    
+    //
     public function saveEvents(){
         foreach($this->events as $dmnProcesoControlEvento){
             $dmnProcesoControlEvento->setProcesoControl($this->domain);
@@ -124,6 +150,12 @@ class ProcesoControlBO extends BaseBO{
     protected function addProperty(DomainProcesoControlPropiedad $dmnProcesoControlPropiedad){
         $this->ProcesoControlPropiedadMapper->insert($dmnProcesoControlPropiedad);
     }
+    protected function delProperty(DomainProcesoControlPropiedad $dmnProcesoControlPropiedad){
+        $this->ProcesoControlPropiedadMapper->delete($dmnProcesoControlPropiedad);
+    }
+    
+    
+    
     protected function updProperty(DomainProcesoControlPropiedad $dmnProcesoControlPropiedad){
         $curDmnProcesoControlPropiedad = $this->ProcesoControlPropiedadMapper->find($dmnProcesoControlPropiedad->getId());
         $curDmnProcesoControlPropiedad->setValor($dmnProcesoControlPropiedad->getValor());

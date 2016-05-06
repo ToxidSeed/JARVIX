@@ -183,7 +183,7 @@ Ext.define('MyApp.GestionProcesos.WinGestionProcesos',{
 //                            }
 //            });
 //            WinModificar.show();
-                var url = base_url+'GestionProcesos/GestionProcesosController/updateOption/?id='+record.get('id')
+                var url = base_url+'GestionProcesos/GestionProcesosController/updateOption/?id='+record.get('id')+'&proyecto_id='+main.config.proyectoId;
                 window.open(url);
           }
       });

@@ -114658,7 +114658,7 @@ Ext.define('Ext.grid.ViewDropZone', {
             
             
         // If the copy flag is set, create a copy of the models
-        console.log(data);
+
         if (data.copy && data.copy ===true ) {
             records = data.records;
             data.records = [];
@@ -114677,7 +114677,7 @@ Ext.define('Ext.grid.ViewDropZone', {
 //            console.log(view);
 //            console.log(data.records);
             data.view.store.remove(data.records, data.view === view);            
-            console.log('accremove  d');
+            
         }
 
         if (record && position) {

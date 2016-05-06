@@ -22,7 +22,8 @@ class ValorPropiedadMapper extends BaseMapper{
     protected $fields = array(
         'id',
         'valor',
-        'propiedadid'
+        'propiedadid',
+        'flgdefault'
     );
     
     protected $tableName = 'ValorPropiedad';
@@ -35,12 +36,14 @@ class ValorPropiedadMapper extends BaseMapper{
         $dmnValorPropiedad = new DomainValorPropiedad($record['ID']);
         $dmnValorPropiedad->setValor($record['VALOR']);
         $dmnValorPropiedad->setPropiedad(new DomainPropiedad($record['PROPIEDADID']));
+        $dmnValorPropiedad->setFlgDefault($record['FLGDEFAULT']);
         return $dmnValorPropiedad;
     }
     
     protected function doInsert(DomainValorPropiedad $dmnValorPropiedad){
-        $fields['valor'] = $dmnValorPropiedad->getValor();
+        $fields['valor']       = $dmnValorPropiedad->getValor();
         $fields['propiedadid'] = $dmnValorPropiedad->getPropiedad()->getId();
+        $fields['flgdefault']  = $dmnValorPropiedad->getFlgDefault(); 
         $this->db->set($fields);
         $res = $this->db->insert($this->tableName);
         $dmnValorPropiedad->setId($this->db->insert_id());
@@ -55,6 +58,7 @@ class ValorPropiedadMapper extends BaseMapper{
     public function doUpdate(DomainValorPropiedad $dmnValorPropiedad){
         $fields['valor'] = $dmnValorPropiedad->getValor();
         $fields['propiedadid'] = $dmnValorPropiedad->getPropiedad()->getId();
+        $fields['flgdefault']  = $dmnValorPropiedad->getFlgDefault(); 
         $this->db->set($fields);
         $this->db->where('id',$dmnValorPropiedad->getId());
         $res = $this->db->update($this->tableName);

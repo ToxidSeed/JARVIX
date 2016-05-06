@@ -28,6 +28,13 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
             ]
         });
         
+        Ext.define('ModelEditor', {
+            extend: 'Ext.data.Model',
+            fields: [
+                'id','constante'
+            ]
+        });
+        
         main.tbarMain = Ext.create('Ext.toolbar.Toolbar',{
            items:[
                {
@@ -42,7 +49,12 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
                    handler:function(){
                        main.close();
                    }
-               }
+               }/*,{
+                   text:'probar',
+                   handler:function(){
+                       
+                   }
+               }*/
            ] 
         });
         
@@ -62,7 +74,15 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
                    handler:function(){
                        main.quitar();
                    }
-               } 
+               }/*,{
+                   text:'probar',
+                   handler:function(){                  
+                        var myStore = main.gridTablas.getStore();                        
+                        var myRecord = myStore.getRange(1,1);
+                        console.log(myRecord[0]);
+                        myRecord[0].set('flgDefault',1);
+                   }
+               } */
            ] 
         });
         
@@ -70,15 +90,53 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
            fieldLabel:'Nombre' 
         });
         
+        // The data store containing the list of states
+        var store_editores = Ext.create('Ext.data.Store', {
+            fields: ['id', 'constante'],
+            proxy:{
+               type:'ajax',
+               url: base_url+'GestionControles/GestionControlesController/get_editores',
+               reader:{
+                   type:'json',
+                   root:'results',
+                   totalProperty:'total'
+               }
+           }
+        });
+
+        // Create the combo box, attached to the states data store
+        main.editores = Ext.create('Ext.form.ComboBox', {
+            fieldLabel: 'Editor',
+            store: store_editores,
+            queryMode: 'remote',
+            displayField: 'constante',
+            valueField: 'id'            
+        });
+        
+            
+        
+        
         main.txtDescripcion = Ext.create('Ext.form.field.TextArea',{
             fieldLabel:'Descripcion',
             width:350,
             height:60
         });
         
-         main.chkSelModel = new Ext.selection.CheckboxModel({
+        main.chkSelModel = new Ext.selection.CheckboxModel({
             mode:'MULTI'
-        })
+        });
+        
+        //main.selModel = 
+        
+        
+        /*Ext.define('User',{
+           extend:'Ext.data.Model',
+           fields:[
+               {name:'id', type:'int'},
+               {name:'valor', type:'string'},
+               {name:'defaukt',type:'boolean',defaultValue:false}   
+           ]
+        });*/
         
         
         main.gridTablas = Ext.create('Per.GridPanel',{            
@@ -88,6 +146,9 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
            border:false,
            src: base_url+'GestionPropiedades/GestionPropiedadesController/getValores',
            selModel:main.chkSelModel,
+           /*selModel:{
+               selType:'cellmodel'
+           },*/
            columns:[
                {
                    xtype:'rownumberer'
@@ -102,6 +163,15 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
                    editor:{
                        xtype:'textfield'
                    }
+               },{
+                   text:'default',
+                   xtype:'checkcolumn',
+                   dataIndex:'flgDefault',
+                   listeners:{
+                       'checkchange':function(check,row_index){
+                           main.desmarcar(row_index);
+                       }
+                   }                   
                }               
            ],
            plugins:[
@@ -109,10 +179,14 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
            ]
         });
         
-       
-        
+        main.gridTablas.on({
+           'edit':function(editor,e){
+               console.log(editor);
+           } 
+        });
+                      
         main.panelPrincipal = Ext.create('Ext.panel.Panel',{
-            bodyPadding:'10px',           
+           bodyPadding:'10px',           
            //split:true,
            region:'west',
            width:'65%',
@@ -120,6 +194,7 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
            height:400,
            items:[
                main.txtNombre,
+               main.editores,
                main.txtDescripcion              
            ]
         });
@@ -147,7 +222,7 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
            ],
            listeners:{
                'show':function(){
-                   if (main.internal.id != 'undefined' && main.internal.id > 0  ){
+                   if (main.internal.id != 'undefined' && main.internal.id > 0){
                         //load data
                         main.getPropiedad();
                         main.loadValores();
@@ -156,15 +231,14 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
            }
         });
         
-        
-        
         this.callParent(arguments);
     },
     AddValorFila:function(){
         var main = this;        
         var myValor = Ext.create('valor',{
            id:null,
-           valor:null 
+           valor:null,
+           flgDefault:null
         });        
         var myStore = main.gridTablas.getStore();
         var myModelAdded = myStore.add(myValor);        
@@ -174,19 +248,25 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
     Guardar:function(){
         var main = this;
         
-        var myValores = main.getValoresInsertar();
-        var myValoresEliminar = Per.Store.getDataAsJSON(main.delRecords);
         
-        console.log(myValores);
+        
+        var myValores = main.getValores();
+        var myValoresEliminar = Per.Store.getDataAsJSON(main.delRecords);                
+        
+        //console.log(myValoresInsertar);
+        
         
         Ext.Ajax.request({
            url:base_url+'GestionPropiedades/GestionPropiedadesController/writeRecord',
            params:{
                 PropiedadId:main.internal.id,
                 ControlId:main.internal.ControlId,
+                EditorId:main.editores.getValue(),
                 Nombre:main.txtNombre.getValue(),
                 Descripcion: main.txtDescripcion.getValue(),
-                Valores:myValores,
+                //ValoresInsert:myValores.valoresInsertar,
+                //ValoresUpdate:myValores.valoresUpdate,
+                Valores: myValores,
                 ValoresEliminar:myValoresEliminar
            },
            success:function(response){
@@ -195,8 +275,7 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
                if(data.success == true && data.code == 0){
                    main.fireEvent('saved');
                    main.close();
-               }
-               //console.log(data);
+               }               
            }           
         });
     },
@@ -211,7 +290,13 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
            success:function(response){
                var decode = Ext.decode(response.responseText);
                main.internal.id = decode.data.id;
-               main.txtNombre.setValue(decode.data.nombre);               
+               main.txtNombre.setValue(decode.data.nombre);    
+               
+                var RecordModelEditor = Ext.create('ModelEditor', {
+                    id   : decode.data.editor.id,
+                    constante : decode.data.editor.constante
+                });
+                main.editores.setValue(RecordModelEditor);
            }           
         });        
     },
@@ -221,20 +306,37 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
             PropiedadId:main.internal.id
         });
     },
-    getValoresInsertar:function(){
+    getValores:function(){
         var main = this;
         var myStore = main.gridTablas.getStore();
         var myRecords = myStore.getRange();        
         var row;
-        var varValoresInsert = new Array(); 
-        for(row in myRecords){
-            if (myRecords[row].get('id') == null){
-                varValoresInsert.push(myRecords[row]);
-            }
+        
+        var varValores = new Array();
+        
+        
+        for(row in myRecords){            
+            varValores.push(myRecords[row]);                            
         }
         
-        return Per.Store.getDataAsJSON(varValoresInsert);
+      
+        return Per.Store.getDataAsJSON(varValores);
+
     },       
+    getValoresActualizar:function(){
+        var main = this;
+       var myStore = main.gridTablas.getStore();
+        var myRecords = myStore.getRange();        
+        var row;
+        var varValoresUpdate = new Array();         
+        
+        for(row in myRecords){
+            if (myRecords[row].get('id') != null){
+                varValoresUpdate.push(myRecords[row]);                
+            }
+        }
+        return Per.Store.getDataAsJSON(varValoresInsert);
+    },
     quitar:function(){
         var main = this;
         var mySelModel = main.gridTablas.getSelectionModel();
@@ -247,6 +349,20 @@ Ext.define('MyApp.GestionControles.WinMantPropiedades',{
             }
         }        
         myStore.remove(records);        
+    },
+    desmarcar:function(row_index_no_desmarcar){
+        var main = this;
+        var myStore = main.gridTablas.getStore();
+        var rows = myStore.getRange();
+        
+        for(var index in rows){
+            console.log(row_index_no_desmarcar);
+            if (index != row_index_no_desmarcar ){
+                var record = rows[index];
+                record.set('flgDefault',0);
+                console.log(index);
+            }                                
+        }        
     }
 });
 

@@ -214,7 +214,7 @@ Ext.define('MyApp.GestionControles.WinMantGestionControles',{
         });
         
         //Ext.util.Observable.capture(main.gridProperties, function(evname) {console.log(evname, arguments);})
-        Ext.util.Observable.capture(main.gridProperties.getView(), function(evname) {console.log(evname, arguments);})
+//        Ext.util.Observable.capture(main.gridProperties.getView(), function(evname) {console.log(evname, arguments);})
         
         main.gridProperties.on({
             'itemdblclick':function(grid,record){

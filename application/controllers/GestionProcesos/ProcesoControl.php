@@ -21,12 +21,12 @@ class ProcesoControl extends BaseController{
     function __construct() {
         parent::__construct();
     }
-    public function Add(){
+    public function wrt(){
     try{
         $this->load->model('Bussiness/ProcesoFlujoBO/ProcesoControlBO','ProcesoControlBO');
         $dmnProcesoControl = new DomainProcesoControl();
-        $dmnProcesoControl->setControl(new DomainTipoControl($this->getField('ControlId')));
-        $dmnProcesoControl->setProceso(new DomainProceso($this->getField('ProcesoId')));
+        $dmnProcesoControl->setControl(new DomainTipoControl($this->getField('control_id')));
+        $dmnProcesoControl->setProceso(new DomainProceso($this->getField('proceso_id')));
         $dmnProcesoControl->setNombre($this->getField('nombre'));
         $dmnProcesoControl->setComentarios($this->getField('comentarios'));
         //$dmnProcesoControl->set
@@ -94,20 +94,38 @@ class ProcesoControl extends BaseController{
 //            $domain->Mapper()->getPropiedad();
 //        }
 //    }
+        
+          public function getPropiedadesDisponibles(){
+        //        $config = array();
+                $this->load->model('Mapper/Finders/Propiedad/PropiedadFRM1','PropiedadFRM1');
+                $response = $this->PropiedadFRM1->search(
+                            array(
+                                    'ControlId' => $this->getField('ControlId') ,
+                                    'ProcesoControlId' => $this->getField('ProcesoControlId')
+                                )
+                        );
+                 
+                foreach($response->getResults() as $dmnPropiedad){                    
+                    $dmnPropiedad->mapper()->getEditor();
+                }
+                                
+                 echo json_encode(Response::asResults($response));
+            }  
     
-    public function getPropiedadesActivas(){
+    public function getPropiedadesSeleccionadas(){
 //        $config = array();
-        $this->load->model('Mapper/Finders/Propiedad/PropiedadFRM2','PropiedadFRM2');
-        $response = $this->PropiedadFRM2->search(
+        $this->load->model('Mapper/Finders/Procesos/ProcesoControlPropiedadFRM1','ProcesoControlPropiedadFRM1');
+        $response = $this->ProcesoControlPropiedadFRM1->search(
                     array(
                             'ControlId' => $this->getField('ControlId'),
-                            'Nombre' => $this->getField('nombre')
+                            'ProcesoControlId' => $this->getField('ProcesoControlId')
                         )
                 );
         
-//        foreach($response->getResults() as $record){
-//            $config[$record->getNombre()] = "";
-//        }
+        foreach($response->getResults() as $record){
+           $myPropiedad =  $record->mapper()->getPropiedad();
+           $myPropiedad->mapper()->getEditor();
+        }
                 
         
 //        echo json_encode($config);
@@ -115,17 +133,19 @@ class ProcesoControl extends BaseController{
          echo json_encode(Response::asResults($response));
     }    
         
-    public function getEventos(){
+    public function getEventosDisponibles(){
         try{
-            $this->load->model('Mapper/Finders/Procesos/FinderProcesoControlEvento','FinderProcesoControlEvento');                                    
-            $response = $this->FinderProcesoControlEvento->search(
-                        $this->getField('ControlId'),
-                        $this->getField('ProcesoControlId')
-                    );                                
+            $this->load->model('Mapper/Finders/Procesos/ProcesoControlEventoFRM1','ProcesoControlEventoFRM1');                                    
+            $response = $this->ProcesoControlEventoFRM1->search(
+                        array(
+                            'ControlId' => $this->getField('ControlId'),
+                            'NombreEvento' => $this->getField('NombreEvento')
+                        )                                                
+            );                                
             
             $this->getEventosReferencias($response);
             echo json_encode(Response::asResults($response));
-        } catch (Exception $ex) {
+        }catch (Exception $ex) {
             if($ex->getCode() == FORM_VALIDATION_ERRORS_CODE){
                 echo $this->getAnswer()->getAsJSON();
             }else{
@@ -182,21 +202,30 @@ class ProcesoControl extends BaseController{
             echo Answer::setFailedMessage($ex->getMessage(),$ex->getCode());
         }
     }
-    public function writePropiedad(){
+    public function add_propiedades(){
         try{
-            //Verificar si el dato enviado tiene id
-            $id = $this->getField('ProcesoControlPropiedadId');                                    
-            if ($id === ''){
-                $this->addPropiedad();
-            }else{
-                $this->updPropiedad();
-            }
-            
-            
-            $this->getAnswer()->setSuccess(true);
-            $this->getAnswer()->setMessage('Actualizado Correctamente');
-            $this->getAnswer()->setCode(0);
-            echo $this->getAnswer()->getAsJSON(); 
+              $arr_propiedades = array();  
+                
+              $proceso_control_id = $this->getField('proceso_control_id');
+              $records = json_decode($this->getField('propiedades'),true);
+              
+              foreach($records as $propiedad_data){
+                  $dmnProcesoControlPropiedad = new DomainProcesoControlPropiedad();
+                  $dmnProcesoControlPropiedad->setProcesoControl(new DomainProcesoControl($proceso_control_id));
+                  $dmnProcesoControlPropiedad->setControl(new DomainTipoControl($this->getField('control_id')));
+                  $dmnProcesoControlPropiedad->setPropiedad(new DomainPropiedad($propiedad_data["propiedad_id"]));
+                  $dmnProcesoControlPropiedad->setValor($propiedad_data["valor"]);
+                  $arr_propiedades[] = $dmnProcesoControlPropiedad;
+              }
+              
+              $this->load->model('Bussiness/ProcesoFlujoBO/ProcesoControlBO','ProcesoControlBO');
+              $this->ProcesoControlBO->propiedades = $arr_propiedades;
+              $this->ProcesoControlBO->add_propiedades();
+              $this->getAnswer()->setSuccess(true);
+              $this->getAnswer()->setMessage('Actualizado Correctamente');
+              $this->getAnswer()->setCode(0);
+              //$this->getAnswer()->AddExtraData('ProcesoControlId',$dmnProcesoControl->getId());
+              echo $this->getAnswer()->getAsJSON();                           
         } catch (Exception $ex) {
             if($ex->getCode() == FORM_VALIDATION_ERRORS_CODE){
                 echo $this->getAnswer()->getAsJSON();
@@ -205,6 +234,34 @@ class ProcesoControl extends BaseController{
             }
         }
     }
+    
+    public function del_propiedades(){
+        try{            
+            $records = json_decode($this->getField('propiedades'),true);
+            $arr_procesos = array();
+            foreach($records as $row){
+                $dmnProcesoControlPropiedad = new DomainProcesoControlPropiedad($row['proceso_control_propiedad_id']);
+                $arr_procesos[] = $dmnProcesoControlPropiedad;
+            }
+            
+            $this->load->model('Bussiness/ProcesoFlujoBO/ProcesoControlBO','ProcesoControlBO');
+            $this->ProcesoControlBO->propiedades = $arr_procesos;
+            $this->ProcesoControlBO->del_propiedades();
+            $this->getAnswer()->setSuccess(true);
+            $this->getAnswer()->setMessage('Actualizado Correctamente');
+            $this->getAnswer()->setCode(0);
+            //$this->getAnswer()->AddExtraData('ProcesoControlId',$dmnProcesoControl->getId());
+            echo $this->getAnswer()->getAsJSON();                           
+              
+        } catch (Exception $ex) {
+            if($ex->getCode() == FORM_VALIDATION_ERRORS_CODE){
+                echo $this->getAnswer()->getAsJSON();
+            }else{
+                echo Answer::setFailedMessage($ex->getMessage(),$ex->getCode());
+            }
+        }
+    }                
+    
     public function writeEvento(){
         try{
             $id = $this->getField('ProcesoControlEventoId');
@@ -259,8 +316,5 @@ class ProcesoControl extends BaseController{
         $this->load->model('Bussiness/ProcesoFlujoBO/ProcesoControlBO','ProcesoControlBO');        
         $this->ProcesoControlBO->updSingleEvent($dmnProcesoControlEvento);        
         
-    }
-    
-    
-    
+    }            
 }

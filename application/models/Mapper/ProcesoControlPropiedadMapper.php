@@ -38,7 +38,7 @@ class ProcesoControlPropiedadMapper extends BaseMapper{
     protected function doCreateObject(array $record = null){
         $dmnProcesoControlPropiedad = new DomainProcesoControlPropiedad($record['ID']);
         $dmnProcesoControlPropiedad->setProcesoControl(new DomainProcesoControl($record['PROCESOCONTROLID']));
-//        $dmnProcesoControlPropiedad->setControlPropiedad(new DomainControlPropiedad($record['CONTROLPROPIEDADID']));        
+        $dmnProcesoControlPropiedad->setControl(new DomainTipoControl($record['CONTROLID']));
         $dmnProcesoControlPropiedad->setPropiedad(new DomainPropiedad($record['PROPIEDADID']));
         $dmnProcesoControlPropiedad->setValor($record['VALOR']);
                 
@@ -52,11 +52,12 @@ class ProcesoControlPropiedadMapper extends BaseMapper{
     protected function doInsert(DomainProcesoControlPropiedad $dmnProcesoControlPropiedad){
         $this->load->database();
         $fields['procesocontrolid'] = $dmnProcesoControlPropiedad->getProcesoControl()->getId();
+        $fields['controlid'] = $dmnProcesoControlPropiedad->getControl()->getId();
         $fields['valor'] = $dmnProcesoControlPropiedad->getValor();
         $fields['propiedadid'] = $dmnProcesoControlPropiedad->getPropiedad()->getId();
-//        $fields['controlpropiedadid'] = $dmnProcesoControlPropiedad->getControlPropiedad()->getId();
         $this->db->set($fields);
         $res = $this->db->insert($this->tableName);
+        echo $this->db->last_query();
         $dmnProcesoControlPropiedad->setId($this->db->insert_id());
         if(!$res){
             $this->db->trans_rollback();
@@ -70,6 +71,7 @@ class ProcesoControlPropiedadMapper extends BaseMapper{
     
     protected function doUpdate(DomainProcesoControlPropiedad $dmnProcesoControlPropiedad){
         $fields['procesocontrolid'] = $dmnProcesoControlPropiedad->getProcesoControl()->getId();
+        $fields['controlid'] = $dmnProcesoControlPropiedad->getControl()->getId();
         $fields['valor'] = $dmnProcesoControlPropiedad->getValor();
 //        $fields['controlpropiedadid'] = $dmnProcesoControlPropiedad->getControlPropiedad()->getId();
         $this->db->set($fields);
@@ -78,6 +80,19 @@ class ProcesoControlPropiedadMapper extends BaseMapper{
         if(!$res){
             $this->db->trans_rollback();
             throw new Exception('Error al Actualizar la tabla '.$this->tableName,-1);
+        }
+    }
+    
+    public function delete(DomainProcesoControlPropiedad $dmnProcesoControlPropiedad){
+        $this->doDelete($dmnProcesoControlPropiedad);
+    }
+    
+    protected function doDelete(DomainProcesoControlPropiedad $dmnProcesoControlPropiedad){
+        $this->db->where('id',$dmnProcesoControlPropiedad->getId());
+        $res = $this->db->delete('procesocontrolpropiedad');
+        if(!$res){
+            $this->db->trans_rollback();
+            throw new Exception('Error al eliminar la tabla'.$this->tableName,-1);
         }
     }
 }

@@ -12,6 +12,7 @@ class DomainPropiedad extends BaseDomain{
     protected $fechaRegistro;
     protected $fechaUltAct;
     protected $control;
+    protected $editor;
     
     function __construct($id = null) {
         $this->id = $id;
@@ -46,6 +47,19 @@ class DomainPropiedad extends BaseDomain{
 
     function setControl($control) {
         $this->control = $control;
+    }
+    function getEditor(){        
+        require_once MAPPERPATH.'EditorMapper.php';   
+        if($this->mapper == true && $this->editor != null && $this->editor->getId() != null){            
+           $mprEditor = new EditorMapper();
+           $this->editor = $mprEditor->find($this->editor->getId());
+        }
+        return $this->editor;
+        
+        
+    }
+    function setEditor($editor){
+        $this->editor = $editor;
     }
 
 

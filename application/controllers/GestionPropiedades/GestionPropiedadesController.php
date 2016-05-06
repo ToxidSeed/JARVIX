@@ -3,6 +3,7 @@ require_once BASECONTROLLERPATH.'BaseController.php';
 require_once BASEMODELPATH.'Constraints.php';
 require_once DOMAINPATH.'DomainPropiedad.php';
 require_once DOMAINPATH.'DomainTipoControl.php';
+require_once DOMAINPATH.'DomainEditor.php';
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -19,14 +20,11 @@ class GestionPropiedadesController extends BaseController{
     public function writeRecord(){        
         $dmnPropiedad = new DomainPropiedad($this->getField('PropiedadId'));        
         $dmnPropiedad->setNombre($this->getField('Nombre'));
+        $dmnPropiedad->setEditor(new DomainEditor($this->getField('EditorId')));
         $valores = json_decode($this->getField('Valores'),true);
-        
-        
-        
+                
         $valoresEliminar = json_decode($this->getField('ValoresEliminar'),true);
 
-        
-        
         $dmnControl = new DomainTipoControl($this->getField('ControlId'));
         $dmnPropiedad->setControl($dmnControl);
         
@@ -40,8 +38,7 @@ class GestionPropiedadesController extends BaseController{
     public function add($dmnPropiedad,$valores){
         try{
             $this->formValidation(__CLASS__,'', __FUNCTION__);
-            //$dmnPropiedad->setFechaRegistro(date(APPDATESTNFORMAT));
-            //$dmnPropiedad->setFechaUltAct(date(APPDATESTNFORMAT));
+            
             $this->load->model('Bussiness/PropiedadBO','PropiedadBO');  
             $this->PropiedadBO->setDomain($dmnPropiedad);
             $this->PropiedadBO->setValores($valores);
@@ -60,11 +57,15 @@ class GestionPropiedadesController extends BaseController{
     
     public function upd($dmnPropiedad,$valores,$valoresEliminar){
         try{
+            //print_r($valores);
+            //print_r($valoresEliminar);
+            //exit();
             $this->formValidation(__CLASS__,'', __FUNCTION__);                        
             $this->load->model('Bussiness/PropiedadBO','PropiedadBO');  
             $this->PropiedadBO->setDomain($dmnPropiedad);
             $this->PropiedadBO->setValores($valores);
             $this->PropiedadBO->setValoresEliminar($valoresEliminar);
+//            print_r($dmnPropiedad);
             $this->PropiedadBO->update();
             echo Answer::setSuccessMessage('Se Actualizó correctamente la propiedad con nombre: '.$dmnPropiedad->getNombre());            
         }
@@ -111,10 +112,19 @@ class GestionPropiedadesController extends BaseController{
         try{
             $this->load->model('Mapper/PropiedadMapper','PropiedadMapper');
             $domain = $this->PropiedadMapper->find($this->getField('PropiedadId'));
+            $domain->mapper()->getEditor();
             echo json_encode(Response::asSingleObject($domain));
         }catch(Exception $ex){
             echo Answer::setFailedMessage($ex->getMessage(),$ex->getCode());
         }
     }
+    
+    public function get_editores(){
+        $this->load->model('Mapper/Finders/ValorPropiedad/ValorPropiedadFRM1','ValorPropiedadFRM1');        
+        $filters = array(
+            'PropiedadId' =>   $this->getField('PropiedadId')
+        );
+        $response = $this->ValorPropiedadFRM1->Search($filters) ;
+        echo json_encode(Response::asResults($response)); 
+    }
 }
-?>

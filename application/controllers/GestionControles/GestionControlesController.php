@@ -125,8 +125,8 @@ class GestionControlesController extends BaseController{
     }    
     
     public function GetLinkedProperties(){
-        $this->load->model('Mapper/Finders/Propiedad/PropiedadFRM1','PropiedadFRM1'); 
-        $response = $this->PropiedadFRM1->search(
+        $this->load->model('Mapper/Finders/Propiedad/PropiedadFRM3','PropiedadFRM3'); 
+        $response = $this->PropiedadFRM3->search(
                     array(
                         'ControlId' => $this->getField('ControlId'),
                         'Nombre' => $this->getField('Nombre')
@@ -147,10 +147,6 @@ class GestionControlesController extends BaseController{
         $response = $this->FinderEventoFRM1->search(array(
             'ControlId' => $this->getField('ControlId')
         ));
-//        foreach($response->getResults() as $dmnControlEvento){
-//            $dmnControlEvento->mapper()->getControl();
-//            $dmnControlEvento->mapper()->getEvento();                    
-//        }
         
         echo json_encode(Response::asResults($response));        
     }
@@ -162,5 +158,12 @@ class GestionControlesController extends BaseController{
         ));                
         echo json_encode(Response::asResults($response));        
     }
+    
+    public function get_editores(){
+        $this->load->model('Mapper/Finders/Editor/EditorFRM1','EditorFRM1');
+        
+        $response = $this->EditorFRM1->search();
+        
+        echo json_encode(Response::asResults($response));
+    }
 }
-?>

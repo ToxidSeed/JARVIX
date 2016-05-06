@@ -199,10 +199,7 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
       
       main.gridControles.on({
           'itemdblclick':function(grid,record){
-               var myWin = new MyApp.GestionProcesos.WinMantProcesosControl();  
-                myWin.internal.Proceso.id = main.internal.id;
-                myWin.internal.ProcesoControl.id = record.get('id');
-                myWin.show();
+              main.open_win_mant_proceso_control(record.get('id'));
           }
       })
       
@@ -211,10 +208,16 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
               {
                   text:'Agregar',
                   iconCls:'icon-add',
-                  handler:function(){                      
+                  handler:function(){             
+
                       var myWin = new MyApp.GestionProcesos.WinMantProcesosControl();  
-                      myWin.internal.Proceso.id = main.internal.id;  
-                      myWin.internal.ProcesoControl.id = null
+                      
+//                       console.log(main.internal);
+                      console.log(myWin.internal);
+                      
+                      myWin.internal.proceso_id = main.internal.id;  
+                      myWin.internal.proceso_control_id = null
+
                       myWin.show();
                   }
               },{
@@ -636,6 +639,18 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
                
            }
         });
-   }   
+   },
+   open_win_mant_proceso_control:function(par_proceso_control_id){
+       var main = this;
+       
+        var myWin = new MyApp.GestionProcesos.WinMantProcesosControl({
+            internal:{
+                id: par_proceso_control_id,
+                proceso_id: main.internal.id
+            }
+        });  
+        
+        myWin.show();
+   }
 });
 

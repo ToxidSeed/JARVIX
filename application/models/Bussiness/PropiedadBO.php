@@ -29,8 +29,10 @@ class PropiedadBO extends BaseBO{
     function setValores(array $parValores = null){
         foreach($parValores as $row){
             $dmnValores = new DomainValorPropiedad();
+            $dmnValores->setId($row['id']);
             $dmnValores->setValor($row['valor']);
             $dmnValores->setPropiedad($this->getDomain());
+            $dmnValores->setFlgDefault($row['flgDefault']);
             $this->valores[]  = $dmnValores;
         }        
     }
@@ -47,8 +49,7 @@ class PropiedadBO extends BaseBO{
             $this->load->database();
             $this->db->trans_start();
             
-            $this->checkObject();
-            
+            $this->checkObject();            
             //Por cada valor insertar un registro en valor propiedad
             
             $mprPropiedad = new PropiedadMapper();
@@ -76,11 +77,22 @@ class PropiedadBO extends BaseBO{
             
             $dmnCurrentPropiedad = $mprPropiedad->find($this->domain->getId());
             $dmnCurrentPropiedad->setNombre($this->domain->getNombre());            
+            $dmnCurrentPropiedad->setEditor($this->domain->getEditor());
             $mprPropiedad->update($dmnCurrentPropiedad);            
                  
-            
-            foreach($this->valores as $dmnValores){
-                $this->valorPropiedadMapper->insert($dmnValores);
+//            print_r($this->valores);
+            foreach($this->valores as $dmnValores){                        
+                if($dmnValores->getId() == null){
+                        /*print_r($dmnValores);
+                         echo 'insert';
+                         print_r($dmnValores->getId());*/
+                    $this->valorPropiedadMapper->insert($dmnValores);
+                }else{
+                     /*   print_r($dmnValores);
+                        echo 'update';
+                         print_r($dmnValores->getId());*/
+                    $this->valorPropiedadMapper->update($dmnValores);
+                }
             }
             
             foreach($this->valoresEliminar as $dmnValoresEli){

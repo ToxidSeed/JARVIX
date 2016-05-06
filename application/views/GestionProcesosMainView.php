@@ -9,6 +9,7 @@
 </style>
 <script type="text/javascript">
       Ext.require('Per.Store');
+       Ext.require('Per.GridPanel');
       Ext.require('Per.MessageBox');
       Ext.require('Per.DebugHelperWindow');
 //      Ext.require('MyApp.GestionProyectos.HelpAplicaciones');
