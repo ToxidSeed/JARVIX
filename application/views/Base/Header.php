@@ -8,7 +8,7 @@
 
 
 <script type="text/javascript">
-        var path = '/RequerimentsManagerSrc/js/app/';
+        var path = '/jarvix/js/app/';
         base_url = '<?php echo base_url();?>'+'index.php/';
         APPDATEFROMDBFORMAT = '<?php echo APPDATEFROMDBFORMAT;?>';
         DATE_W3C = '<?php echo DATE_W3C;?>';

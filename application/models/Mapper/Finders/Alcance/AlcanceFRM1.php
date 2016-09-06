@@ -5,7 +5,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-class AlcanceFRM1 extends ProcesoMapper{
+
+require_once BASEMODELPATH.'BaseMapper.php';
+
+class AlcanceFRM1 extends BaseMapper{
     public function __construct() {
         parent::__construct();
     }
@@ -15,28 +18,70 @@ class AlcanceFRM1 extends ProcesoMapper{
         'proceso.nombre'
     );
     
+    private $Proceso = array();
+    private $ProcesoFlujo = array();
+    private $ProcesoControl = array();
+    
     private $results = array();
     
     function search($filters){
         $this->db->select($this->fields);
         $this->db->from('proceso');
         $this->db->where('proyectoid',$filters['ProyectoId']);
-        $res  = $this->db->get();        
+        $res  = $this->db->get();   
+        $this->Proceso = $res->result_array();
+        //Getting Flujos
+        $result = $this->armarDependencia();
+        print_r($result);
+        //Getting Controles        
     }
     
     private function getFlujos($ProyectoId){
         $fields = array(
-            'procesoflujo.id',
-            'procesoflujo.nombre'
+            'proceso.id as proceso_id',
+            'proceso.nombre as proceso_nombre',
+            'procesoflujo.id as procesoflujo_id',
+            'procesoflujo.nombre as procesoflujo_nombre'            
         );
         
-        $this->db->select()
+        $this->db->select($fields);
+        $this->db->from('proceso');
+        $this->db->join('proceso.id = procesoflujo.procesoid','left');        
+        $this->db->where('proyectoid',$ProyectoId);
+        $res = $this->db->get();
+        $this->ProcesoFlujo = $res->result_array();
     }
     
     private function getControles($ProyectoId){
         $fields = array(
-            'procesocontrol.id',
-            'procesoflujo.nombre'
+            'proceso.id as proceso_id',
+            'proceso.nombre as proceso_nombre',
+            'procesocontrol.id as procesocontrol_id',
+            'procesocontrol.nombre as procesocontrol_nombre'
         );
+        
+        $this->db->select($fields);
+        $this->db->from('proceso');
+        $this->db->join('proceso.id = procesoflujo.procesoid','left');
+        $this->db->where('proyectoid',$ProyectoId);
+        $res = $this->db->get();
+        $this->ProcesoControl = $res->result_array();
+    }
+    
+    private function armarDependencia(){
+        
+       foreach($this->Proceso as $row => $key){
+           $this->Proceso[$key]['Flujos'] = 0;
+           $this->Proceso[$key]['Controles'] = 0;
+       }
+    }
+    
+    private function getProcesoFlujo($ProcesoId){
+        $flujos = array();
+        
+    }
+    
+    private function getProcesoControl(){
+        
     }
 }

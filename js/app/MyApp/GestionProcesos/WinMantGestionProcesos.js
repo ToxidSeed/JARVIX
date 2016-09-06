@@ -372,7 +372,7 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
       });
       
         main.protoImage = Ext.create('Ext.Img', {
-//            src: 'http://localhost/requerimentsManager/uploads/GestionProcesos.png'
+//            src: 'http://localhost/jarvix/uploads/GestionProcesos.png'
         });
       
       main.tbarEspecificacion = Ext.create('Ext.toolbar.Toolbar',{

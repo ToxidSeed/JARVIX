@@ -57,7 +57,8 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridAlcance', {
                 model: WinEditEntregaModel,
                 proxy: {
                     type: 'ajax',
-                    url: 'http://localhost/RequerimentsManagerSrc/resources/data/tree/treegrid.json'
+                    //url: 'http://localhost/jarvix/resources/data/tree/treegrid.json'
+                    url:base_url+'GestionEntregas/Alcance/search'
                 },
                 folderSort: true
             }),

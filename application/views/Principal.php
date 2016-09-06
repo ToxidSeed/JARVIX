@@ -7,7 +7,7 @@
 
 
 <script type="text/javascript">
-        var path = '/RequerimentsManagerSrc/js/app/';
+        var path = '/jarvix/js/app/';
         base_url = '<?php echo base_url();?>'+'index.php';
         DATE_W3C = '<? echo DATE_W3C; ?>';
         UsuarioId = "<?php echo $id; ?>";

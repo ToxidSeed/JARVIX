@@ -7,7 +7,7 @@
             <link media="all" type="text/css" rel="stylesheet" href="./css/bootstrap.min.css">  
             <link media="all" type="text/css" rel="stylesheet" href="./css/LoginStyle.css">
             <script type="text/javascript">
-                    var path = '/RequerimentsManagerSrc/js/app/';
+                    var path = '/jarvix/js/app/';
                     base_url = '<?php echo base_url();?>'+'index.php/';                    
             </script>  
             <script type="text/javascript" src="<?php echo base_url();?>js/angular/angular.min.js"></script>
