@@ -18,21 +18,28 @@ class AlcanceFRM1 extends BaseMapper{
         'proceso.nombre'
     );
     
-    private $Proceso = array();
-    private $ProcesoFlujo = array();
-    private $ProcesoControl = array();
+    private $Procesos = array();
+    private $ProcesoFlujos = array();
+    private $ProcesoControls = array();
     
     private $results = array();
     
     function search($filters){
+        $this->load->database();
         $this->db->select($this->fields);
         $this->db->from('proceso');
         $this->db->where('proyectoid',$filters['ProyectoId']);
         $res  = $this->db->get();   
-        $this->Proceso = $res->result_array();
+        echo $this->db->last_query();
+        $this->Procesos = $res->result_array();
         //Getting Flujos
-        $result = $this->armarDependencia();
-        print_r($result);
+        $this->getFlujos($filters['ProyectoId']);
+        //Getting Controles
+        $this->getControles($filters['ProyectoId']);
+        //build dependency
+        $this->armarDependencia();
+        //devolver resultados
+        return $this->results;
         //Getting Controles        
     }
     
@@ -46,10 +53,10 @@ class AlcanceFRM1 extends BaseMapper{
         
         $this->db->select($fields);
         $this->db->from('proceso');
-        $this->db->join('proceso.id = procesoflujo.procesoid','left');        
+        $this->db->join('procesoflujo','proceso.id = procesoflujo.procesoid');        
         $this->db->where('proyectoid',$ProyectoId);
         $res = $this->db->get();
-        $this->ProcesoFlujo = $res->result_array();
+        $this->ProcesoFlujos = $res->result_array();
     }
     
     private function getControles($ProyectoId){
@@ -62,26 +69,42 @@ class AlcanceFRM1 extends BaseMapper{
         
         $this->db->select($fields);
         $this->db->from('proceso');
-        $this->db->join('proceso.id = procesoflujo.procesoid','left');
+        $this->db->join('procesocontrol','proceso.id = procesocontrol.procesoid');
         $this->db->where('proyectoid',$ProyectoId);
         $res = $this->db->get();
-        $this->ProcesoControl = $res->result_array();
+        //echo $this->db->last_query();
+        $this->ProcesoControls = $res->result_array();
+        //print_r($this->ProcesoControl);
     }
     
     private function armarDependencia(){
-        
-       foreach($this->Proceso as $row => $key){
-           $this->Proceso[$key]['Flujos'] = 0;
-           $this->Proceso[$key]['Controles'] = 0;
-       }
+        //print_r($this->Proceso);
+       foreach($this->Procesos as $key => $row){           
+           $this->Procesos[$key]['Flujos'] = $this->getFlujoPorProceso($row['id']);
+           $this->Procesos[$key]['Controles'] = $this->getControlPorProceso($row['id']);
+       }              
     }
     
-    private function getProcesoFlujo($ProcesoId){
+    private function getFlujoPorProceso($ProcesoId){
         $flujos = array();
         
+        foreach($this->ProcesoFlujos as $key => $row){
+            if($this->ProcesoFlujos[$key]['proceso_id'] === $ProcesoId  ){
+                $flujos[] = $row;
+            }
+        }
+        return $flujos;
     }
     
-    private function getProcesoControl(){
+    private function getControlPorProceso($ProcesoId){
+        $controles = array();
         
+        foreach($this->ProcesoControls as $key => $row){
+            if($this->ProcesoControls[$key]['proceso_id'] === $ProcesoId){
+                $controles[] = $row;
+            }
+        }    
+        
+        return $controles;
     }
 }

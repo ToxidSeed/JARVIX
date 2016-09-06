@@ -13,6 +13,10 @@ class Alcance extends BaseController{
     }
     function search(){
         $this->load->model('Mapper/Finders/Alcance/AlcanceFRM1','AlcanceFRM1');
-        $results = $this->AlcanceFRM1->search();        
+        $results = $this->AlcanceFRM1->search(array(
+            'ProyectoId' => 4
+        ));        
+        
+        //doing 
     }
 }
