@@ -83,16 +83,14 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
         main.txtTipoControl.on({
             'select':function(combo,records){                
                 var mySelectedRecord = records[0];
-                main.internal.Control.id = mySelectedRecord.get('id');
+                main.internal.control_id = mySelectedRecord.get('id');
                 main.internal.Control.nombre = mySelectedRecord.get('nombre');
                 //console.log(main.internal.ProcesoControlPropiedad);
                 
 //                console.log(main.internal);
                 main.getPropiedadesSeleccionadas();
             }
-        });
-       
-        
+        });             
         
         main.btnHelpControles = Ext.create('Ext.button.Button',{
             text:'...',            
@@ -148,6 +146,9 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
                 hidden:true
             },
             {
+                xtype:'rownumberer'
+            },
+            {
                 text:'Nombre',
                 dataIndex:'propiedad.nombre'                    
             },{
@@ -165,6 +166,27 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
                    var mask =  main.crear_renderer(value,record.get('propiedad.id'),record.get('propiedad.editor.constante'),'sel');                                          
                    return mask;
                 }
+            },{
+                xtype:'actioncolumn',
+                align:'center',
+                width:30,
+                items:[
+                    {
+                        iconCls:'icon-comments',
+                        tooltip:'Comentarios',
+                        handler:function(grid,rowIndex){
+                            //var var_propiedad_id = record.get('name'); 
+                            var myRecord = main.store_propiedades.getAt(rowIndex);
+                            
+                            var var_params = {
+                               IdReferencia:myRecord.get('id')
+                            };
+                            
+                            //console.log(var_params);
+                            main.openWinComentarioPropiedad(var_params);
+                        }
+                    }
+                ]
             }
          ],
             plugins: [
@@ -195,45 +217,85 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
       
       main.gridPropiedades.on({
          'itemdblclick':function(grid,record,item,index,event){
-             var var_propiedad_id = record.get('name');      
-             var var_params = {
-                 propiedadId: var_propiedad_id
-             };
-             main.openWinEditor(var_params);
+             
          },
          'itemmouseleave':function(view){
              //view.refresh();
          }
       });
       
+      main.store_propiedades.on({
+          'update':function(store,record){
+              main.updPropiedad(record);
+          }
+      });
+      
+      main.storeEventos = Ext.create('Ext.data.Store',{
+          fields:[
+                'id',
+                'evento.nombre'
+            ],
+            proxy:{
+                type:'ajax',
+                url: base_url+'/GestionProcesos/ProcesoControl/getEventosSeleccionados',
+                reader:{
+                    type:'json',
+                    root:'results',
+                    totalProperty:'total'
+                }
+            }
+      });
+      //
       main.gridEventos = Ext.create('Ext.grid.Panel',{         
-         border:false,                      
-         loadOnCreate:false,
+         border:false,                               
          width:350,
-         height:400,
-         pageSize:20,         
-         src:base_url+'/GestionProcesos/ProcesoControl/getEventosDisponibles',
+         height:0,         
+         store:main.storeEventos,
          columns:[
              {
                  xtype:'rownumberer'
-             },
+             },             
              {
                  header:'Nombre',
-                 dataIndex:'nombre'
+                 dataIndex:'evento.nombre',
+                 flex:1
              },{
-                 header:'eventoId',
-                 dataIndex:'id',
-                 hidden:true
-             },{
-                 header:'controlid',
-                 dataIndex:'controlid',
-                 hidden:true
-             }
-         ]
+                xtype:'actioncolumn',
+                align:'center',
+                width:30,
+                items:[
+                    {
+                        iconCls:'icon-comments',
+                        tooltip:'Comentarios',
+                        handler:function(grid,rowIndex){
+                            var myRecord = main.storeEventos.getAt(rowIndex);
+                            
+                            var object = {
+                                IdReferencia:myRecord.get('id')
+                            };
+                            main.openWinComentarioEvento(object);
+                        }
+                    }
+                ]
+            }
+         ],
+         viewConfig:{        
+           plugins:{
+               ptype:'gridviewdragdrop',
+               dropGroup:'myDragEventZone',
+               dragGroup:'myDragEventZone'
+           },
+           listeners:{
+               'drop':function(node,data,overModel,dropPosition,dropHandlers){
+                   main.add_eventos(data);
+                   
+               }
+           }
+         }
       });
       
       
-       main.gridEventos.on({
+       /*main.gridEventos.on({
          'itemdblclick':function(grid,record,item,index,event){
              var eventoName = record.get('evento.nombre');             
              main.myWinEditor.setTitle(eventoName);                          
@@ -249,7 +311,7 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
              };
              main.myWinEditor.showAt(event.getX(),event.getY());
          } 
-      });
+      });*/
       
       
      main.tbarPropiedades = Ext.create('Ext.toolbar.Toolbar',{
@@ -334,40 +396,17 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
         main.mainTab.on({
             tabChange:function(tabPanel,newCard,oldCard){
                 //main.myWinEditor.close();
-                if (newCard.id === 'tabEventos'){
-                    main.getEventosSeleccionados();
+                if (newCard.id === 'tabEventos'){                    
+                    //main.getEventosSeleccionados();
+                    main.cambiar_tab_evento();
                 }
                 if (newCard.id === 'tabPropiedades'){
-                    main.getPropiedadesSeleccionadas();
+                    //main.getPropiedadesSeleccionadas();
+                    main.cambiar_tab_propiedad();
                 }
             }
         });
         
-//        main.gridHelpControles = Ext.create('Per.GridPanel',{
-//            loadOnCreate:false,
-//            width:400,
-//            height:400,
-//             src:base_url+'',                         
-////            floating:true,
-//            columns:[
-//                {
-//                    header:'Text',
-//                    dataIndex:'ControlId'
-//                }
-//            ] 
-//        });    
-        
-       
-        
-//        main.mainPanel = Ext.create('Ext.panel.Panel',{
-//            bodyPadding:'10px',
-//            layout:'column',
-//            items:[
-//                main.txtTipoControl,
-//                main.btnHelpControles,
-//                main.txtDescripcion
-//            ]
-//        });
         
         main.mainPanel = Ext.create('Ext.panel.Panel',{
             bodyPadding:'10px',    
@@ -508,8 +547,7 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
             fields:[
                 'id',
                 'nombre',
-                'Valor'
-                
+                'Valor'                
             ],
             proxy:{
                 type:'ajax',
@@ -539,7 +577,8 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
                 },
                 {
                     text:'Nombre',
-                    dataIndex:'nombre'                    
+                    dataIndex:'nombre',
+                    flex:1
                 }
             ],
             plugins: [
@@ -551,12 +590,12 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
                 plugins: {
                     ptype: 'gridviewdragdrop',                    
                     dragText:'Moviendo',
-                    dragGroup:'myDragZone',
-                    dropGroup:'myDragZone'
+                    dragGroup:'myDragEventZone',
+                    dropGroup:'myDragEventZone'
                 },
                 listeners:{
                     'drop':function(node,data,overModel,dropPosition,dropHandlers){
-                        //main.del_propiedades(data);
+                        main.del_eventos(data);                        
                     }
                 }
             }
@@ -566,14 +605,16 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
            items:[
                {
                    text:'Buscar',
+                   iconCls:'icon-search',
                    handler:function(){
-                       
+                       main.getEventosDisponibles();
                    }
                },
                {
                    text:'Ocultar',
                    handler:function(){
-                       
+                       main.panelEventosDisp.hide();
+                       main.mainPanel.show();
                    }
                }
            ] 
@@ -620,11 +661,18 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
            ]           
         });       
         
-        main.on({
-            
+        main.on({            
             'show':function(){
                 main.loadControl();
                 main.habilitar_controles();
+            },
+            'resize':function(w,newW,newH){
+                var h = Ext.getCmp('tabPropiedades').getHeight();
+                var w = Ext.getCmp('tabPropiedades').getWidth();
+                //console.log(h);
+                main.gridPropiedades.setHeight(h-30);
+                main.gridEventos.setHeight(h-30);
+                main.gridEventos.setWidth(w-5);
             }
         });
         
@@ -637,14 +685,16 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
     save:function(param){
         var main = this;      
                 
-        console.log(param);
+        //console.log(main.internal.proceso_control_id);        
                 
+        //console.log(param);                
         Ext.Ajax.request({
           url:base_url+'GestionProcesos/ProcesoControl/wrt',
           params:{
-              control_id:main.internal.Control.id,
+              control_id:main.internal.control_id,
               nombre:  main.txtNombre.getValue(),   
               proceso_id: main.internal.proceso_id,
+              proceso_control_id:main.internal.proceso_control_id,
               comentarios:main.txtComentarios.getValue()              
           },
           success:function(response){
@@ -660,7 +710,9 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
     process_save:function(param,response){
         var main = this;  
         if(param && param.action){
-           
+            //console.log('xx');
+            main.fireEvent('save');
+           //console.log(param.action);
             //Abrir ventana de busqueda propiedades
             if(param.action === 'open_p'){
                 main.open_search_window_propiedad(response);
@@ -680,7 +732,9 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
         var main = this;
         var w = main.mainPanel.getWidth();
         main.mainPanel.hide();
-        main.panelPropiedadesDisponibles.setWidth(w);
+        if(w > 0){
+            main.panelPropiedadesDisponibles.setWidth(w);
+        }        
         main.panelPropiedadesDisponibles.show();
         var var_response = Ext.decode(response.responseText);
         main.internal.proceso_control_id = var_response.extradata.ProcesoControlId;
@@ -699,41 +753,13 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
         
         var w = main.mainPanel.getWidth();
         main.mainPanel.hide();
-        main.panelEventosDisp.setWidth(w);
+        if (w > 0){
+            main.panelEventosDisp.setWidth(w);
+        }        
         main.panelEventosDisp.show();
         var var_response = Ext.decode(response.responseText);
         main.internal.proceso_control_id = var_response.extradata.ProcesoControlId;        
-    },
-    /*modify:function(msg){
-        var main = this;
-        Ext.Ajax.request({
-          url:base_url+'GestionProcesos/ProcesoControl/upd',
-          params:{
-              ControlId:main.internal.Control.id,
-              nombre:  main.txtNombre.getValue(),   
-              ProcesoId: main.internal.Proceso.id,
-              comentarios:main.txtComentarios.getValue(),
-              ProcesoControlId: main.internal.ProcesoControl.id
-              
-          },
-          success:function(response){
-              var msgbox = new Per.MessageBox();  
-              msgbox.data = Ext.decode(response.responseText);
-              //console.log(msg.data);
-              //main.internal.ProcesoControl.id = jsonResponse.extradata.ProcesoControlId;
-//              console.log(main.internal);
-              if (msg === true){
-                  msgbox.success();
-              }                                              
-          },
-          failure:function(response){
-              var msg = new Per.MessageBox();               
-              msg.data = Ext.decode(response.responseText);
-              msg.failure();
-          }
-       });
-        
-    },*/
+    },    
     openHelpControlsWindow:function(){
         console.log('now');
         var main = this;       
@@ -748,11 +774,12 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
     },
     getPropiedadesSeleccionadas:function(){
         var main = this;
-;
+
+        //console.log(main.internal);
         
         main.gridPropiedades.getStore().load({
             params:{
-                    ControlId:main.internal.Control.id,
+                    ControlId:main.internal.control_id,
                     ProcesoControlId: main.internal.proceso_control_id
             }
         });
@@ -761,17 +788,18 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
         var main = this;
         main.gridEventosDisp.getStore().load({
              params:{
-                 ControlId:main.internal.id,
+                 ControlId:main.internal.control_id,
+                 NombreEvento: main.txtSearchEventos.getValue(),
                  ProcesoControlId:main.internal.proceso_control_id
              } 
         });
     },
     getEventosSeleccionados:function(){
-        var main = this;        
-                
+        var main = this;                
+        console.log('here');
         main.gridEventos.getStore().load({
             params:{
-                ControlId:main.internal.Control.id,
+                ControlId:main.internal.control_id,
                 ProcesoControlId:main.internal.proceso_control_id
             }
         });                                
@@ -800,7 +828,7 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
             main.store_propiedades_disp.load(
                 {
                     params:{
-                     ControlId: main.internal.Control.id,
+                     ControlId: main.internal.control_id,
                      nombre:main.txtPropiedad.getValue(),
                      ProcesoControlId: main.internal.proceso_control_id
                      }
@@ -942,46 +970,86 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
                 field: field
             });                                 
     },
-    openWinEditor:function(object){
+    openWinComentarioPropiedad:function(object){
         var main = this;
         
-        main.myTextAreaEditor = Ext.create('Ext.form.field.TextArea',{
-            width:350,
-            height:150
-        });
-        main.myWinEditor = Ext.create('Ext.window.Window',{             
-             width:350,
-             height:200,  
-             title:'Comentarios',
-             //closeAction:'hide',
-//             closable:false,
-             modal:true,
-             params:{
-                method:null,
-                data:{}
-             },
-             defaultFocus: main.myTextAreaEditor,
-             items:[
-                 main.myTextAreaEditor
-             ],
-             buttons:[
-                 {
-                     text:'Aceptar',
-                     handler:function(){                         
-                         main.comentarios[object.propiedadId] = main.myTextAreaEditor.getValue();                         
-                         console.log(main.comentarios);
-                     }
-                 },
-                 {
-                     text:'Salir',
-                     handler:function(){
-                         main.myWinEditor.hide();
-                     }
-                 }
-             ]
-        });
+        var myInternal = {            
+            IdReferencia:object.IdReferencia,
+            list_url:'GestionProcesos/ProcesoControlPropiedad/listComentarios',
+            del_url:'GestionProcesos/ProcesoControlPropiedad/del',
+            wrt_url:'GestionProcesos/ProcesoControlPropiedad/wrtComentario'
+        };
         
-        main.myWinEditor.show();
+        var myWin = new MyApp.GestionProcesos.WinAddComentarios({
+            internal:myInternal
+        });        
+        myWin.show();        
+    },
+    openWinComentarioEvento:function(object){
+        var main = this;
+        var myInternal = {
+            IdReferencia:object.IdReferencia,
+            list_url:'GestionProcesos/ProcesoControlEvento/listComentarios',
+            del_url:'GestionProcesos/ProcesoControlEvento/del',
+            wrt_url:'GestionProcesos/ProcesoControlEvento/wrtComentario'
+        };
+        var myWin = new MyApp.GestionProcesos.WinAddComentarios({
+            internal:myInternal
+        });        
+        myWin.show();        
+    },    
+    add_eventos:function(data){
+        var main = this;
+        var records = data.records;
+        
+        var jsonRecords = [];
+        for(var row in data.records){
+            var myObject = {
+                "EventoId":data.records[row].get("id"),
+                "Nombre":data.records[row].get("nombre")
+            };
+            jsonRecords.push(myObject);
+        }                                
+        
+        Ext.Ajax.request({
+          url:base_url+'GestionProcesos/ProcesoControl/add_eventos',
+          params:{
+            proceso_control_id:main.internal.proceso_control_id,
+            eventos: Ext.encode(jsonRecords),
+            control_id: main.internal.control_id
+          },
+          success:function(response){             
+             main.getEventosDisponibles();
+             main.getEventosSeleccionados();
+          }
+       });
+    },
+    del_eventos:function(data){
+      var main = this;
+      
+      //console.log(data);
+      var json_records_to_del = [];
+      for(var idx in data.records ){
+          var myObj = {
+              "EventoId":data.records[idx].get("id")
+          };
+          json_records_to_del.push(myObj);
+      }
+      
+      Ext.Ajax.request({
+         url:base_url+'GestionProcesos/ProcesoControl/del_eventos',
+         params:{
+             eventos:Ext.JSON.encode(json_records_to_del)
+         },
+         success:function(response){
+             main.getEventosDisponibles();
+             main.getEventosSeleccionados();
+         },
+         failure:function(response){
+            main.getEventosDisponibles();
+             main.getEventosSeleccionados();
+         }
+      });
     },
     add_propiedades:function(data){
         var main = this;        
@@ -1003,12 +1071,15 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
         //Begin Ajax request here
         var proceso_control_id = main.internal.proceso_control_id;
         
+        //console.log(main.internal);
+        
+        
         Ext.Ajax.request({
           url:base_url+'GestionProcesos/ProcesoControl/add_propiedades',
           params:{
             proceso_control_id:proceso_control_id,
             propiedades: var_propiedades,
-            control_id: main.internal.Control.id
+            control_id: main.internal.control_id
           },
           success:function(response){
 //             console.log(response.responseText);
@@ -1044,15 +1115,42 @@ Ext.define('MyApp.GestionProcesos.WinMantProcesosControl',{
        });
         
         //return Ext.JSON.encode(records_to_del);        
-    },    
+    },
+    updPropiedad:function(record){                
+        var main = this;                
+        
+        Ext.Ajax.request({
+          url:base_url+'GestionProcesos/ProcesoControlPropiedad/updValorPropiedad',
+          params:{
+            id:record.get('id'),
+            valor:record.get('valor')
+          },
+          success:function(response){
+             main.getPropiedadesDisponibles();
+             main.getPropiedadesSeleccionadas();
+          }
+       });  
+    },
     habilitar_controles:function(){
         var main = this;
         //check si es un registro nuevo
-        var tbtn_agregar_propiedad = Ext.getCmp('tbtn_agregar_propiedad');    
+        /*var tbtn_agregar_propiedad = Ext.getCmp('tbtn_agregar_propiedad');    
         if(main.internal.proceso_control_id === 0){
             tbtn_agregar_propiedad.disable();
         }else{
             tbtn_agregar_propiedad.enable();
-        }
-    }
+        }*/
+    },
+    cambiar_tab_evento:function(){
+        var main = this;
+        main.getEventosSeleccionados();
+        main.mainPanel.show();
+        main.panelPropiedadesDisponibles.hide();
+    },
+    cambiar_tab_propiedad:function(){
+        var main = this;
+        main.getPropiedadesSeleccionadas();
+        main.mainPanel.show();
+        main.panelEventosDisp.hide();
+    }      
 });

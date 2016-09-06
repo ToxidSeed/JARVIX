@@ -181,7 +181,7 @@ Ext.define('MyApp.GestionControles.WinGestionControles',{
                 
                 
                 
-        this.callParent(arguments)
+        this.callParent(arguments);
     },
     getParams:function(){
         var main = this;

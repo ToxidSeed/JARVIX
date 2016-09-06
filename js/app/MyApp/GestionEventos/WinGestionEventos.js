@@ -1,6 +1,7 @@
 
 Ext.define('MyApp.GestionEventos.WinGestionEventos',{
   extend:'Ext.panel.Panel' ,
+  
   maximized:true,   
   width:0,
   height:0,
@@ -9,12 +10,17 @@ Ext.define('MyApp.GestionEventos.WinGestionEventos',{
   initComponent:function(){
       var main = this;
       
+      
+      
       main.tbar = Ext.create('Ext.toolbar.Toolbar',{
          items:[
              {
-                 text:'Nuevo',
+                 text:'Agregar',
+                 iconCls:'icon-add',
                  handler:function(){
-                     new MyApp.GestionEventos.WinMantGestionEventos().show();
+                     new MyApp.GestionEventos.WinMantGestionEventos({
+                         Id:0
+                     }).show();
                  }
             }
          ] 
@@ -67,14 +73,22 @@ Ext.define('MyApp.GestionEventos.WinGestionEventos',{
          items:[
              {
                  text:'Buscar',
+                 iconCls:'icon-search',
                  handler:function(){
                      
                      main.GridEventos.load(main.getParams()) 
                  }
              },{
                  text:'Limpiar',
+                 iconCls:'icon-clean',
                  handler:function(){
                      main.limpiarCriterios();
+                 }
+             },{
+                 text:'Ocultar',
+                 iconCls:'icon-collapse',
+                 handler:function(){
+                     main.panelCriterioBusqueda.collapse();
                  }
              }
          ] 
@@ -82,6 +96,9 @@ Ext.define('MyApp.GestionEventos.WinGestionEventos',{
       
       main.panelCriterioBusqueda = Ext.create('Ext.panel.Panel',{          
           region:'west',
+          title:'Buscar Eventos',
+          collapsible:true,
+          bodyPadding:'10px',
           tbar:main.panelCritTbar,
           items:[
                 main.txtCodigo,
@@ -89,7 +106,7 @@ Ext.define('MyApp.GestionEventos.WinGestionEventos',{
                  main.fieldFechaRegistro,
                  main.fieldFechaUltAct
           ]
-      })
+      });
       
       main.GridEventos = Ext.create('Per.GridPanel',{
          loadOnCreate:false,
@@ -128,7 +145,7 @@ Ext.define('MyApp.GestionEventos.WinGestionEventos',{
           }
       })
       
-      Ext.apply(this,{
+      Ext.apply(this,{            
             layout:'border',
             items:[
               main.panelCriterioBusqueda,

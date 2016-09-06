@@ -58,28 +58,48 @@ class GestionProcesosController extends BaseController{
         $this->load->view('Base/Footer.php');
     }
 
-    public function add(){
+    public function wrt(){
         try{
             
-            $data = $this->cargarArchivo();
+            //
+            //print_r($_FILES);
+            $exist_file = false;
             
-            if($data == null){
-                exit();
+            if ($_FILES['prototypeUpload']['name'] != null && 
+                     $_FILES['prototypeUpload']['name'] !='' ){
+                    
+                    $data = $this->cargarArchivo();
+                    
+                    if($data == null){
+                        exit();
+                    }
+                    
+                    $exist_file = true;
             }
+                
+
+            $this->formValidation(__CLASS__,'', __FUNCTION__);  
             
-            $this->formValidation(__CLASS__,'', __FUNCTION__);                        
             $dmnProceso = new DomainProceso();
+            if($this->getField('ProcesoId')>0){
+                $dmnProceso->setId($this->getField('ProcesoId'));
+            }
             $dmnProceso->setNombre($this->getField('nombre'));
             $dmnProceso->setEstado(new DomainEstado(0));//Estado Activo
             $dmnProceso->setProyecto(new DomainProyecto($this->getField('ProyectoId')));
             $dmnProceso->setAplicacion(new DomainAplicacion($this->getField('AplicacionId')));
+            $dmnProceso->setDescripcion($this->getField('Descripcion'));
             //Setting file path
-            $filePath = base_url().'uploads/'.$data['file_name'];            
-            $fileName = $filePath;
-            $dmnProceso->setRutaPrototipo($fileName);
+            
+            if ($exist_file == true){
+                $filePath = base_url().'uploads/'.$data['file_name'];            
+                $fileName = $filePath;
+                $dmnProceso->setRutaPrototipo($fileName);
+            }
+            
             $this->load->model('Bussiness/ProcesoBO','ProcesoBO');
             $this->ProcesoBO->setDomain($dmnProceso);
-            $this->ProcesoBO->add();
+            $this->ProcesoBO->wrt();
             
             $this->getAnswer()->setSuccess(true);
             $this->getAnswer()->setMessage('Registrado Correctamente');

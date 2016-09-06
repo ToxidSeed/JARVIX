@@ -1,11 +1,22 @@
 <style>
-.x-grid-row .x-grid-cell-inner {
+.x-grid-row .x-grid-cell-inner {    
     white-space: pre-line;
 }
-.x-grid-row-over .x-grid-cell-inner {
-    font-weight: bold;
+.x-grid-row-over .x-grid-cell-inner {   
+    /*font-weight: bold;*/
     white-space: pre-line;
 }
+
+.custom-grid .x-grid-row .x-grid-cell-inner {
+    /*font-weight: bold;*/
+    white-space: nowrap;
+}
+
+.custom-grid-pre-line .x-grid-row .x-grid-cell-inner {
+    /*font-weight: bold;*/
+    white-space: pre-line;
+}
+
 </style>
 <script type="text/javascript">
       Ext.require('Per.Store');
@@ -13,6 +24,8 @@
       Ext.require('Per.MessageBox');
       Ext.require('Per.DebugHelperWindow');
 //      Ext.require('MyApp.GestionProyectos.HelpAplicaciones');
+      
+      Ext.require('MyApp.GestionProcesos.WinAddComentarios');
       Ext.require('MyApp.GestionProcesos.WinMantGestionProcesos');
       Ext.require('MyApp.GestionProcesos.WinAgregarFlujo');
       Ext.require('MyApp.GestionProcesos.WinGuardarDescripcion');  

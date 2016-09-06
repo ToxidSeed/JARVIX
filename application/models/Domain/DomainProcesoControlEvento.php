@@ -16,7 +16,7 @@ class DomainProcesoControlEvento extends BaseDomain{
     protected $id;
     protected $procesoControl;
     protected $valor;
-    protected $controlEvento;
+    protected $control;
     protected $evento;
     
     function getId() {
@@ -31,8 +31,8 @@ class DomainProcesoControlEvento extends BaseDomain{
         return $this->valor;
     }
 
-    function getControlEvento() {
-        return $this->controlEvento;
+    function getControl() {
+        return $this->control;
     }
 
     function setId($id) {
@@ -47,8 +47,8 @@ class DomainProcesoControlEvento extends BaseDomain{
         $this->valor = $valor;
     }
 
-    function setControlEvento($controlEvento) {
-        $this->controlEvento = $controlEvento;
+    function setControl($control) {
+        $this->control = $control;
     }
     function getEvento() {
          require_once MAPPERPATH.'EventoMapper.php';        

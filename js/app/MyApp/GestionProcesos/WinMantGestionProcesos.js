@@ -17,7 +17,8 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
        var main = this;
        
      main.txtNombre = Ext.create('Ext.form.field.Text',{
-        fieldLabel:'Nombre'
+        fieldLabel:'Nombre',
+        width:350
      });
 //              
       main.txtCodigo = Ext.create('Ext.form.field.Text',{
@@ -48,21 +49,32 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
                   handler:function(){                      
                       main.panelMainData.submit({
                           params:{
+                              ProcesoId:main.txtCodigo.getValue(),
                               nombre: main.txtNombre.getValue(),
                               ProyectoId: main.internal.ProyectoId,
-                              AplicacionId: main.internal.AplicacionId
+                              AplicacionId: main.internal.AplicacionId,
+                              Descripcion: main.Descripcion.getValue()
                           },
                           success:function(form,action){
                               main.internal.id = action.result.extradata.ProcesoId;
                               var msg = new Per.MessageBox();
                               msg.data = action.result;
                               msg.data.type = 'Advertencia';
-                              main.loadGeneralData();
-                              
+                              main.loadGeneralData();                              
                               msg.success();
                           },
-                          failure:function(){
-                              alert('Failure');
+                          failure:function(form,action){                              
+                              var myResponse = Ext.decode(action.response.responseText);
+                              if (myResponse.code === 1){
+                                  /*for(var idx in myResponse.errors){
+                                      console.log(myResponse.errors[idx]);
+                                  }*/
+                                  
+                                  var msg = new Per.MessageBox();
+                                  msg.data = myResponse;
+                                  msg.showWarningValidationMessage();
+                              }
+                              
                           }
                       });
                   }
@@ -71,7 +83,7 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
       });
       
       main.panelMainData = Ext.create('Ext.form.Panel',{
-          url:base_url+'GestionProcesos/GestionProcesosController/add',
+          url:base_url+'GestionProcesos/GestionProcesosController/wrt',
           tbar:main.toolbar,   
           border:false,
           bodyPadding:'10px',
@@ -199,6 +211,7 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
       
       main.gridControles.on({
           'itemdblclick':function(grid,record){
+              console.log('metodo')
               main.open_win_mant_proceso_control(record.get('id'));
           }
       })
@@ -209,8 +222,8 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
                   text:'Agregar',
                   iconCls:'icon-add',
                   handler:function(){             
-
-                      var myWin = new MyApp.GestionProcesos.WinMantProcesosControl();  
+                      main.open_win_mant_proceso_control(0);
+                      /*var myWin = new MyApp.GestionProcesos.WinMantProcesosControl();  
                       
 //                       console.log(main.internal);
                       console.log(myWin.internal);
@@ -218,7 +231,7 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
                       myWin.internal.proceso_id = main.internal.id;  
                       myWin.internal.proceso_control_id = null
 
-                      myWin.show();
+                      myWin.show();*/
                   }
               },{
                   text:'Quitar',
@@ -471,13 +484,24 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
       });
       
       main.panelPrototype = Ext.create('Ext.panel.Panel',{          
-          title:'Prototipo',
+          //title:'Prototipo',
           region:'center',
           width:200,
           items:[
               main.protoImage
-          ]
-          
+          ],          
+          header:{
+              //titlePosition: 0,
+              items:[
+                  {
+                      xtype:'textfield',           
+                      id:'IdTitlePrototipo',                      
+                      width:'100%',
+                      readOnly:true,
+                      fieldLabel:'<b>Prototipo Actual</b>',                          
+                  }
+              ]
+          }
       });
           
 //      console.log(main.internal)  
@@ -525,8 +549,12 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
           },
           success:function(response){
               var data = Ext.decode(response.responseText);
+              console.log(data);
               main.protoImage.setSrc(data.data.rutaPrototipo);
+              Ext.getCmp('IdTitlePrototipo').setValue(data.data.rutaPrototipo);
               main.txtCodigo.setValue(data.data.id);
+              main.txtNombre.setValue(data.data.nombre);
+              main.Descripcion.setValue(data.data.descripcion);
 //              main.uploadImage.setValue('data.data.rutaPrototipo');
               
           }
@@ -642,14 +670,25 @@ Ext.define('MyApp.GestionProcesos.WinMantGestionProcesos',{
    },
    open_win_mant_proceso_control:function(par_proceso_control_id){
        var main = this;
-       
+       //console.log('xx');
         var myWin = new MyApp.GestionProcesos.WinMantProcesosControl({
             internal:{
-                id: par_proceso_control_id,
+                id:par_proceso_control_id,
+                proceso_control_id: par_proceso_control_id,
                 proceso_id: main.internal.id
             }
         });  
-        
+        //Ext.util.Observable.capture(myWin, function(){console.log(arguments)});
+        myWin.on({
+            'close':function(){
+                console.log('close');
+                main.refreshControls();
+            },
+            'save':function(){
+                console.log('save');
+                main.refreshControls();
+            }
+        });
         myWin.show();
    }
 });

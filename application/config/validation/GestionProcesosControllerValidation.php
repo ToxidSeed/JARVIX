@@ -11,6 +11,13 @@ $config['Validation'] = array(
                         'label' => 'Nombre',
                         'rules' => 'required'
                     )
+    ),
+    'wrt' =>array(
+                    array(
+                        'field' => 'nombre',
+                        'label' => 'Nombre',
+                        'rules' => 'required'
+                    )
     )
 );
 ?>

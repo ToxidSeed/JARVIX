@@ -17,11 +17,7 @@ Ext.define('MyApp.GestionProcesos.WinGestionProcesos',{
             fieldLabel:'Proyecto',
             width:350
          });
-         
-         
-         
-         
-         
+
          main.btnSetProject = {                              
                                 iconCls:'icon-arrow_refresh',
                                 handler:function(){

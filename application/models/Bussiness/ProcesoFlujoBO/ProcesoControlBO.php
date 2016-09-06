@@ -21,6 +21,14 @@ class ProcesoControlBO extends BaseBO{
 //    private $dmnProcesoControl;
     public $propiedades = array();
     public $propiedades_borrar = array();
+    
+    //eventos
+    private $eventos = array();
+    public function set_eventos($eventos){
+        $this->eventos = $eventos;
+    }
+    
+    
 //    private $events = array();
     private $ProcesoControlMapper;
     private $ProcesoControlPropiedadMapper;
@@ -109,6 +117,35 @@ class ProcesoControlBO extends BaseBO{
         }
     }
     
+    public function add_eventos(){
+        try{
+            $this->load->database();            
+            $this->db->trans_start();
+
+            foreach($this->eventos as $dmnProcesoControlEvento){            
+                $this->addEvent($dmnProcesoControlEvento);
+            }
+
+            $this->db->trans_commit(); 
+        } catch (Exception $ex) {
+            $this->db->trans_rollback();
+            throw new Exception($ex->getMessage(),$ex->getCode());
+        }
+    }
+    //
+    public function del_eventos(){
+        try{
+            $this->load->database();
+            $this->db->trans_start();
+            foreach($this->eventos as $dmnProcesoControlEvento){
+                $this->delEvent($dmnProcesoControlEvento);
+            }
+            $this->db->trans_commit();
+        } catch (Exception $ex) {
+            $this->db->trans_rollback();
+            throw new Exception($ex->getMessage(),$ex->getCode());
+        }
+    }
     
     //Realiza el borrado de las propiedades
     //consideraciones
@@ -129,16 +166,7 @@ class ProcesoControlBO extends BaseBO{
     }
     
     //
-    public function saveEvents(){
-        foreach($this->events as $dmnProcesoControlEvento){
-            $dmnProcesoControlEvento->setProcesoControl($this->domain);
-            if($dmnProcesoControlEvento->getId() == null){
-                $this->addEvent($dmnProcesoControlEvento);
-            }else{
-                $this->updEvent($dmnProcesoControlEvento);
-            }
-        }
-    }
+   
     
     public function addSingleProperty(DomainProcesoControlPropiedad $dmnProcesoControlPropiedad){
         $this->addProperty($dmnProcesoControlPropiedad);
@@ -176,15 +204,23 @@ class ProcesoControlBO extends BaseBO{
     protected function updEvent(DomainProcesoControlEvento $dmnProcesoControlEvento){
         $curDmnProcesoControlEvento = $this->ProcesoControlEventoMapper->find($dmnProcesoControlEvento->getId());
         $curDmnProcesoControlEvento->setValor($dmnProcesoControlEvento->getValor());
-        $this->ProcesoControlEventoMapper->update($dmnProcesoControlEvento);
-        
+        $this->ProcesoControlEventoMapper->update($dmnProcesoControlEvento);        
     }
+    
+    protected function delEvent(DomainProcesoControlEvento $dmnProcesoControlEvento){
+        $this->ProcesoControlEventoMapper->delete($dmnProcesoControlEvento);
+    }
+    
     protected function hasObject() {
         if($this->domain == null){
             $this->errors->add(new ErrorObject('El Objeto no ha sido enviado',-1));
             return false;
         }
         return true;
+    }
+    
+    public function updValorPropiedad(){
+        
     }
     
 }

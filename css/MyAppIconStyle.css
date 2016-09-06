@@ -49,3 +49,9 @@
 .icon-arrow_refresh{
     background-image: url(../images/icon/arrow_refresh.png) !important;
 }
+.icon-comments{
+    background-image: url(../images/icon/book_open.png) !important;
+}
+.icon-new{
+    background-image: url(../images/icon/page_white_add.png) !important;
+}

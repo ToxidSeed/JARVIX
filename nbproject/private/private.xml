@@ -1,16 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="7">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="15">
         <file>
             <url>js/app/MyApp/GestionProcesos/WinMantProcesosControl.js</url>
             <bookmark id="6">
                 <name/>
-                <line>491</line>
+                <line>522</line>
                 <key/>
             </bookmark>
             <bookmark id="7">
                 <name/>
-                <line>843</line>
+                <line>891</line>
+                <key/>
+            </bookmark>
+        </file>
+        <file>
+            <url>js/app/MyApp/GestionProcesos/WinMantGestionProcesos.js</url>
+            <bookmark id="15">
+                <name/>
+                <line>223</line>
+                <key/>
+            </bookmark>
+            <bookmark id="9">
+                <name/>
+                <line>600</line>
+                <key/>
+            </bookmark>
+            <bookmark id="10">
+                <name/>
+                <line>613</line>
+                <key/>
+            </bookmark>
+            <bookmark id="11">
+                <name/>
+                <line>629</line>
+                <key/>
+            </bookmark>
+            <bookmark id="12">
+                <name/>
+                <line>644</line>
+                <key/>
+            </bookmark>
+            <bookmark id="13">
+                <name/>
+                <line>668</line>
                 <key/>
             </bookmark>
         </file>
@@ -23,33 +56,31 @@
             </bookmark>
             <bookmark id="4">
                 <name/>
-                <line>47</line>
+                <line>50</line>
                 <key/>
             </bookmark>
             <bookmark id="2">
                 <name/>
-                <line>97</line>
+                <line>76</line>
                 <key/>
             </bookmark>
             <bookmark id="3">
                 <name/>
-                <line>121</line>
+                <line>100</line>
                 <key/>
             </bookmark>
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/models/Mapper/ProcesoControlPropiedadMapper.php</file>
-            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/js/app/MyApp/GestionControles/WinMantPropiedades.js</file>
-            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/models/Domain/DomainPropiedad.php</file>
-            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/js/app/MyApp/GestionProcesos/WinMantProcesosControl.js</file>
-            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/controllers/GestionProcesos/ProcesoControl.php</file>
-            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/models/Mapper/PropiedadMapper.php</file>
-            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/models/Bussiness/PropiedadBO.php</file>
-            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/models/Mapper/ValorPropiedadMapper.php</file>
-            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/models/Bussiness/ProcesoFlujoBO/ProcesoControlBO.php</file>
-            <file>file:/C:/xampp/htdocs/RequerimentsManagerSrc/application/controllers/GestionPropiedades/GestionPropiedadesController.php</file>
+            <file>file:/D:/xampp/htdocs/RequerimentsManagerSrc/application/views/GestionControles.php</file>
+            <file>file:/D:/xampp/htdocs/RequerimentsManagerSrc/application/controllers/GestionControles/GestionControlesController.php</file>
+            <file>file:/D:/xampp/htdocs/RequerimentsManagerSrc/application/controllers/GestionEntregas/Entrega.php</file>
+            <file>file:/D:/xampp/htdocs/RequerimentsManagerSrc/js/app/MyApp/GestionControles/WinGestionControles.js</file>
+            <file>file:/D:/xampp/htdocs/RequerimentsManagerSrc/application/views/EntregaView.php</file>
+            <file>file:/D:/xampp/htdocs/RequerimentsManagerSrc/application/models/Mapper/Finders/Alcance/AlcanceFRM1.php</file>
+            <file>file:/D:/xampp/htdocs/RequerimentsManagerSrc/application/controllers/GestionProcesos/AddPasoFlujo.php</file>
+            <file>file:/D:/xampp/htdocs/RequerimentsManagerSrc/js/app/MyApp/GestionEntrega/WinEntrega.js</file>
         </group>
     </open-files>
 </project-private>

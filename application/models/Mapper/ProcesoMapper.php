@@ -74,15 +74,18 @@ class ProcesoMapper extends BaseMapper{
         $fields['fechaultact'] = $dmnProceso->getFechaUltAct();
         $fields['aplicacionid'] = $dmnProceso->getAplicacion()->getId();
         $fields['descripcion'] = $dmnProceso->getDescripcion();
-        $fields['estado'] = $dmnProceso->getEstado()->getId();
-        $fields['rutaprototipo'] = $dmnProceso->getRutaPrototipo();
+        //$fields['estado'] = $dmnProceso->getEstado()->getId();
+        if($dmnProceso->getRutaPrototipo() != ''){
+            $fields['rutaprototipo'] = $dmnProceso->getRutaPrototipo();
+        }        
         $this->db->set($fields);
+        $this->db->where('id',$dmnProceso->getId());
         $res = $this->db->update($this->tableName);
+        
         if(!$res){
             $this->db->trans_rollback();
             throw new Exception('Error al Actualizar el proceso',-1);
         }
     }
 }
-
 ?>

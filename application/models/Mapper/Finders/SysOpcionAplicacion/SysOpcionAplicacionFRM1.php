@@ -26,6 +26,7 @@ class SysOpcionAplicacionFRM1 extends SysOpcionAplicacionMapper {
         $this->db->join('sysperfil','sysperfilopcionapp.sysperfilid = sysperfil.id');
         $this->db->join('sysusuarioperfil','sysperfil.id = sysusuarioperfil.sysperfilid');
         $this->db->where('sysusuarioperfil.sysusuarioid',$params['UsuarioId']);
+        $this->db->where('sysopcionaplicacion.flghabilitado',1);
         $this->db->group_by($this->fields);
         $response = $this->db->get();        
         $arrResponse = $this->getMultiResponse($response);              

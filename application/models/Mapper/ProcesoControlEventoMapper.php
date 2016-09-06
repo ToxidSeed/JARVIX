@@ -21,7 +21,7 @@ class ProcesoControlEventoMapper extends BaseMapper{
         'procesocontrolevento.id',
         'procesocontrolevento.procesocontrolid',
         'procesocontrolevento.valor',
-        'procesocontrolevento.controleventoid',
+        'procesocontrolevento.controlid',
         'procesocontrolevento.eventoid'
     );
     
@@ -38,7 +38,7 @@ class ProcesoControlEventoMapper extends BaseMapper{
     protected function doCreateObject(array $record = null){        
         $dmnProcesoControlEvento = new DomainProcesoControlEvento($record['ID']);
         $dmnProcesoControlEvento->setProcesoControl(new DomainProcesoControl($record['PROCESOCONTROLID']));
-        $dmnProcesoControlEvento->setControlEvento(new DomainControlEvento($record['CONTROLEVENTOID']));
+        $dmnProcesoControlEvento->setControl(new DomainTipoControl($record['CONTROLID']));
         $dmnProcesoControlEvento->setEvento( new DomainEvento($record['EVENTOID']));
         $dmnProcesoControlEvento->setValor($record['VALOR']);                
         return $dmnProcesoControlEvento;
@@ -50,9 +50,9 @@ class ProcesoControlEventoMapper extends BaseMapper{
    protected function doInsert(DomainProcesoControlEvento $dmnProcesoControlEvento){
        $this->load->database();
        $fields['procesocontrolid'] = $dmnProcesoControlEvento->getProcesoControl()->getId();
-       $fields['valor'] = $dmnProcesoControlEvento->getValor();
+       //$fields['valor'] = $dmnProcesoControlEvento->getValor();
        $fields['eventoid'] = $dmnProcesoControlEvento->getEvento()->getId();
-       $fields['controleventoid'] = $dmnProcesoControlEvento->getControlEvento()->getId();
+       $fields['controlid'] = $dmnProcesoControlEvento->getControl()->getId();
        $this->db->set($fields);
        $res = $this->db->insert($this->tableName);
     //   echo $this->db->last_query();
@@ -78,5 +78,13 @@ class ProcesoControlEventoMapper extends BaseMapper{
             $this->db->trans_rollback();
             throw new Exception('Error al Actualizar la tabla '.$this->tableName,-1);
         }
+   }
+   public function delete(DomainProcesoControlEvento $dmnProcesoControlEvento){
+       $this->doDelete($dmnProcesoControlEvento);
+   }
+   protected function doDelete(DomainProcesoControlEvento $dmnProcesoControlEvento){
+       $this->load->database();
+       $this->db->where('id',$dmnProcesoControlEvento->getId());
+       $this->db->delete('procesocontrolevento');
    }
 }

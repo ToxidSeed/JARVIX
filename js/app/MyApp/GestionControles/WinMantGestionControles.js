@@ -13,10 +13,7 @@ Ext.define('MyApp.GestionControles.WinMantGestionControles',{
     modal:true,
     frame:false,
     pendingAddEvent:false,
-    showSavingEvent:null,
-    internal:{
-       id:null  
-    },
+    showSavingEvent:null,    
     initComponent:function(){
         var main = this;       
         

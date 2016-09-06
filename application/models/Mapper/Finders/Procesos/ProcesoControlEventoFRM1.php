@@ -21,15 +21,17 @@ class ProcesoControlEventoFRM1 extends EventoMapper{
         $this->load->database();
         $this->db->select($this->fields);
         $this->db->from($this->tableName);
-        $this->db->join('procesocontrolpropiedad',
-                'evento.controlid = procesocontrolpropiedad.controlid '
-                . 'and evento.id = procesocontrolpropiedad.eventoid','left');        
+        $this->db->join('procesocontrolevento',
+                'evento.controlid = procesocontrolevento.controlid '
+                . 'and evento.id = procesocontrolevento.eventoid '
+                . 'and procesocontrolevento.procesocontrolid = '.$filters['ProcesoControlId'],'left');        
         $this->db->where('evento.controlid',$filters['ControlId']);
         $this->db->where('procesocontrolevento.id is null');
-        if(isset($filters['NombreEvento']) || Trim($filters['NombreEvento']) <> '' ){
+        if(isset($filters['NombreEvento']) && Trim($filters['NombreEvento']) != '' ){
             $this->db->where('evento.nombre',$filters['NombreEvento']);
         }
         $response = $this->db->get();
+        //echo $this->db->last_query();
         $arrResponse = $this->getMultiResponse($response);
         return new ResponseModel($arrResponse,count($arrResponse));
     }

@@ -11,6 +11,7 @@ require_once DOMAINPATH.'DomainProcesoControlPropiedad.php';
 require_once DOMAINPATH.'DomainControlPropiedad.php';
 require_once DOMAINPATH.'DomainProcesoControl.php';
 require_once DOMAINPATH.'DomainPropiedad.php';
+require_once DOMAINPATH.'DomainTipoControl.php';
 
 
 class ProcesoControlPropiedadMapper extends BaseMapper{
@@ -22,7 +23,7 @@ class ProcesoControlPropiedadMapper extends BaseMapper{
         'procesocontrolpropiedad.procesocontrolid',
         'procesocontrolpropiedad.valor',
         'procesocontrolpropiedad.propiedadid',
-//        'procesocontrolpropiedad.controlpropiedadid'
+        'procesocontrolpropiedad.controlid'
     );
     
     protected $uniqueValues = array(

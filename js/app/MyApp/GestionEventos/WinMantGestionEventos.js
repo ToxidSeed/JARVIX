@@ -5,7 +5,7 @@
 Ext.define('MyApp.GestionEventos.WinMantGestionEventos',{
     extend:'Ext.window.Window',    
     create:true, //parametro que utilizamos para determinar si es un nuevo registro un la edicion de uno ya existente
-    id:null,
+    Id:null,
     width:500,
     height:150,
     modal:true,
@@ -49,8 +49,16 @@ Ext.define('MyApp.GestionEventos.WinMantGestionEventos',{
     initComponent:function(){
         var main = this;
         
+        console.log(main.id);
+        if(main.Id == 0){
+            main.title = 'Nuevo Evento';
+        }else{
+            main.title = 'Modificar Evento';
+        }
+        
         main.txtNombre = Ext.create('Ext.form.field.Text',{
-           fieldLabel:'Nombre' 
+           fieldLabel:'Nombre',
+           width:350
         });
         
         main.dtFechaRegistro = Ext.create('Ext.form.field.Date',{
@@ -69,7 +77,9 @@ Ext.define('MyApp.GestionEventos.WinMantGestionEventos',{
         });
         
         main.tbar = Ext.create('Ext.toolbar.Toolbar');
-        main.btnGuardar = {text:'Guardar',
+        main.btnGuardar = {
+                            text:'Guardar',
+                            iconCls:'icon-disk',
                             handler:function(){
                             if(main.create == true){
                                 main.saveNewEvento();
@@ -91,6 +101,7 @@ Ext.define('MyApp.GestionEventos.WinMantGestionEventos',{
         
         main.btnCancelar = {
             text:'Cancelar',
+            iconCls:'icon-door-out',
             handler:function(){
                 main.close();
             }
@@ -106,6 +117,7 @@ Ext.define('MyApp.GestionEventos.WinMantGestionEventos',{
         Ext.apply(this,{
             width:400,
             height:250,
+            bodyPadding:'10px',
            items:[
                main.txtNombre,
                main.dtFechaRegistro,
