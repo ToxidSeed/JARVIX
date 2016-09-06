@@ -1,4 +1,4 @@
-/* 
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -12,15 +12,16 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega',{
    width:500,
    height:150,
    modal:true,
+   maximized:true,
    initComponent:function(){
        var main = this;
-       
+
        if (main.create === true){
            main.title = 'Nuevo';
        }else{
            main.title = 'Modificar';
        }
-   
+
        main.tbar = Ext.create('Ext.toolbar.Toolbar',{
           items:[
               {
@@ -33,11 +34,11 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega',{
                       main.close();
                   }
               }
-          ] 
-       });       
-       
+          ]
+       });
+
        main.storePicker = new Ext.create('Ext.data.Store',{
-            remoteFilter:true,  
+            remoteFilter:true,
             fields:[
                 'id',
                 'nombre'
@@ -52,7 +53,7 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega',{
                }
            }
        });
-       
+
         main.txtProyecto = Ext.create('Ext.form.ComboBox',{
             fieldLabel: 'Proyecto',
             store: main.storePicker,
@@ -66,15 +67,15 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega',{
             valueField: 'id',
             width:350
         });
-       
+
        main.txtNombre = Ext.create('Ext.form.field.Text',{
-           fieldLabel:'Nombre'           
-       });            
-       
+           fieldLabel:'Nombre'
+       });
+
        main.dateFecha = Ext.create('Ext.form.field.Date',{
            fieldLabel:'Fecha'
        });
-       
+
        main.panelGeneral = Ext.create('Ext.panel.Panel',{
           region:'west',
           bodyPadding:'10px',
@@ -82,9 +83,9 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega',{
               main.txtProyecto,
               main.txtNombre,
               main.dateFecha
-          ] 
-       });   
-       
+          ]
+       });
+
        main.tbarListAlcance = Ext.create('Ext.toolbar.Toolbar',{
           items:[
               {
@@ -94,11 +95,11 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega',{
                   text:'Quitar',
                   iconCls:'icon-delete'
               }
-          ] 
+          ]
        });
-       
-       
-       
+
+
+
        /*main.listAlcance = Ext.create('Per.GridPanel',{
            tbar:main.tbarListAlcance,
            title:'Procesos',
@@ -122,27 +123,27 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega',{
             ],
             pagingBar:true
        });*/
-       
+
        /*main.listDetAlcance = Ext.create('Per.GridPanel',{
            title:'Detalle',
-           loadOnCreate:false,           
+           loadOnCreate:false,
        });*/
-       
-       
-       
+
+
+
        /*main.panelAlcance = Ext.create('Ext.panel.Panel',{
            width:200,
            height:300,
            region:'center',
            items:[
-               main.listAlcance               
+               main.listAlcance
            ]
        });*/
-       
-       main.TreeGridAlcance = new   MyApp.GestionEntrega.WinEditEntrega_TreeGridAlcance()
-       
+
+       main.TreeGridAlcance = Ext.create('MyApp.GestionEntrega.WinEditEntrega_TreeGridAlcance');
+
        Ext.apply(this,{
-            width: 900, 
+            width: 900,
             height: 450,
             layout:'border',
             defaultFocus:main.txtTecnologia,
@@ -153,7 +154,7 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega',{
                 //main.panelAlcance
             ]
         });
-        
+
         this.callParent(arguments);
    }
 });
