@@ -86,61 +86,20 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega',{
           ]
        });
 
-       main.tbarListAlcance = Ext.create('Ext.toolbar.Toolbar',{
-          items:[
-              {
-                  text:'Agregar',
-                  iconCls:'icon-add'
-              },{
-                  text:'Quitar',
-                  iconCls:'icon-delete'
-              }
-          ]
-       });
-
-
-
-       /*main.listAlcance = Ext.create('Per.GridPanel',{
-           tbar:main.tbarListAlcance,
-           title:'Procesos',
-           loadOnCreate:false,
-           region:'center',
-            width:200,
-            //height:100,
-            pageSize:20,
-            src:'',
-            columns:[
-              {
-                  xtype:'rownumberer'
-                },{
-                    header:'id',
-                    dataIndex:'id'
-                },{
-                    header:'Nombre',
-                    dataIndex:'nombre',
-                    flex:1
-                }
-            ],
-            pagingBar:true
-       });*/
-
-       /*main.listDetAlcance = Ext.create('Per.GridPanel',{
-           title:'Detalle',
-           loadOnCreate:false,
-       });*/
-
-
-
-       /*main.panelAlcance = Ext.create('Ext.panel.Panel',{
-           width:200,
-           height:300,
-           region:'center',
-           items:[
-               main.listAlcance
-           ]
-       });*/
 
        main.TreeGridAlcance = Ext.create('MyApp.GestionEntrega.WinEditEntrega_TreeGridAlcance');
+       main.TreeGridProcesosDisp = Ext.create('MyApp.GestionEntrega.WinEditEntrega_TreeGridProcesosDisp');
+
+       main.TreeGridAlcance.on({
+         'btnAgregar_Click':function(args){
+             //Show and hide panels
+             main.MostrarProcesos();
+
+             //Load stores
+             //main.TreeGridDefAlcance.store.load();
+         }
+       })
+
 
        Ext.apply(this,{
             width: 900,
@@ -149,12 +108,17 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega',{
             defaultFocus:main.txtTecnologia,
             items:[
                 main.panelGeneral,
-                main.TreeGridAlcance
-                //main.listAlcance
-                //main.panelAlcance
+                main.TreeGridAlcance,
+                main.TreeGridProcesosDisp
             ]
         });
 
         this.callParent(arguments);
+   },
+   MostrarProcesos:function(){
+        var main = this;
+        console.log('ssss');
+        main.panelGeneral.hide();
+        main.TreeGridProcesosDisp.show();
    }
 });

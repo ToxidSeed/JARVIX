@@ -1,18 +1,20 @@
 Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridAlcance', {
     extend: 'Ext.tree.Panel',
-    requires: [
+  /*requires: [
         'Ext.data.*',
         'Ext.grid.*',
         'Ext.tree.*',
         'Ext.ux.CheckColumn'
         //'KitchenSink.model.tree.Task'
-    ],
+    ],*/
     xtype: 'tree-grid',
-    title: 'Procesos',
+    title: 'Alcance',
+    region:'center',
     height: 300,
     useArrows: true,
-    rootVisible: false,
+    draggable:true,
     resizable:true,
+    rootVisible: false,
     //multiSelect: true,
     //singleExpand: true,
     /*setRootNode: function() {
@@ -22,12 +24,16 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridAlcance', {
     },*/
     initComponent: function() {
         this.width = 500;
+        var main = this;
 
         var myToolGrid = Ext.create('Ext.toolbar.Toolbar',{
            items:[
                {
                    text:'Agregar',
-                   iconCls:'icon-add'
+                   iconCls:'icon-add',
+                   handler:function(){
+                     main.fireEvent('btnAgregar_Click');
+                   }
                },{
                    text:'Quitar',
                    iconCls:'icon-delete'
@@ -44,17 +50,23 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridAlcance', {
             fields: [{
                 name: 'nombre',
                 type: 'string'
+            },{
+                name:'user',
+                type:'string'
             }]
         });
 
         var store = new Ext.data.TreeStore({
             model: WinEditEntregaModel,
+            autoLoad:false,
             proxy: {
                 type: 'ajax',
                 //url: 'http://localhost/jarvix/resources/data/tree/treegrid.json'
                 url:base_url+'GestionEntregas/Alcance/search'
-            }           
+            }
         });
+
+
 
         Ext.apply(this, {
             tbar:myToolGrid,
@@ -66,7 +78,20 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridAlcance', {
                 flex: 1,
                 //sortable: true,
                 dataIndex: 'nombre'
-            }]
+            },{
+              text: 'Assigned To',
+               //flex: 1,
+               dataIndex: 'user',
+               sortable: true
+            }],
+            viewConfig:{
+                plugins:{
+                  ptype:'treeviewdragdrop',
+                  ddGroup:'AlcanceDragDrop',
+                  ptype: 'gridviewdragdrop',
+                  //enableDrop: false
+                }
+            }
         });
         this.callParent();
     }

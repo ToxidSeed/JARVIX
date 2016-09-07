@@ -37,13 +37,17 @@ class Alcance extends BaseController{
           $JSONTreeData['children'][] = array(
             "id" =>  $row['id'],
             "nombre" => $row['nombre'],
+            "iconCls" => "icon-list_packages",
+            "expanded" => "true",
             "children" => array(
                   array(
                     "nombre" => "Flujos",
+                    "iconCls" => "icon-proceso_flujo",
                     "children" => $this->makeNodeFlujos($row["Flujos"])
                   ),
                   array(
                     "nombre" => "Controles",
+                    "iconCls" => "icon-proceso_control",
                     "children" => $this->makeNodeControles($row["Controles"])
                   )
             )

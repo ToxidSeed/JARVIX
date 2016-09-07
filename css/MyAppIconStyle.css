@@ -55,3 +55,12 @@
 .icon-new{
     background-image: url(../images/icon/page_white_add.png) !important;
 }
+.icon-list_packages{
+  background-image: url(../images/icon/list_packages.gif) !important;
+}
+.icon-proceso_flujo{
+  background-image: url(../images/icon/proceso_flujo.png) !important;
+}
+.icon-proceso_control{
+  background-image: url(../images/icon/proceso_control.png) !important;
+}
