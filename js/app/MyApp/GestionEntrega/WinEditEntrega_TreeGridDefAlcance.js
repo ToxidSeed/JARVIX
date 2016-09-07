@@ -1,28 +1,19 @@
-Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridAlcance', {
-    extend: 'Ext.tree.Panel',
-    requires: [
-        'Ext.data.*',
-        'Ext.grid.*',
-        'Ext.tree.*',
-        'Ext.ux.CheckColumn'
-        //'KitchenSink.model.tree.Task'
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridDefAlcance', {
+    extend:'Ext.tree.Panel',
+    requires:[
+        
     ],
-    xtype: 'tree-grid',
-    title: 'Procesos',
-    height: 300,
-    useArrows: true,
-    rootVisible: false,
-    resizable:true,
-    //multiSelect: true,
-    //singleExpand: true,
-    /*setRootNode: function() {
-        if (this.getStore().autoLoad) {
-            this.callParent(arguments);
-        }
-    },*/
-    initComponent: function() {
-        this.width = 500;
-
+    xtype:'tree-grid',
+    title:'Procesos',
+    height:300,
+    initComponent:function(){
+        this.width = 300;
+        
         var myToolGrid = Ext.create('Ext.toolbar.Toolbar',{
            items:[
                {
@@ -32,13 +23,13 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridAlcance', {
                    text:'Quitar',
                    iconCls:'icon-delete'
                }
-           ]
+           ] 
         });
-
-        var mySelModel = new Ext.selection.CheckboxModel({
+        
+         var mySelModel = new Ext.selection.CheckboxModel({
             mode:'MULTI'
         });
-
+        
         Ext.define('WinEditEntregaModel', {
             extend: 'Ext.data.TreeModel',
             fields: [{
@@ -46,7 +37,7 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridAlcance', {
                 type: 'string'
             }]
         });
-
+        
         var store = new Ext.data.TreeStore({
             model: WinEditEntregaModel,
             proxy: {
@@ -55,7 +46,7 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridAlcance', {
                 url:base_url+'GestionEntregas/Alcance/search'
             }           
         });
-
+        
         Ext.apply(this, {
             tbar:myToolGrid,
             store: store,
@@ -71,3 +62,4 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridAlcance', {
         this.callParent();
     }
 });
+
