@@ -1,9 +1,21 @@
 <?php
 
-/* 
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
+ * Caso 1: Si el proceso No tiene Flujos ni controles pendientes de mostrar:
+     - Nada relacionado al proceso ni el proceso en si.
+ * Caso 2: Si el proceso No tiene Flujos y si tiene Controles pendientes debe mostrar:
+     - Proceso
+     -  Controles
+   Caso 3: Si el proceso tiene Flujos y no controles pendientes debe mostrar:
+     - Proceso
+     -  Flujos
+   Caso 4: Si el proceso tiene flujos y controles pendientes debe mostrar:
+     - Proceso
+     -  Flujos
+     -  Controles  
  */
 require_once BASEMODELPATH.'BaseMapper.php';
 
@@ -15,29 +27,32 @@ class AlcanceFRM2 extends BaseMapper{
         'proceso.id',
         'proceso.nombre'
     );
-    
+
     private $Procesos = array();
     private $ProcesoFlujos = array();
     private $ProcesoControl = array();
-    
+
     function search($filters){
-        $this->load->database();
-        $this->db->select($this->fields);
-        $this->db->from('proceso');
-        $res = $this->db->get();
-        
-        $this->Procesos = $res->result_array();
-        
-        //getting flujos
-        $this->getFlujos($filters['ProyectoId']);
-        //Getting Controles
-        $this->getControles($filters['ProyectoId']);
-        //Build dependency
-        $this->armarDependencia();
-        //devolver resultados
-        return $this->Procesos;                
+         $this->load->database();
+
+         
+
+        // $this->db->select($this->fields);
+        // $this->db->from('proceso');
+        // $res = $this->db->get();
+
+        // $this->Procesos = $res->result_array();
+
+        // //getting flujos
+        // $this->getFlujos($filters['ProyectoId']);
+        // //Getting Controles
+        // $this->getControles($filters['ProyectoId']);
+        // //Build dependency
+        // $this->armarDependencia();
+        // //devolver resultados
+        // return $this->Procesos;
     }
-    
+
     private function  getFlujos($ProyectoId){
         $fields = array(
             'proceso.id as proceso_id',
@@ -45,7 +60,7 @@ class AlcanceFRM2 extends BaseMapper{
             'procesoflujo.id as procesoflujo_id',
             'procesoflujo.nombre as procesoflujo_nombre'
         );
-        
+
         $this->db->select($fields);
         $this->db->from('proceso');
         $this->db->join('procesoflujo','proceso.id = procesoflujo.procesoid');
@@ -53,7 +68,7 @@ class AlcanceFRM2 extends BaseMapper{
         $res = $this->db->get();
         $this->ProcesoFlujos = $res->result_array();
     }
-    
+
     private function getControles($ProyectoId){
         $fields = array(
             'proceso.id as proceso_id',
@@ -61,7 +76,7 @@ class AlcanceFRM2 extends BaseMapper{
             'procesocontrol.id as procesocontrol_id',
             'procesocontrol.nombre as procesocontrol_nombre'
         );
-        
+
         $this->db->select($fields);
         $this->db->from('proceso');
         $this->db->join('procesocontrol','proceso.id = procesocontrol.id');
@@ -69,7 +84,7 @@ class AlcanceFRM2 extends BaseMapper{
         $res = $this->db->get();
         $this->ProcesoControl = $res->result_array();
     }
-    
+
     private function armarDependencia(){
         //print_r($this->Proceso);
        foreach($this->Procesos as $key => $row){
@@ -100,5 +115,4 @@ class AlcanceFRM2 extends BaseMapper{
 
         return $controles;
     }
-    
 }
