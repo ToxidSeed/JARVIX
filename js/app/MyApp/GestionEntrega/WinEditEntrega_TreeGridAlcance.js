@@ -7,14 +7,16 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridAlcance', {
         'Ext.ux.CheckColumn'
         //'KitchenSink.model.tree.Task'
     ],*/
-    xtype: 'tree-grid',
+   xtype: 'tree-grid',
     title: 'Alcance',
     region:'center',
-    height: 300,
+    height: 150,
+    //border:true,    
     useArrows: true,
-    draggable:true,
-    resizable:true,
+    //draggable:true,
+    //resizable:true,
     rootVisible: false,
+    //allowContainerDrops:true,
     //multiSelect: true,
     //singleExpand: true,
     /*setRootNode: function() {
@@ -56,7 +58,7 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridAlcance', {
             }]
         });
 
-        var store = new Ext.data.TreeStore({
+        main.store = new Ext.data.TreeStore({
             model: WinEditEntregaModel,
             autoLoad:false,
             proxy: {
@@ -70,7 +72,7 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridAlcance', {
 
         Ext.apply(this, {
             tbar:myToolGrid,
-            store: store,
+            store: main.store,
             selModel:mySelModel,
             columns: [{
                 xtype: 'treecolumn', //this is so we know which column will show the tree
@@ -78,21 +80,37 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridAlcance', {
                 flex: 1,
                 //sortable: true,
                 dataIndex: 'nombre'
-            },{
+            }/*,{
               text: 'Assigned To',
                //flex: 1,
                dataIndex: 'user',
                sortable: true
-            }],
+            }*/],
             viewConfig:{
                 plugins:{
-                  ptype:'treeviewdragdrop',
-                  ddGroup:'AlcanceDragDrop',
-                  ptype: 'gridviewdragdrop',
-                  //enableDrop: false
+                //ptype:'gridviewdragdrop',                
+                 ptype:'treeviewdragdrop',
+                  ddGroup:'group'
+                  //allowContainerDrops: true
+                },
+                listeners:{
+                    'beforedrop':function(){
+                        console.log('here');
+                    }
                 }
-            }
+            },
+            listeners:{
+                'beforeitemappend':function(node,childnode){
+                    console.log(node);
+                    console.log(childnode);
+                }
+            },
+            bbar:[
+                { xtype: 'button', text: 'Button 1' }
+              ]
         });
-        this.callParent();
+        
+        
+        this.callParent();        
     }
 });

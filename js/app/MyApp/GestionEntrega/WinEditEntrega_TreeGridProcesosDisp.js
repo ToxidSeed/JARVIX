@@ -5,14 +5,26 @@
  */
 Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridProcesosDisp', {
     extend:'Ext.tree.Panel',
+    requires: [
+        'Ext.data.*',
+        'Ext.grid.*',
+        'Ext.tree.*',
+        'Ext.ux.CheckColumn'
+        //'KitchenSink.model.tree.Task'
+    ],
     region:'west',
     hidden:true,
     xtype:'tree-grid',
     title:'Procesos',
-    height:300,
+    height:150,    
     width:300,
+    border:true,
+    bodyBorder:true,
+    
     rootVisible: false,
     useArrows: true,
+   // singleExpand: true,
+    draggable:true,
     initComponent:function(){
         this.width = 300;
         var main = this;
@@ -66,19 +78,25 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridProcesosDisp', {
                 xtype: 'treecolumn', //this is so we know which column will show the tree
                 text: 'Proceso',
                 flex: 1,
+//                draggable:true,
                 //sortable: true,
                 dataIndex: 'nombre'
             }],
             viewConfig:{
               //draggable:true,
+              //ddGroup:'group',
               plugins:{
-                //ptype:'gridviewdragdrop',
+              //ptype:'gridviewdragdrop',                
                 ptype:'treeviewdragdrop',
-                ddGroup:'AlcanceDragDrop'
-                //enableDrop: false
+                ddGroup:'group'
               }
-            }
+            },
+            bbar:[
+                { xtype: 'button', text: 'Button 1' }
+              ]
         });
+        
+        
         this.callParent();
     }
 });
