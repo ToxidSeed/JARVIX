@@ -18,7 +18,8 @@ class AddProcesoFlujo extends BaseController{
         parent::__construct();
     }
     
-    const STATUS_REGISTRADO = 0;
+    const STATUS_PROCESO_FLUJO_REGISTRADO = 0;
+    const STATUS_ALCANCE_COMPLETADO = 0;
     
     public function Add(){
         try{
@@ -27,7 +28,8 @@ class AddProcesoFlujo extends BaseController{
             $dmnProcesoFlujo->setProceso(new DomainProceso($this->getField('ProcesoId')));
             $dmnProcesoFlujo->setNombre($this->getField('Nombre'));
             $dmnProcesoFlujo->setDescripcion($this->getField('Descripcion'));                                                
-            $dmnProcesoFlujo->setEstadoProcesoFlujo(new DomainEstadoProcesoFlujo(self::STATUS_REGISTRADO));
+            $dmnProcesoFlujo->setEstado(new DomainEstadoProcesoFlujo(self::STATUS_PROCESO_FLUJO_REGISTRADO));
+            $dmnProcesoFlujo->setAlcanceCompletadoInd(self::STATUS_ALCANCE_COMPLETADO);
             
             $this->load->model('Bussiness/ProcesoFlujoBO/ProcesoFlujoAddBO','ProcesoFlujoAddBO');
             $this->ProcesoFlujoAddBO->setDomain($dmnProcesoFlujo);            

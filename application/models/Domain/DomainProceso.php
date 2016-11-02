@@ -16,6 +16,7 @@ class DomainProceso extends BaseDomain{
     protected $descripcion;
     protected $estado;
     protected $rutaPrototipo;
+    protected $alcanceCompletadoInd;
     public function __construct($id = null) {
         $this->id = $id;
     }
@@ -87,6 +88,14 @@ class DomainProceso extends BaseDomain{
 
     public function setRutaPrototipo($rutaPrototipo) {
         $this->rutaPrototipo = $rutaPrototipo;
+    }
+
+    function getAlcanceCompletadoInd() {
+        return $this->alcanceCompletadoInd;
+    }
+
+    function setAlcanceCompletadoInd($alcanceCompletadoInd) {
+        $this->alcanceCompletadoInd = $alcanceCompletadoInd;
     }
 
 

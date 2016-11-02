@@ -11,6 +11,8 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridAlcance', {
     title: 'Alcance',
     region:'center',
     height: 150,
+    split:true,
+    //split:true,
     //border:true,    
     useArrows: true,
     //draggable:true,
@@ -28,11 +30,12 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridAlcance', {
         this.width = 500;
         var main = this;
 
-        var myToolGrid = Ext.create('Ext.toolbar.Toolbar',{
+        main.ltbar = Ext.create('Ext.toolbar.Toolbar',{
            items:[
                {
-                   text:'Agregar',
-                   iconCls:'icon-add',
+                   text:'Buscar',
+                   iconCls:'icon-search',
+                   id:'btnBuscar',
                    handler:function(){
                      main.fireEvent('btnAgregar_Click');
                    }
@@ -62,16 +65,15 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridAlcance', {
             model: WinEditEntregaModel,
             autoLoad:false,
             proxy: {
-                type: 'ajax',
-                //url: 'http://localhost/jarvix/resources/data/tree/treegrid.json'
-                url:base_url+'GestionEntregas/Alcance/search'
+                type: 'ajax',                
+                url:'../GestionEntregas/Alcance/searchxxx'
             }
         });
 
 
 
         Ext.apply(this, {
-            tbar:myToolGrid,
+            tbar:main.ltbar,
             store: main.store,
             selModel:mySelModel,
             columns: [{
@@ -85,29 +87,7 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridAlcance', {
                //flex: 1,
                dataIndex: 'user',
                sortable: true
-            }*/],
-            viewConfig:{
-                plugins:{
-                //ptype:'gridviewdragdrop',                
-                 ptype:'treeviewdragdrop',
-                  ddGroup:'group'
-                  //allowContainerDrops: true
-                },
-                listeners:{
-                    'beforedrop':function(){
-                        console.log('here');
-                    }
-                }
-            },
-            listeners:{
-                'beforeitemappend':function(node,childnode){
-                    console.log(node);
-                    console.log(childnode);
-                }
-            },
-            bbar:[
-                { xtype: 'button', text: 'Button 1' }
-              ]
+            }*/]            
         });
         
         

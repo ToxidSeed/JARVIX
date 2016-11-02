@@ -32,10 +32,10 @@ class EntregaMapper extends BaseMapper{
     
     protected function doCreateObject(array $records = null){
         $dmnEntrega = new DomainEntrega($records['ID']);
-        $dmnEntrega->setProyecto(DomainProyecto($records['PROYECTOID']));
+        $dmnEntrega->setProyecto(new DomainProyecto($records['PROYECTOID']));
         $dmnEntrega->setNombre($records['NOMBRE']);
         $dmnEntrega->setFecha($records['FECHA']);
-        $dmnEntrega->setAlcance(new DomainAlcance($records['ALCANCEID']));
+        //$dmnEntrega->setAlcance(new DomainAlcance($records['ALCANCEID']));
         
         return $dmnEntrega;
     }
@@ -48,7 +48,7 @@ class EntregaMapper extends BaseMapper{
         $field['proyectoid'] = $dmnEntrega->getProyecto()->getId();
         $field['nombre'] = $dmnEntrega->getNombre();
         $field['fecha'] = $dmnEntrega->getFecha();
-        $field['alcanceid'] = $dmnEntrega->getAlcance()->getId();
+        //$field['alcanceid'] = $dmnEntrega->getAlcance()->getId();
         
         $this->db->set($field);
         $res = $this->db->insert($this->tableName);
@@ -67,7 +67,7 @@ class EntregaMapper extends BaseMapper{
         $field['proyectoid'] = $dmnEntrega->getProyecto()->getId();
         $field['nombre'] = $dmnEntrega->getNombre();
         $field['fecha'] = $dmnEntrega->getFecha();
-        $field['alcanceid'] = $dmnEntrega->getAlcance()->getId();
+        //$field['alcanceid'] = $dmnEntrega->getAlcance()->getId();
         
         $this->db->set($field);
         $this->db->where('id',$dmnEntrega->getId());

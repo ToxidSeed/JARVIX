@@ -16,9 +16,10 @@ class DomainProcesoControl extends BaseDomain{
     protected $proceso;
     protected $fechaRegistro;
     protected $control;
-    protected $estadoProcesoControl;
+    protected $estadoId;
     protected $nombre;
     protected $comentarios;
+    protected $alcanceCompletadoInd;
                        
     function getId() {
         return $this->id;
@@ -41,10 +42,7 @@ class DomainProcesoControl extends BaseDomain{
         return $this->control;
     }
 
-    function getEstadoProcesoControl() {
-        return $this->estadoProcesoControl;
-    }
-
+   
     function setId($id) {
         $this->id = $id;
     }
@@ -61,10 +59,7 @@ class DomainProcesoControl extends BaseDomain{
         $this->control = $control;
     }
 
-    function setEstadoProcesoControl($estadoProcesoControl) {
-        $this->estadoProcesoControl = $estadoProcesoControl;
-    }
-    
+   
     function getNombre() {
         return $this->nombre;
     }
@@ -79,6 +74,22 @@ class DomainProcesoControl extends BaseDomain{
 
     function setComentarios($comentarios) {
         $this->comentarios = $comentarios;
+    }
+
+    function getEstadoId() {
+        return $this->estadoId;
+    }
+
+    function getAlcanceCompletadoInd() {
+        return $this->alcanceCompletadoInd;
+    }
+
+    function setEstadoId($estadoId) {
+        $this->estadoId = $estadoId;
+    }
+
+    function setAlcanceCompletadoInd($alcanceCompletadoInd) {
+        $this->alcanceCompletadoInd = $alcanceCompletadoInd;
     }
 
 

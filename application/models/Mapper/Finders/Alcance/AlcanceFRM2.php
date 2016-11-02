@@ -1,9 +1,7 @@
 <?php
 
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+
  * Caso 1: Si el proceso No tiene Flujos ni controles pendientes de mostrar:
      - Nada relacionado al proceso ni el proceso en si.
  * Caso 2: Si el proceso No tiene Flujos y si tiene Controles pendientes debe mostrar:

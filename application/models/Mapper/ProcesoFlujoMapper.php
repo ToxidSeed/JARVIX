@@ -20,7 +20,8 @@ class ProcesoFlujoMapper extends BaseMapper{
         'procesoid',
         'nombre',
         'descripcion',
-        'estadoprocesoflujoid'
+        'estadoid',
+        'alcancecompletadoind'
     );
     
     protected $uniqueValues = array(
@@ -34,8 +35,8 @@ class ProcesoFlujoMapper extends BaseMapper{
         $dmnProcesoFlujo->setProceso(new DomainProceso($record['PROCESOID']));
         $dmnProcesoFlujo->setNombre($record['NOMBRE']);
         $dmnProcesoFlujo->setDescripcion($record['DESCRIPCION']);
-        $dmnProcesoFlujo->setEstadoProcesoFlujo(new DomainEstadoProcesoFlujo($record['ESTADOPROCESOFLUJOID']));
-        
+        $dmnProcesoFlujo->setEstado(new DomainEstadoProcesoFlujo($record['ESTADOID']));
+        $dmnProcesoFlujo->setAlcanceCompletadoInd($record['ALCANCECOMPLETADOIND']);        
         return $dmnProcesoFlujo;
     }
     
@@ -43,10 +44,11 @@ class ProcesoFlujoMapper extends BaseMapper{
         $this->doInsert($dmnProcesoFlujo);
     }
     protected function doInsert(DomainProcesoFlujo $dmnProcesoFlujo){
-        $fields['procesoid'] = $dmnProcesoFlujo->getProceso()->getId();
-        $fields['nombre'] = $dmnProcesoFlujo->getNombre();
-        $fields['descripcion'] = $dmnProcesoFlujo->getDescripcion();
-        $fields['estadoprocesoflujoid'] = $dmnProcesoFlujo->getEstadoProcesoFlujo()->getId();
+        $fields['procesoid']            = $dmnProcesoFlujo->getProceso()->getId();
+        $fields['nombre']               = $dmnProcesoFlujo->getNombre();
+        $fields['descripcion']          = $dmnProcesoFlujo->getDescripcion();
+        $fields['estadoid']             = $dmnProcesoFlujo->getEstado()->getId();
+        $fields['alcancecompletadoind'] = $dmnProcesoFlujo->getAlcanceCompletadoInd();
         $this->db->set($fields);
         $res = $this->db->insert($this->tableName);
         
@@ -61,10 +63,11 @@ class ProcesoFlujoMapper extends BaseMapper{
         $this->doUpdate($dmnProcesoFlujo);
     }
     protected function doUpdate(DomainProcesoFlujo $dmnProcesoFlujo){
-        $fields['nombre'] = $dmnProcesoFlujo->getNombre();
-        $fields['procesoid'] = $dmnProcesoFlujo->getProceso()->getId();
-        $fields['descripcion'] = $dmnProcesoFlujo->getDescripcion();
-        $fields['estadoprocesoflujoid'] = $dmnProcesoFlujo->getEstadoProcesoFlujo()->getId();
+        $fields['nombre']               = $dmnProcesoFlujo->getNombre();
+        $fields['procesoid']            = $dmnProcesoFlujo->getProceso()->getId();
+        $fields['descripcion']          = $dmnProcesoFlujo->getDescripcion();
+        $fields['estadoid']             = $dmnProcesoFlujo->getEstadoProcesoFlujo()->getId();
+        $fields['alcancecompletadoind'] = $dmnProcesoFlujo->getAlcanceCompletadoInd();
         $this->db->set($fields);
         $this->db->where('id',$dmnProcesoFlujo->getId());
         $res = $this->db->update($this->tableName);

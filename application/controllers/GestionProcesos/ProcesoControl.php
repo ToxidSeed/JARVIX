@@ -21,6 +21,10 @@ class ProcesoControl extends BaseController{
     function __construct() {
         parent::__construct();
     }
+    
+    const STATUS_PROCESO_CONTROL_REGISTRADO = 0;
+    
+    
     public function wrt(){    
         try{
             $this->load->model('Bussiness/ProcesoFlujoBO/ProcesoControlBO','ProcesoControlBO');
@@ -32,8 +36,11 @@ class ProcesoControl extends BaseController{
             $this->ProcesoControlBO->setDomain($dmnProcesoControl);
 
             if($this->getField('proceso_control_id') == 0 || $this->getField('proceso_control_id') == null ){
+                $dmnProcesoControl->setAlcanceCompletadoInd(self::STATUS_PROCESO_CONTROL_REGISTRADO);
                 $this->ProcesoControlBO->add();
             }else{
+                //@TEMPORAL: se debe quitar este estado;
+                 $dmnProcesoControl->setAlcanceCompletadoInd(self::STATUS_PROCESO_CONTROL_REGISTRADO);
                 $this->ProcesoControlBO->upd();
             }
             $this->getAnswer()->setSuccess(true);

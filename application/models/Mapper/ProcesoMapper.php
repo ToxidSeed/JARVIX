@@ -21,7 +21,8 @@ class ProcesoMapper extends BaseMapper{
         'fechaultact',
         'descripcion',
 //        'estado',
-        'rutaprototipo'
+        'rutaprototipo',
+        'alcancecompletadoind'
     );
     
     protected $uniqueValues = array(
@@ -39,6 +40,7 @@ class ProcesoMapper extends BaseMapper{
         $dmnProceso->setDescripcion($record['DESCRIPCION']);
 //        $dmnProceso->setEstado(new DomainEstado($record['ESTADOID']));
         $dmnProceso->setRutaPrototipo($record['RUTAPROTOTIPO']);
+        $dmnProceso->setAlcanceCompletadoInd($record['ALCANCECOMPLETADOIND']);
         return $dmnProceso;
     }
     
@@ -54,6 +56,7 @@ class ProcesoMapper extends BaseMapper{
         $fields['descripcion'] = $dmnProceso->getDescripcion();
         $fields['estadoid'] = $dmnProceso->getEstado()->getId();
         $fields['rutaprototipo'] = $dmnProceso->getRutaPrototipo();
+        $fields['alcancecompletadoind'] = $dmnProceso->getAlcanceCompletadoInd();
         $this->db->set($fields);        
         $res = $this->db->insert($this->tableName);
         
@@ -69,11 +72,12 @@ class ProcesoMapper extends BaseMapper{
         $this->doUpdate($dmnProceso);
     }
     protected function doUpdate(DomainProceso $dmnProceso){
-        $fields['nombre'] = $dmnProceso->getNombre();
-        $fields['fecharegistro'] = $dmnProceso->getFechaRegistro();
-        $fields['fechaultact'] = $dmnProceso->getFechaUltAct();
-        $fields['aplicacionid'] = $dmnProceso->getAplicacion()->getId();
-        $fields['descripcion'] = $dmnProceso->getDescripcion();
+        $fields['nombre']               = $dmnProceso->getNombre();
+        $fields['fecharegistro']        = $dmnProceso->getFechaRegistro();
+        $fields['fechaultact']          = $dmnProceso->getFechaUltAct();
+        $fields['aplicacionid']         = $dmnProceso->getAplicacion()->getId();
+        $fields['descripcion']          = $dmnProceso->getDescripcion();
+        $fields['alcancecompletadoind'] = $dmnProceso->getAlcanceCompletadoInd();
         //$fields['estado'] = $dmnProceso->getEstado()->getId();
         if($dmnProceso->getRutaPrototipo() != ''){
             $fields['rutaprototipo'] = $dmnProceso->getRutaPrototipo();

@@ -1,5 +1,6 @@
 <script type="text/javascript">
       Ext.require('Per.GridPanel');
+      Ext.require('MyApp.Helpers.Proyectos.HelperProyectosUsuario');
       Ext.require('MyApp.GestionEntrega.WinEditEntrega_TreeGridAlcance');
       Ext.require('MyApp.GestionEntrega.WinEditEntrega_TreeGridProcesosDisp');            
       Ext.require('MyApp.GestionEntrega.WinEditEntrega');

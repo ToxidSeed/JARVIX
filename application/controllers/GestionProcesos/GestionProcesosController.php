@@ -11,6 +11,9 @@ require_once DOMAINPATH.'DomainProyecto.php';
 require_once DOMAINPATH.'DomainAplicacion.php';
 
 class GestionProcesosController extends BaseController{
+    
+    const STATUS_ALCANCE_COMPLETADO_IND = 0;
+    
     function __construct() {
         parent::__construct();
     }
@@ -19,6 +22,8 @@ class GestionProcesosController extends BaseController{
         $this->load->view('GestionProcesosView.php');
         $this->load->view('Base/Footer.php');
     }
+    
+    
     public function addOption(){        
         //Load Proyect Information
         try{            
@@ -89,6 +94,8 @@ class GestionProcesosController extends BaseController{
             $dmnProceso->setProyecto(new DomainProyecto($this->getField('ProyectoId')));
             $dmnProceso->setAplicacion(new DomainAplicacion($this->getField('AplicacionId')));
             $dmnProceso->setDescripcion($this->getField('Descripcion'));
+            //@TEMPORAL: deberia ser distinto para UPDATE que para write
+            $dmnProceso->setAlcanceCompletadoInd(self::STATUS_ALCANCE_COMPLETADO_IND);
             //Setting file path
             
             if ($exist_file == true){

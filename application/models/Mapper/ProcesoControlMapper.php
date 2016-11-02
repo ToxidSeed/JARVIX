@@ -21,7 +21,8 @@ class ProcesoControlMapper extends BaseMapper{
         'fecharegistro',
         'controlid',
         'nombre',
-        'estadoprocesocontrolid'
+        'estadoid',
+        'alcancecompletadoind'
     );
     
     protected $uniqueValues = array(
@@ -36,6 +37,7 @@ class ProcesoControlMapper extends BaseMapper{
         $dmnProcesoControl->setNombre($record['NOMBRE']);
         $dmnProcesoControl->setFechaRegistro($record['FECHAREGISTRO']);
         $dmnProcesoControl->setControl(new DomainTipoControl($record['CONTROLID']));
+        $dmnProcesoControl->setAlcanceCompletadoInd($record['ALCANCECOMPLETADOIND']);
 //        $dmnProcesoControl->setEstadoProcesoControl(new DomainEstadoProcesoControl($record['ESTADOPROCESOCONTROLID']));
         return $dmnProcesoControl;
     }
@@ -45,10 +47,11 @@ class ProcesoControlMapper extends BaseMapper{
     }
     
     protected function doInsert(DomainProcesoControl $dmnProcesoControl){
-        $fields['procesoid'] = $dmnProcesoControl->getProceso()->getId();
-        $fields['fecharegistro'] = $dmnProcesoControl->getFechaRegistro();
-        $fields['controlid'] = $dmnProcesoControl->getControl()->getId();
-        $fields['nombre'] = $dmnProcesoControl->getNombre();
+        $fields['procesoid']            = $dmnProcesoControl->getProceso()->getId();
+        $fields['fecharegistro']        = $dmnProcesoControl->getFechaRegistro();
+        $fields['controlid']            = $dmnProcesoControl->getControl()->getId();
+        $fields['nombre']               = $dmnProcesoControl->getNombre();
+        $fields['alcancecompletadoind'] = $dmnProcesoControl->getAlcanceCompletadoInd();
 //        $fields['estadocontrolid'] = $dmnProcesoControl->getEstadoProcesoControl()->getId();
         $this->db->set($fields);
         $res = $this->db->insert($this->tableName);
@@ -65,16 +68,15 @@ class ProcesoControlMapper extends BaseMapper{
     }
     
     protected function doUpdate(DomainProcesoControl $dmnProcesoControl){
-        $fields['procesoid'] = $dmnProcesoControl->getProceso()->getId();
-        $fields['fecharegistro'] = $dmnProcesoControl->getFechaRegistro();
-        $fields['controlid'] = $dmnProcesoControl->getControl()->getId();
-        $fields['nombre'] = $dmnProcesoControl->getNombre();
+        $fields['procesoid']            = $dmnProcesoControl->getProceso()->getId();
+        $fields['fecharegistro']        = $dmnProcesoControl->getFechaRegistro();
+        $fields['controlid']            = $dmnProcesoControl->getControl()->getId();
+        $fields['nombre']               = $dmnProcesoControl->getNombre();
+        $fields['alcancecompletadoind'] = $dmnProcesoControl->getAlcanceCompletadoInd();
 //        $fields['estadoprocesocontrolid'] = $dmnProcesoControl->getEstadoProcesoControl()->getId();
         $this->db->set($fields);
         $this->db->where('id',$dmnProcesoControl->getId());
         $res = $this->db->update($this->tableName);
-        
-//        echo $this->db->last_query();
         
         if(!$res){
             $this->db->trans_rollback();

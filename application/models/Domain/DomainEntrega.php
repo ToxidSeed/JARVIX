@@ -13,51 +13,49 @@ class DomainEntrega extends BaseDomain{
     protected $proyecto;
     protected $nombre;
     protected $fecha;
-    protected $alcance;
-    
-    function __construct($id) {
-        $this->id = $id ;
+    //protected $alcance;
+    public function __construct($id) {
+        $this->id = $id;
     }
-    
     function getId() {
         return $this->id;
     }
 
     function getProyecto() {
+        if($this->mapper ===true){
+            require_once(MAPPERPATH.'ProyectoMapper.php');
+            $mprProyectoMapper = new ProyectoMapper();
+            $this->proyecto = $mprProyectoMapper->find($this->proyecto->getId());
+        }        
         return $this->proyecto;
     }
-
-    function getNombre() {
-        return $this->nombre;
-    }
-
-    function getFecha() {
+  
+    function getFecha() {        
         return $this->fecha;
-    }
-
-    function getAlcance() {
-        return $this->alcance;
     }
 
     function setId($id) {
         $this->id = $id;
     }
 
-    function setProyectoId($proyectoId) {
-        $this->proyectoId = $proyectoId;
+    function setProyecto($proyecto) {
+        $this->proyecto = $proyecto;
+    }
+
+    function getNombre() {
+        return $this->nombre;
     }
 
     function setNombre($nombre) {
         $this->nombre = $nombre;
     }
 
+    
     function setFecha($fecha) {
         $this->fecha = $fecha;
     }
 
-    function setAlcance($alcance) {
-        $this->alcance = $alcance;
-    }
+
 
 
 }

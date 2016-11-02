@@ -49,6 +49,10 @@ Ext.define('MyApp.GestionEntrega.WinEntrega',{
            ]
        });
        
+       main.txtProyecto = Ext.create('Ext.form.field.Text',{
+           fieldLabel:'Proyecto'
+       });
+       
        main.txtNombre = Ext.create('Ext.form.field.Text',{
            fieldLabel:'Nombre'
        });
@@ -75,7 +79,7 @@ Ext.define('MyApp.GestionEntrega.WinEntrega',{
           width:200,
           pageSize:20,
           title:'Entregas',
-          src:'',
+          src:'../GestionEntregas/Entrega/search',
           columns:[
               {
                   xtype:'rownumberer'
@@ -89,7 +93,19 @@ Ext.define('MyApp.GestionEntrega.WinEntrega',{
               }
           ],
           pagingBar:true
-       });                        
+       });      
+       
+       main.list.on({
+           'afterrender':function(){
+                main.list.load({
+                    ProyectoId: main.txtProyecto.getValue()
+                });
+           },
+           'itemdblclick':function(grid,record){
+               //console.log(record);
+               main.editEntrega(record.get('id'));
+           }
+       });
        
        Ext.apply(this,{
             layout:'border',
@@ -101,9 +117,13 @@ Ext.define('MyApp.GestionEntrega.WinEntrega',{
                                                 
         this.callParent(arguments);
    },
-   editEntrega:function(){
+   editEntrega:function(EntregaId){
        var main = this;
-       var myWin = new MyApp.GestionEntrega.WinEditEntrega();
+       var myWin = new MyApp.GestionEntrega.WinEditEntrega({
+           internal:{
+               id:EntregaId
+           }
+       });
        myWin.show();
    }
 });

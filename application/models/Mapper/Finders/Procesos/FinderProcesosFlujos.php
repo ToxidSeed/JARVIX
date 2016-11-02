@@ -15,7 +15,7 @@ class FinderProcesosFlujos extends ProcesoFlujoMapper{
         $this->db->select($this->fields);
         $this->db->from($this->tableName);
         $this->db->where('procesoid',$procesoId);
-        $this->db->where('estadoprocesoflujoid',self::STATUS_REGISTRADO);
+        $this->db->where('estadoid',self::STATUS_REGISTRADO);
         $response = $this->db->get();
         $arrResponse = $this->getMultiResponse($response);
         return new ResponseModel($arrResponse, count($arrResponse));        

@@ -12,7 +12,8 @@ class DomainProcesoFlujo extends BaseDomain{
     protected $proceso;
     protected $nombre;
     protected $descripcion;
-    protected $estadoProcesoFlujo;
+    protected $estado;
+    protected $alcanceCompletadoInd;
     
     function __construct($id = null) {
         $this->id = $id;
@@ -49,13 +50,23 @@ class DomainProcesoFlujo extends BaseDomain{
     public function setDescripcion($descripcion) {
         $this->descripcion = $descripcion;
     }
-    function getEstadoProcesoFlujo() {
-        return $this->estadoProcesoFlujo;
+    function getEstado() {
+        return $this->estado;
     }
 
-    function setEstadoProcesoFlujo($estadoProcesoFlujo) {
-        $this->estadoProcesoFlujo = $estadoProcesoFlujo;
+    function setEstado($estadoProcesoFlujo) {
+        $this->estado = $estadoProcesoFlujo;
     }
+
+    function getAlcanceCompletadoInd() {
+        return $this->alcanceCompletadoInd;
+    }
+
+    function setAlcanceCompletadoInd($alcanceCompletadoInd) {
+        $this->alcanceCompletadoInd = $alcanceCompletadoInd;
+    }
+
+
 
 
 
