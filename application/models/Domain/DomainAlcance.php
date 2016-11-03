@@ -10,27 +10,46 @@ require_once BASEMODELPATH.'BaseDomain.php';
 
 class DomainAlcance extends BaseDomain{
     protected $id;
-    protected $fechaCierre;
-
-    function __construct($id) {
+    protected $tipo;
+    protected $item;
+    protected $entrega;
+    
+    function __construct($id){
         $this->id = $id;
     }
-    
     function getId() {
         return $this->id;
     }
 
-    function getFechaCierre() {
-        return $this->fechaCierre;
+    function getTipo() {
+        return $this->tipo;
+    }
+
+    function getItem() {
+        return $this->item;
+    }
+
+    function getEntrega() {
+        return $this->entrega;
     }
 
     function setId($id) {
         $this->id = $id;
     }
 
-    function setFechaCierre($fechaCierre) {
-        $this->fechaCierre = $fechaCierre;
+    function setTipo($tipo) {
+        $this->tipo = $tipo;
     }
+
+    function setItem($item) {
+        $this->item = $item;
+    }
+
+    function setEntrega($entrega) {
+        $this->entrega = $entrega;
+    }
+
+
 
 
 }

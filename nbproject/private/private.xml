@@ -2,6 +2,19 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="15">
         <file>
+            <url>js/app/MyApp/GestionProcesos/WinMantProcesosControl.js</url>
+            <bookmark id="6">
+                <name/>
+                <line>522</line>
+                <key/>
+            </bookmark>
+            <bookmark id="7">
+                <name/>
+                <line>891</line>
+                <key/>
+            </bookmark>
+        </file>
+        <file>
             <url>js/app/MyApp/GestionProcesos/WinMantGestionProcesos.js</url>
             <bookmark id="15">
                 <name/>
@@ -35,19 +48,6 @@
             </bookmark>
         </file>
         <file>
-            <url>js/app/MyApp/GestionProcesos/WinMantProcesosControl.js</url>
-            <bookmark id="6">
-                <name/>
-                <line>522</line>
-                <key/>
-            </bookmark>
-            <bookmark id="7">
-                <name/>
-                <line>891</line>
-                <key/>
-            </bookmark>
-        </file>
-        <file>
             <url>application/controllers/GestionProcesos/ProcesoControl.php</url>
             <bookmark id="5">
                 <name/>
@@ -73,7 +73,7 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/xampp/htdocs/jarvix/application/models/Bussiness/ProcesoBO.php</file>
+            <file>file:/D:/xampp/htdocs/jarvix/application/models/Domain/DomainTipoAlcance.php</file>
             <file>file:/D:/xampp/htdocs/jarvix/application/models/Domain/DomainEntrega.php</file>
             <file>file:/D:/xampp/htdocs/jarvix/js/app/MyApp/GestionEntrega/WinEditEntrega_TreeGridAlcance.js</file>
             <file>file:/D:/xampp/htdocs/jarvix/application/controllers/GestionProcesos/ProcesoControl.php</file>
@@ -84,9 +84,8 @@
             <file>file:/D:/xampp/htdocs/jarvix/js/app/MyApp/GestionEntrega/WinEntrega.js</file>
             <file>file:/D:/xampp/htdocs/jarvix/application/models/Bussiness/EntregaBO.php</file>
             <file>file:/D:/xampp/htdocs/jarvix/application/models/Mapper/ProyectoMapper.php</file>
-            <file>file:/D:/xampp/htdocs/jarvix/js/app/MyApp/GestionProcesos/WinMantGestionProcesos.js</file>
-            <file>file:/D:/xampp/htdocs/jarvix/js/app/MyApp/GestionEntrega/WinEditEntrega.js</file>
             <file>file:/D:/xampp/htdocs/jarvix/js/app/MyApp/GestionEntrega/WinEditEntrega_TreeGridProcesosDisp.js</file>
+            <file>file:/D:/xampp/htdocs/jarvix/application/models/Domain/DomainAlcance.php</file>
         </group>
     </open-files>
 </project-private>

@@ -44,7 +44,7 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridProcesosDisp', {
                    id:'btnAgregar',
                    handler:function(){
                         var records = main.selectRecords();
-                        main.aggregarAlcance(records);
+                        main.agregarAlcance(records);
                    }
                },{
                    text:'Ocultar',                   
@@ -161,7 +161,7 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridProcesosDisp', {
             });
         p.resumeEvents();
     },
-    aggregarAlcance:function(parAlcance){
+    agregarAlcance:function(parAlcance){
         var main = this;
                         
         Ext.Ajax.request({

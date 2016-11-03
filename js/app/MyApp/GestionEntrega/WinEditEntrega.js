@@ -77,7 +77,12 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega',{
        });
 
        main.dateFecha = Ext.create('Ext.form.field.Date',{
-           fieldLabel:'Fecha'
+           fieldLabel:'Fecha Entrega'
+       });
+       
+       main.dateFechaCierra = Ext.create('Ext.form.field.Date',{
+          fieldLabel:'Fecha Cierre Alcance',
+          disabled:true
        });
 
        main.btnBuscarProyecto = Ext.create('Ext.Button',{
@@ -107,7 +112,8 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega',{
                },
               main.txtEntrega,
               //main.txtNombre,
-              main.dateFecha
+              main.dateFecha,
+              main.dateFechaCierra
           ]
        });
 
@@ -157,10 +163,10 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega',{
         });
 
        if (main.create === true){
-           main.title = 'Nuevo';
+           main.title = 'Nueva Entrega';
            main.Nuevo();
        }else{
-           main.title = 'Modificar';
+           main.title = 'Modificar Entrega';
        }    
         
         this.callParent(arguments);

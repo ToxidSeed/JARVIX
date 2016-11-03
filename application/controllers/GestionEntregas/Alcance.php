@@ -7,6 +7,14 @@
  */
 
 require_once BASECONTROLLERPATH.'BaseController.php';
+require_once DOMAINPATH.'DomainTipoAlcance.php';
+require_once DOMAINPATH.'DomainAlcance.php';
+require_once DOMAINPATH.'DomainEntrega.php';
+require_once DOMAINPATH.'DomainProceso.php';
+require_once DOMAINPATH.'DomainProcesoFlujo.php';
+require_once DOMAINPATH.'DomainProcesoControl.php';
+
+
 class Alcance extends BaseController{
     function __construct() {
         parent::__construct();
@@ -110,9 +118,16 @@ class Alcance extends BaseController{
         (count($node['children'])==0)?array():$varNodes[]=$node;
     }
     public function Add(){
-        $varAlcance = json_decode($this->getField('Alcance'),true);
-        
+        $inputArrAlcance = json_decode($this->getField('Alcance'),true);
+        $arrDmnAlcance = array();
+        $dmnEntrega = new DomainEntrega($this->getField('EntregaId'));
+        foreach($inputArrAlcance as $row){            
+            $dmnAlcance = new DomainAlcance();
+            $dmnAlcance->setEntrega($dmnEntrega);            
+            $dmnAlcance->setTipo(new DomainTipoAlcance($row['tipo']));
+            $dmnAlcance->setItem($item);
+            $arrDmnAlcance[] = $dmnAlcance;
+        }                        
         //
-        
     }
 }

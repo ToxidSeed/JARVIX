@@ -15,8 +15,10 @@ class AlcanceMapper extends BaseMapper{
     }
     
     protected $fields = array(
-      'id',
-       'fechacierre'
+       'id',
+       'tipoId',
+       'itemId',
+       'entregaId'
     );
     
     protected $uniqueValues = array(
