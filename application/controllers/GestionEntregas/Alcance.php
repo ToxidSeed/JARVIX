@@ -19,26 +19,30 @@ class Alcance extends BaseController{
     function __construct() {
         parent::__construct();
     }
-    
+
+    const __TIPO_PROCESO = 1;
+    const __TIPO_PROCESO_FLUJO = 2;
+    const __TIPO_PROCESO_CONTROL = 3;
+
     private $Procesos = array();
     private $Flujos = array();
     private $Controles = array();
-    
+
     function search(){
         $this->load->model('Mapper/Finders/Alcance/AlcanceFRM1','AlcanceFRM1');
         $this->AlcanceFRM1->search(array(
             'parProyectoId' => $this->getField('ProyectoId')
         ));
-        
+
         $this->Procesos = $this->AlcanceFRM1->getProcesos();
         $this->Flujos = $this->AlcanceFRM1->getFlujos();
-        $this->Controles = $this->AlcanceFRM1->getControles();    
+        $this->Controles = $this->AlcanceFRM1->getControles();
 
         //print_r($results);
         echo json_encode($this->makeStructure());
     }
 
-//    private function makeTree    
+//    private function makeTree
     private function makeStructure(){
         $JSONTreeData = array(
           'text' => '.',
@@ -54,7 +58,7 @@ class Alcance extends BaseController{
                 'checked' => false,
                 "iconCls" => "icon-list_packages",
                 "expanded" => "true",
-                "tipo" => "PROCESO",
+                "tipo" => "1",
                 "children" => $this->getNodes($row['id'])
             );
         }
@@ -62,8 +66,8 @@ class Alcance extends BaseController{
     }
     //
     private function getNodes($parProcesoId){
-        $varNodes = array();            
-        $this->addNodeFlujos(&$varNodes,$parProcesoId);        
+        $varNodes = array();
+        $this->addNodeFlujos(&$varNodes,$parProcesoId);
         $this->addNodeControles(&$varNodes,$parProcesoId);
         return $varNodes;
     }
@@ -77,21 +81,21 @@ class Alcance extends BaseController{
             'tipo' => 'CNT',
             "children" => array()
         );
-        
+
         foreach($this->Flujos as $key => $row){
             if($parProcesoId == $row['proceso_id']){
                 $node['children'] = array(
                      "nombre" => $row["procesoflujo_nombre"],
                     'checked' => false,
                     'AlcanceId' => $row["procesoflujo_id"],
-                    'tipo' => 'FLUJO',
+                    'tipo' => '2',
                     "leaf"  => "true"
-                );    
+                );
                 unset($this->Flujos[$key]);
             }
         }
         (count($node['children'])==0)?array():$varNodes[]=$node;
-    }    
+    }
     //
     private function addNodeControles(&$varNodes,$parProcesoId){
         $node = array(
@@ -102,32 +106,75 @@ class Alcance extends BaseController{
             'tipo' => 'CNT',
             "children" => array()
           );
-        
+
         foreach($this->Controles as $key => $row){
             if($parProcesoId == $row['proceso_id']){
                 $node['children'] = array(
                      "nombre" => $row["procesocontrol_nombre"],
                     'checked' => false,
                     'AlcanceId' => $row["procesocontrol_id"],
-                    'tipo' => 'CONTROL',
+                    'tipo' => '3',
                     "leaf"  => "true"
-                );              
+                );
                 unset($this->Controles[$key]);
             }
         }
         (count($node['children'])==0)?array():$varNodes[]=$node;
     }
     public function Add(){
+      try{
         $inputArrAlcance = json_decode($this->getField('Alcance'),true);
         $arrDmnAlcance = array();
         $dmnEntrega = new DomainEntrega($this->getField('EntregaId'));
-        foreach($inputArrAlcance as $row){            
+        foreach($inputArrAlcance as $row){
             $dmnAlcance = new DomainAlcance();
-            $dmnAlcance->setEntrega($dmnEntrega);            
+            $dmnAlcance->setEntrega($dmnEntrega);
             $dmnAlcance->setTipo(new DomainTipoAlcance($row['tipo']));
-            $dmnAlcance->setItem($item);
+            $this->setItem($dmnAlcance,$row['AlcanceId']);
             $arrDmnAlcance[] = $dmnAlcance;
-        }                        
-        //
+        }
+        //print_r($arrDmnAlcance);
+        $this->load->model('Bussiness/AlcanceBO','AlcanceBO');
+        $this->AlcanceBO->Add($arrDmnAlcance);
+        $this->getAnswer()->setSuccess(true);
+        $this->getAnswer()->setMessage('Registrado Correctamente');
+        $this->getAnswer()->setCode(0);
+        echo $this->getAnswer()->getAsJSON();
+      }catch (Exception $ex) {
+          if($ex->getCode() == FORM_VALIDATION_ERRORS_CODE){
+              echo $this->getAnswer()->getAsJSON();
+          }else{
+              echo Answer::setFailedMessage($ex->getMessage(),$ex->getCode());
+          }
+      }
+    }
+
+    private function setItem(DomainAlcance $dmnAlcance,$parAlcanceId){
+        switch($dmnAlcance->getTipo()->getId()){
+            case self::__TIPO_PROCESO:
+                $dmnAlcance->setItem(new DomainProceso($parAlcanceId));
+                break;
+            case self::__TIPO_PROCESO_FLUJO:
+                $dmnAlcance->setItem(new DomainProcesoFlujo($parAlcanceId));
+                break;
+            case self::__TIPO_PROCESO_CONTROL:
+                $dmnAlcance->setItem(new DomainProcesoControl($parAlcanceId));
+                break;
+        }
+    }
+    public function SearchAsignados(){
+      $this->load->model('Mapper/Finders/Alcance/AlcanceFRM2','AlcanceFRM2');
+      $this->AlcanceFRM2->search(array(
+          'parEntregaId' => $this->getField('EntregaId')
+      ));
+
+
+
+      //$this->Procesos = $this->AlcanceFRM2->getProcesos();
+      //$this->Flujos = $this->AlcanceFRM2->getFlujos();
+      //$this->Controles = $this->AlcanceFRM2->getControles();
+
+      //print_r($results);
+      //echo json_encode($this->makeStructure());
     }
 }
