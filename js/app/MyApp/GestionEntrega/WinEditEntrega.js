@@ -17,7 +17,7 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega',{
    modal:true,
    maximized:true,
    initComponent:function(){
-       var main = this;      
+       var main = this;
 
        main.tbar = Ext.create('Ext.toolbar.Toolbar',{
           items:[
@@ -67,9 +67,9 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega',{
             valueField: 'id',
             width:350
         });
-        
+
         main.txtEntrega = Ext.create('Ext.form.field.Text',{
-           fieldLabel:'Entrega' 
+           fieldLabel:'Entrega'
         });
 
        main.txtNombre = Ext.create('Ext.form.field.Text',{
@@ -79,7 +79,7 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega',{
        main.dateFecha = Ext.create('Ext.form.field.Date',{
            fieldLabel:'Fecha Entrega'
        });
-       
+
        main.dateFechaCierra = Ext.create('Ext.form.field.Date',{
           fieldLabel:'Fecha Cierre Alcance',
           disabled:true
@@ -87,7 +87,7 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega',{
 
        main.btnBuscarProyecto = Ext.create('Ext.Button',{
             text:'...',
-            handler:function(){                
+            handler:function(){
                 main.BuscarProyecto();
             }
         })
@@ -96,19 +96,19 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega',{
            height:150,
           region:'west',
           bodyPadding:'10px',
-          items:[              
+          items:[
               {
                    layout:'column',
                    frame:false,
-                   border:false,                                           
+                   border:false,
                     bodyStyle:{
                          background:'transparent',
                          padding:'0px 0px 5px 0px'
                     },
-                   items:[                    
+                   items:[
                         main.txtProyecto,
                         main.btnBuscarProyecto
-                   ]                                          
+                   ]
                },
               main.txtEntrega,
               //main.txtNombre,
@@ -119,7 +119,7 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega',{
 
 
        main.TreeGridAlcance = Ext.create('MyApp.GestionEntrega.WinEditEntrega_TreeGridAlcance');
-       
+
        main.TreeGridProcesosDisp = Ext.create('MyApp.GestionEntrega.WinEditEntrega_TreeGridProcesosDisp');
        //
        main.TreeGridProcesosDisp.on({
@@ -127,14 +127,14 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega',{
                main.OcultarProcesos();
            }
        });
-       
+
        //afteritemexpand
        //beforeitemexpand
 
        main.TreeGridAlcance.on({
          'btnAgregar_Click':function(args){
              //Show and hide panels
-             //console.log(main.TreeGridAlcance.getStore().getNewRecords());             
+             //console.log(main.TreeGridAlcance.getStore().getNewRecords());
              main.MostrarProcesos();
 
              //Load stores
@@ -157,7 +157,7 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega',{
                 'show':function(){
                     if(main.internal.id !== null){
                         main.getEntrega();
-                    }                    
+                    }
                 }
             }
         });
@@ -167,15 +167,15 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega',{
            main.Nuevo();
        }else{
            main.title = 'Modificar Entrega';
-       }    
-        
+       }
+
         this.callParent(arguments);
    },
    MostrarProcesos:function(){
-        var main = this;        
+        var main = this;
         main.panelGeneral.hide();
         main.TreeGridProcesosDisp.show();
-        main.loadAlcanceDisponible(main.internal.proyecto.id);        
+        main.loadAlcanceDisponible(main.internal.proyecto.id);
    },
    OcultarProcesos:function(){
        var main = this;
@@ -186,7 +186,7 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega',{
    Nuevo:function(){
        var main = this;
        if (main.internal.id === null){
-           main.TreeGridProcesosDisp.Toolbar.child("#btnAgregar").disable(); 
+           main.TreeGridProcesosDisp.Toolbar.child("#btnAgregar").disable();
            main.TreeGridAlcance.ltbar.child('#btnBuscar').disable();
        }
    },
@@ -200,10 +200,10 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega',{
         var winProyectos = new MyApp.Helpers.Proyectos.HelperProyectosUsuario();
             winProyectos.show();
             winProyectos.on({
-                'seleccion':function(){                    
+                'seleccion':function(){
                     main.txtProyecto.setValue(winProyectos.response.Proyecto.nombre);
                     main.internal.proyecto.id = winProyectos.response.Proyecto.id;
-//                    main.txtSetProject.setValue(winProyectos.response.Proyecto.nombre);            
+//                    main.txtSetProject.setValue(winProyectos.response.Proyecto.nombre);
 //                    main.Grid.load(main.getParams());
 //                    main.Grid.show();
 //                    main.dispModelarRequerimientos.hide();
@@ -222,7 +222,7 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega',{
            },
            success:function(response){
                 //Ext.Msg.alert('Status', response.responseText);
-                var data = Ext.decode(response.responseText);    
+                var data = Ext.decode(response.responseText);
                 main.TreeGridProcesosDisp.setProyecto(main.internal.proyecto.id);
                 main.internal.id = data.extradata.EntregaId;
                 main.Modificar();
@@ -237,15 +237,15 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega',{
                EntregaId:main.internal.id
            },
            success:function(response){
-               
-                var record = Ext.decode(response.responseText).data;        
+
+                var record = Ext.decode(response.responseText).data;
 
                 main.internal = {
                     id:record.id,
-                    proyecto:{
+                      proyecto:{
                         id:record.proyecto.id
                     }
-                };                
+                };
                 //
                 main.txtEntrega.setValue(record.nombre);
                 main.txtProyecto.setValue(record.proyecto.nombre);
@@ -253,6 +253,7 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega',{
                 //console.log(response);
                 //Set Grid Values
                 main.TreeGridProcesosDisp.setInternal(main.internal);
+                main.loadAlcanceAsignado(main.internal);
            }
        });
    },
@@ -260,6 +261,11 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega',{
        var main = this;
        //console.log(ProyectoId);
        //main.TreeGridProcesosDisp.setProyecto(ProyectoId);
-       main.TreeGridProcesosDisp.getStore().load();       
+       main.TreeGridProcesosDisp.getStore().load();
+   },
+   loadAlcanceAsignado:function(parEntrega){
+     var main = this;
+     main.TreeGridAlcance.setInternal(main.internal);
+     main.TreeGridAlcance.getStore().load();
    }
 });

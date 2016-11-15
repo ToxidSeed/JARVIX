@@ -1,19 +1,22 @@
 Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridAlcance', {
     extend: 'Ext.tree.Panel',
-  /*requires: [
-        'Ext.data.*',
-        'Ext.grid.*',
-        'Ext.tree.*',
-        'Ext.ux.CheckColumn'
-        //'KitchenSink.model.tree.Task'
-    ],*/
+     internal:{
+        id:null
+     },
+     requires: [
+         'Ext.data.*',
+         'Ext.grid.*',
+         'Ext.tree.*',
+         'Ext.ux.CheckColumn'
+         //'KitchenSink.model.tree.Task'
+     ],
    xtype: 'tree-grid',
     title: 'Alcance',
     region:'center',
     height: 150,
     split:true,
     //split:true,
-    //border:true,    
+    //border:true,
     useArrows: true,
     //draggable:true,
     //resizable:true,
@@ -58,6 +61,12 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridAlcance', {
             },{
                 name:'user',
                 type:'string'
+            },{
+                name:'tipo',
+                type:'string'
+            },{
+                name:'AlcanceId',
+                type:'number'
             }]
         });
 
@@ -65,9 +74,23 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridAlcance', {
             model: WinEditEntregaModel,
             autoLoad:false,
             proxy: {
-                type: 'ajax',                
-                url:'../GestionEntregas/Alcance/searchxxx'
+                type: 'ajax',
+                url:'../GestionEntregas/Alcance/SearchAsignados'
+            },
+            listeners:{
+              'beforeload':function(store){
+                if(main.internal.id === null){
+                  return false;
+                }else{
+                  store.getProxy().extraParams = {
+                    EntregaId:main.internal.id
+                  };
+                }
+            },
+            'load':function(store){
+                main.setRootNode(main.store.getRootNode());
             }
+          }
         });
 
 
@@ -80,17 +103,43 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridAlcance', {
                 xtype: 'treecolumn', //this is so we know which column will show the tree
                 text: 'Proceso',
                 flex: 1,
-                //sortable: true,
                 dataIndex: 'nombre'
-            }/*,{
-              text: 'Assigned To',
-               //flex: 1,
-               dataIndex: 'user',
-               sortable: true
-            }*/]            
+            }],
+            listeners:{
+                'checkchange':function(node, checked, eOpts){
+                     main.checkChildrens(node, checked, eOpts);
+                },
+                'afterrender':function(){
+                  main.setRootNode(main.store.getRootNode());
+                }
+            }
         });
-        
-        
-        this.callParent();        
+
+
+        this.callParent();
+    },
+    setInternal:function(parInternal){
+      var main = this;
+      main.internal = parInternal;
+    },
+    checkChildrens:function(node, checked, eOpts){
+        node.eachChild(function(n) {
+            node.cascadeBy(function(n){
+                n.set('checked', checked);
+            });
+        });
+
+        //check parent node if child node is check
+        p = node.parentNode;
+        var pChildCheckedCount = 0;
+        p.suspendEvents();
+        p.eachChild(function(c) {
+            if (c.get('checked')) pChildCheckedCount++;
+                if(p.parentNode !== null){
+                    p.parentNode.set('checked', !!pChildCheckedCount);
+                    p.set('checked', !!pChildCheckedCount);
+                }
+            });
+        p.resumeEvents();
     }
 });

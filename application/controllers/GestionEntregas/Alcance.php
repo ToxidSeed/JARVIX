@@ -62,6 +62,7 @@ class Alcance extends BaseController{
                 "children" => $this->getNodes($row['id'])
             );
         }
+        //print_r($this->Procesos);
         return $JSONTreeData;
     }
     //
@@ -168,13 +169,14 @@ class Alcance extends BaseController{
           'parEntregaId' => $this->getField('EntregaId')
       ));
 
-
-
-      //$this->Procesos = $this->AlcanceFRM2->getProcesos();
-      //$this->Flujos = $this->AlcanceFRM2->getFlujos();
-      //$this->Controles = $this->AlcanceFRM2->getControles();
+      $this->Procesos = $this->AlcanceFRM2->getProcesos();
+      //print_r($this->Procesos);
+      $this->Flujos = $this->AlcanceFRM2->getFlujos();
+      //print_r($this->Flujos);
+      $this->Controles = $this->AlcanceFRM2->getControles();
+      //print_r($this->Controles);
 
       //print_r($results);
-      //echo json_encode($this->makeStructure());
+      echo json_encode($this->makeStructure());
     }
 }

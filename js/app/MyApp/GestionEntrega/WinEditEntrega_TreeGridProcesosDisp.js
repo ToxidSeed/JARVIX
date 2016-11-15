@@ -22,7 +22,7 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridProcesosDisp', {
     hidden:true,
     xtype:'tree-grid',
     title:'Procesos',
-    height:150,    
+    height:150,
     width:300,
     border:true,
     bodyBorder:true,
@@ -34,7 +34,7 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridProcesosDisp', {
     initComponent:function(){
         this.width = 300;
         var main = this;
-        
+
 
         main.Toolbar = Ext.create('Ext.toolbar.Toolbar',{
            items:[
@@ -47,7 +47,7 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridProcesosDisp', {
                         main.agregarAlcance(records);
                    }
                },{
-                   text:'Ocultar',                   
+                   text:'Ocultar',
                    iconCls:'icon-collapse',
                    id:'btnOcultar',
                    handler:function(){
@@ -88,14 +88,14 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridProcesosDisp', {
                 url:'../GestionEntregas/Alcance/search'
             },
             listeners:{
-                'beforeload':function(store){                    
+                'beforeload':function(store){
                     if(main.internal.proyecto.id === null){
                         return false;
                     }else{
                         store.getProxy().extraParams = {
                            ProyectoId:main.internal.proyecto.id
-                        };                           
-                    }                    
+                        };
+                    }
                 }
             }
         });
@@ -103,7 +103,7 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridProcesosDisp', {
 
         Ext.apply(this, {
             tbar:main.Toolbar,
-            //store: main.store,            
+            //store: main.store,
             columns: [{
                 xtype: 'treecolumn', //this is so we know which column will show the tree
                 text: 'Proceso',
@@ -120,8 +120,8 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridProcesosDisp', {
                 }
             }
         });
-        
-        
+
+
         this.callParent();
     },
     selectRecords:function(){
@@ -129,13 +129,13 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridProcesosDisp', {
         var records = main.getView().getChecked();
         var varAlcanceDetalle = [];
         Ext.Array.each(records, function(rec){
-            //var varIdAlcance =  
+            //var varIdAlcance =
             var varTipo         = rec.get('tipo');
             if(varTipo !== 'CNT'){
                 var varDetalle = {
                     tipo:varTipo,
-                    AlcanceId:rec.get('AlcanceId')                
-                };            
+                    AlcanceId:rec.get('AlcanceId')
+                };
                 varAlcanceDetalle.push(varDetalle);
             }
         });
@@ -152,27 +152,27 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridProcesosDisp', {
         p = node.parentNode;
         var pChildCheckedCount = 0;
         p.suspendEvents();
-        p.eachChild(function(c) { 
+        p.eachChild(function(c) {
             if (c.get('checked')) pChildCheckedCount++;
                 if(p.parentNode !== null){
                     p.parentNode.set('checked', !!pChildCheckedCount);
                     p.set('checked', !!pChildCheckedCount);
-                }                
+                }
             });
         p.resumeEvents();
     },
     agregarAlcance:function(parAlcance){
         var main = this;
-                        
+
         Ext.Ajax.request({
           url:base_url+'GestionEntregas/Alcance/Add',
           params:{
               EntregaId:main.internal.id,
               ProyectoId:main.internal.proyecto.id,
-              Alcance:parAlcance             
+              Alcance:parAlcance
           },
           success:function(response){
-              console.log(response);                
+              console.log(response);
           }
        });
     },
