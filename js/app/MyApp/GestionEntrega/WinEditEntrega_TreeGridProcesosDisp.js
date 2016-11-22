@@ -78,6 +78,8 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridProcesosDisp', {
             }]
         });
 
+        //console.log(main.internal);
+
         main.store = new Ext.data.TreeStore({
             autoLoad:false,
             model: WinProcesosModel,
@@ -92,8 +94,10 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridProcesosDisp', {
                     if(main.internal.proyecto.id === null){
                         return false;
                     }else{
+                        //console.log(main.internal);
                         store.getProxy().extraParams = {
-                           ProyectoId:main.internal.proyecto.id
+                           ProyectoId:main.internal.proyecto.id,
+                           EntregaId: main.internal.id
                         };
                     }
                 }
@@ -114,8 +118,9 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridProcesosDisp', {
                 'checkchange':function(node, checked, eOpts){
                      main.checkChildrens(node, checked, eOpts);
                 },
-                'show':function(){
+                'afterrender':function(){
                     //Reload Node when show
+                    //console.log('xx');
                     main.setRootNode(main.store.getRootNode());
                 }
             }
@@ -172,12 +177,15 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridProcesosDisp', {
               Alcance:parAlcance
           },
           success:function(response){
-              console.log(response);
+              //main.store.load();
+              main.fireEvent('AfterAgregarAlcanceSuccess');
           }
        });
     },
     setInternal:function(parInternal){
         var main = this;
+       //console.log(parInternal);
         main.internal = parInternal;
+
     }
 });

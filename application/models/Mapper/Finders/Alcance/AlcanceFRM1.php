@@ -2,27 +2,29 @@
 
 /*
  * Clase que devuelve los procesos, flujos
+ * que se encuentran disponibles para seleccion
  */
 
 require_once BASEMODELPATH.'BaseMapper.php';
 
 class AlcanceFRM1 extends BaseMapper{
-   
+
 
     const PROCESO_STATUS_REGISTRADO = 0;
     const PROCESO_ALCANCE_NO_COMPLETADO = 0;
     const FLUJO_ALCANCE_NO_COMPLETADO = 0;
     const CONTROL_ALCANCE_NO_COMPLETADO = 0;
+    const __TIPO_PROCESO_FLUJO = 2;
 
     protected $fields = array(
        'proceso.id',
        'proceso.nombre'
     );
-    
+
     private $Procesos = array();
     private $Flujos = array();
     private $Controles = array();
-    
+
     public function getProcesos(){
         return $this->Procesos;
     }
@@ -31,20 +33,20 @@ class AlcanceFRM1 extends BaseMapper{
     }
     public function getControles(){
         return $this->Controles;
-    }    
-    
+    }
+
     public function __construct() {
         parent::__construct();
     }
-    
+
     //Getter and setter
     public function search($filters){
         $this->load->database();
         $this->searchProcesos($filters['parProyectoId']);
-        $this->searchFlujos($filters['parProyectoId']);
-        $this->searchControles($filters['parProyectoId']);
+        $this->searchFlujos($filters['parProyectoId'],$filters['parEntregaId']);
+        $this->searchControles($filters['parProyectoId'],$filters['parEntregaId']);
     }
-    
+
     function searchProcesos($parProyectoId){
         $this->db->select($this->fields);
         $this->db->from('proceso');
@@ -54,8 +56,8 @@ class AlcanceFRM1 extends BaseMapper{
         $res  = $this->db->get();
         //echo $this->db->last_query();
         $this->Procesos = $res->result_array();
-    }    
-    private function searchFlujos($parProyectoId){
+    }
+    private function searchFlujos($parProyectoId,$parEntregaId){
         $fields = array(
             'proceso.id as proceso_id',
             'proceso.nombre as proceso_nombre',
@@ -65,12 +67,19 @@ class AlcanceFRM1 extends BaseMapper{
         $this->db->select($fields);
         $this->db->from('proceso');
         $this->db->join('procesoflujo','proceso.id = procesoflujo.procesoid');
+        $this->db->join('alcance','procesoflujo.id = alcance.itemid'.
+                        ' and alcance.tipoid = '.self::__TIPO_PROCESO_FLUJO.
+                        ' and alcance.entregaid = '.$parEntregaId,'left');
         $this->db->where('procesoflujo.alcancecompletadoind',self::FLUJO_ALCANCE_NO_COMPLETADO);
-        $this->db->where('proyectoid',$parProyectoId);
+        $this->db->where('proceso.proyectoid',$parProyectoId);
+        $this->db->where('alcance.id is null');
+        //$this->db->where('alcance.tipoid',);
+        //$this->db->where('alcance.entregaid',$parEntregaId);
         $res = $this->db->get();
+        //echo $this->db->last_query();
         $this->Flujos = $res->result_array();
     }
-    private function searchControles($parProyectoId){
+    private function searchControles($parProyectoId,$parEntregaId){
         $fields = array(
             'proceso.id as proceso_id',
             'proceso.nombre as proceso_nombre',
@@ -80,8 +89,12 @@ class AlcanceFRM1 extends BaseMapper{
         $this->db->select($fields);
         $this->db->from('proceso');
         $this->db->join('procesocontrol','proceso.id = procesocontrol.procesoid');
+        $this->db->join('alcance','procesocontrol.id = alcance.itemid'.
+                        ' and alcance.tipoid = '.self::__TIPO_PROCESO_FLUJO.
+                        ' and alcance.entregaid = '.$parEntregaId,'left');
         $this->db->where('procesocontrol.alcancecompletadoind',self::CONTROL_ALCANCE_NO_COMPLETADO);
         $this->db->where('proyectoid',$parProyectoId);
+        $this->db->where('alcance.id is null');
         $res = $this->db->get();
         //echo $this->db->last_query();
         $this->Controles = $res->result_array();

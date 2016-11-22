@@ -44,7 +44,13 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridAlcance', {
                    }
                },{
                    text:'Quitar',
-                   iconCls:'icon-delete'
+                   iconCls:'icon-delete',
+                   id:'btnQuitar',
+                   handler:function(){
+                     main.fireEvent('btnQuitar_Click');
+                     var records = main.selectRecords();
+                     main.quitarAlcance(records);
+                   }
                }
            ]
         });
@@ -66,6 +72,9 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridAlcance', {
                 type:'string'
             },{
                 name:'AlcanceId',
+                type:'number'
+            },{
+                name:'InternalId',
                 type:'number'
             }]
         });
@@ -98,7 +107,7 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridAlcance', {
         Ext.apply(this, {
             tbar:main.ltbar,
             store: main.store,
-            selModel:mySelModel,
+            //selModel:mySelModel,
             columns: [{
                 xtype: 'treecolumn', //this is so we know which column will show the tree
                 text: 'Proceso',
@@ -122,6 +131,25 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridAlcance', {
       var main = this;
       main.internal = parInternal;
     },
+    selectRecords:function(){
+        var main = this;
+        var records = main.getView().getChecked();
+        console.log(records);
+        var varAlcanceDetalle = [];
+        Ext.Array.each(records, function(rec){
+            //var varIdAlcance =
+            var varTipo         = rec.get('tipo');
+            if(varTipo !== 'CNT'){
+                var varDetalle = {
+                    tipo:varTipo,
+                    AlcanceId:rec.get('AlcanceId'),
+                    InternalId:rec.get('InternalId')
+                };
+                varAlcanceDetalle.push(varDetalle);
+            }
+        });
+        return Ext.encode(varAlcanceDetalle);
+    },
     checkChildrens:function(node, checked, eOpts){
         node.eachChild(function(n) {
             node.cascadeBy(function(n){
@@ -141,5 +169,20 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega_TreeGridAlcance', {
                 }
             });
         p.resumeEvents();
+    },
+    quitarAlcance:function(parAlcance){
+        var main = this;
+        Ext.Ajax.request({
+          url:base_url+'GestionEntregas/Alcance/Quitar',
+          params:{
+              EntregaId:main.internal.id,
+              ProyectoId:main.internal.proyecto.id,
+              Alcance:parAlcance
+          },
+          success:function(response){
+              //main.store.load();
+              main.fireEvent('AfterAgregarAlcanceSuccess');
+          }
+       });
     }
 });

@@ -125,6 +125,10 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega',{
        main.TreeGridProcesosDisp.on({
            'btnOcultar_Click':function(node){
                main.OcultarProcesos();
+           },
+           'AfterAgregarAlcanceSuccess':function(){
+                main.loadAlcanceDisponible();
+                main.loadAlcanceAsignado();
            }
        });
 
@@ -133,12 +137,7 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega',{
 
        main.TreeGridAlcance.on({
          'btnAgregar_Click':function(args){
-             //Show and hide panels
-             //console.log(main.TreeGridAlcance.getStore().getNewRecords());
              main.MostrarProcesos();
-
-             //Load stores
-             //main.TreeGridDefAlcance.store.load();
          }
        });
 
@@ -175,7 +174,7 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega',{
         var main = this;
         main.panelGeneral.hide();
         main.TreeGridProcesosDisp.show();
-        main.loadAlcanceDisponible(main.internal.proyecto.id);
+        //main.loadAlcanceDisponible();
    },
    OcultarProcesos:function(){
        var main = this;
@@ -252,18 +251,18 @@ Ext.define('MyApp.GestionEntrega.WinEditEntrega',{
                 main.dateFecha.setValue(record.fecha);
                 //console.log(response);
                 //Set Grid Values
-                main.TreeGridProcesosDisp.setInternal(main.internal);
-                main.loadAlcanceAsignado(main.internal);
+                //main.TreeGridProcesosDisp.setInternal(main.internal);
+                main.loadAlcanceDisponible();
+                main.loadAlcanceAsignado();
            }
        });
    },
    loadAlcanceDisponible:function(ProyectoId){
        var main = this;
-       //console.log(ProyectoId);
-       //main.TreeGridProcesosDisp.setProyecto(ProyectoId);
+       main.TreeGridProcesosDisp.setInternal(main.internal);
        main.TreeGridProcesosDisp.getStore().load();
    },
-   loadAlcanceAsignado:function(parEntrega){
+   loadAlcanceAsignado:function(){
      var main = this;
      main.TreeGridAlcance.setInternal(main.internal);
      main.TreeGridAlcance.getStore().load();

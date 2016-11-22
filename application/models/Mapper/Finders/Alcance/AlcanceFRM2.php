@@ -2,18 +2,7 @@
 
 /*
 
- * Caso 1: Si el proceso No tiene Flujos ni controles pendientes de mostrar:
-     - Nada relacionado al proceso ni el proceso en si.
- * Caso 2: Si el proceso No tiene Flujos y si tiene Controles pendientes debe mostrar:
-     - Proceso
-     -  Controles
-   Caso 3: Si el proceso tiene Flujos y no controles pendientes debe mostrar:
-     - Proceso
-     -  Flujos
-   Caso 4: Si el proceso tiene flujos y controles pendientes debe mostrar:
-     - Proceso
-     -  Flujos
-     -  Controles
+
  */
 require_once BASEMODELPATH.'BaseMapper.php';
 
@@ -28,7 +17,8 @@ class AlcanceFRM2 extends BaseMapper{
     }
     protected $fields = array(
         'proceso.id',
-        'proceso.nombre'
+        'proceso.nombre',
+        'alcance.id as alcance_id'
     );
 
     private $Procesos = array();
@@ -65,6 +55,7 @@ class AlcanceFRM2 extends BaseMapper{
 
     private function  SearchFlujos($parEntregaId){
         $fields = array(
+            'alcance.id as alcance_id',
             'procesoflujo.procesoid as proceso_id',
             'procesoflujo.id as procesoflujo_id',
             'procesoflujo.nombre as procesoflujo_nombre'
@@ -83,6 +74,7 @@ class AlcanceFRM2 extends BaseMapper{
 
     private function SearchControles($parEntregaId){
         $fields = array(
+            'alcance.id as alcance_id',
             'procesocontrol.procesoid as proceso_id',
             'procesocontrol.id as procesocontrol_id',
             'procesocontrol.nombre as procesocontrol_nombre'

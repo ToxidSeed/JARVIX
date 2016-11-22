@@ -31,7 +31,8 @@ class Alcance extends BaseController{
     function search(){
         $this->load->model('Mapper/Finders/Alcance/AlcanceFRM1','AlcanceFRM1');
         $this->AlcanceFRM1->search(array(
-            'parProyectoId' => $this->getField('ProyectoId')
+            'parProyectoId' => $this->getField('ProyectoId'),
+            'parEntregaId' => $this->getField('EntregaId')
         ));
 
         $this->Procesos = $this->AlcanceFRM1->getProcesos();
@@ -52,17 +53,22 @@ class Alcance extends BaseController{
           'children' => array()
         );
         foreach($this->Procesos as $key => $row){
-            $JSONTreeData['children'][] = array(
-                "AlcanceId" =>  $row['id'],
-                "nombre" => $row['nombre'],
-                'checked' => false,
-                "iconCls" => "icon-list_packages",
-                "expanded" => "true",
-                "tipo" => "1",
-                "children" => $this->getNodes($row['id'])
-            );
+            $nodes = $this->getNodes($row['id']);
+            //echo count($nodes);
+            if(count($nodes) > 0){
+              $JSONTreeData['children'][] = array(
+                  "InternalId" => (isset($row['alcance_id']))?$row['alcance_id']:0 ,
+                  "AlcanceId" =>  $row['id'],
+                  "nombre" => $row['nombre'],
+                  'checked' => false,
+                  "iconCls" => "icon-list_packages",
+                  "expanded" => "true",
+                  "tipo" => "1",
+                  "children" => $nodes
+                );
+            }
         }
-        //print_r($this->Procesos);
+
         return $JSONTreeData;
     }
     //
@@ -82,15 +88,16 @@ class Alcance extends BaseController{
             'tipo' => 'CNT',
             "children" => array()
         );
-
+        //print_r($this->Flujos);
         foreach($this->Flujos as $key => $row){
             if($parProcesoId == $row['proceso_id']){
                 $node['children'] = array(
+                     "InternalId" => (isset($row['alcance_id']))?$row['alcance_id']:0,
                      "nombre" => $row["procesoflujo_nombre"],
-                    'checked' => false,
-                    'AlcanceId' => $row["procesoflujo_id"],
-                    'tipo' => '2',
-                    "leaf"  => "true"
+                     'checked' => false,
+                     'AlcanceId' => $row["procesoflujo_id"],
+                     'tipo' => '2',
+                     "leaf"  => "true"
                 );
                 unset($this->Flujos[$key]);
             }
@@ -111,6 +118,7 @@ class Alcance extends BaseController{
         foreach($this->Controles as $key => $row){
             if($parProcesoId == $row['proceso_id']){
                 $node['children'] = array(
+                    "InternalId" => (isset($row['alcance_id']))?$row['alcance_id']:0,
                      "nombre" => $row["procesocontrol_nombre"],
                     'checked' => false,
                     'AlcanceId' => $row["procesocontrol_id"],
@@ -178,5 +186,31 @@ class Alcance extends BaseController{
 
       //print_r($results);
       echo json_encode($this->makeStructure());
+    }
+
+    public function Quitar(){
+      try{
+        $inArrAlcance = json_decode($this->getField('Alcance'),true);
+        $arrDmnAlcance = array();
+        foreach($inArrAlcance as $key => $row){
+          $dmnAlcance = new DomainAlcance($row['InternalId']);
+          if($row['InternalId'] !==0){
+              $arrDmnAlcance[] = $dmnAlcance;
+          }
+        }
+
+        $this->load->model('Bussiness/AlcanceBO','AlcanceBO');
+        $this->AlcanceBO->Quitar($arrDmnAlcance);
+        $this->getAnswer()->setSuccess(true);
+        $this->getAnswer()->setMessage('Eliminado Correctamente');
+        $this->getAnswer()->setCode(0);
+        echo $this->getAnswer()->getAsJSON();
+      }catch (Exception $ex) {
+          if($ex->getCode() == FORM_VALIDATION_ERRORS_CODE){
+              echo $this->getAnswer()->getAsJSON();
+          }else{
+              echo Answer::setFailedMessage($ex->getMessage(),$ex->getCode());
+          }
+      }
     }
 }

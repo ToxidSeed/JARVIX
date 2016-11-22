@@ -57,4 +57,11 @@ class AlcanceMapper extends BaseMapper{
     protected function doUpdate(DomainAlcance $dmnAlcance){
         $field['fechacierre'] = $dmnAlcance->getFechaCierre();
     }
+    public function delete(DomainAlcance $dmnAlcance){
+      $this->doDelete($dmnAlcance);
+    }
+    protected function doDelete(DomainAlcance $dmnAlcance){
+        $this->db->where('id',$dmnAlcance->getId());
+        $this->db->delete('alcance');
+    }
 }
