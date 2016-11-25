@@ -13,6 +13,8 @@ class DomainAlcance extends BaseDomain{
     protected $tipo;
     protected $item;
     protected $entrega;
+    protected $proceso;
+    protected $nroItems;
 
     function __construct($id = null){
         $this->id = $id;
@@ -49,7 +51,18 @@ class DomainAlcance extends BaseDomain{
         $this->entrega = $entrega;
     }
 
-
+    public function setProceso(DomainProceso $dmnProceso){
+        $this->proceso = $dmnProceso;
+    }
+    public function getProceso(){
+      return $this->proceso;
+    }
+    public function setNroItems($NroItems){
+       $this->nroItems = $NroItems;
+    }
+    public function getNroItems(){
+      return $this->nroItems;
+    }
 
 
 }

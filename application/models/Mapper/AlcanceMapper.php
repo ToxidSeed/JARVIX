@@ -22,7 +22,9 @@ class AlcanceMapper extends BaseMapper{
     );
 
     protected $uniqueValues = array(
-      array('id')
+      array('id'),
+      array('tipoid',
+            'itemid')
     );
 
     protected $tableName = 'alcance';

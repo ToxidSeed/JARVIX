@@ -72,19 +72,6 @@
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/D:/xampp/htdocs/jarvix/application/models/Mapper/EntregaMapper.php</file>
-            <file>file:/D:/xampp/htdocs/jarvix/application/models/Domain/DomainTipoAlcance.php</file>
-            <file>file:/D:/xampp/htdocs/jarvix/js/app/MyApp/GestionEntrega/WinEntrega.js</file>
-            <file>file:/D:/xampp/htdocs/jarvix/application/models/Bussiness/EntregaBO.php</file>
-            <file>file:/D:/xampp/htdocs/jarvix/application/models/Mapper/ProyectoMapper.php</file>
-            <file>file:/D:/xampp/htdocs/jarvix/application/models/Domain/DomainEntrega.php</file>
-            <file>file:/D:/xampp/htdocs/jarvix/js/app/MyApp/GestionEntrega/WinEditEntrega_TreeGridAlcance.js</file>
-            <file>file:/D:/xampp/htdocs/jarvix/application/controllers/GestionProcesos/ProcesoControl.php</file>
-            <file>file:/D:/xampp/htdocs/jarvix/application/models/Base/BaseMapper.php</file>
-            <file>file:/D:/xampp/htdocs/jarvix/application/controllers/GestionEntregas/Entrega.php</file>
-            <file>file:/D:/xampp/htdocs/jarvix/js/app/MyApp/GestionEntrega/WinEditEntrega_TreeGridProcesosDisp.js</file>
-            <file>file:/D:/xampp/htdocs/jarvix/application/controllers/GestionEntregas/Alcance.php</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

@@ -139,6 +139,7 @@ class Alcance extends BaseController{
             $dmnAlcance = new DomainAlcance();
             $dmnAlcance->setEntrega($dmnEntrega);
             $dmnAlcance->setTipo(new DomainTipoAlcance($row['tipo']));
+            $dmnAlcance->setProceso(new DomainProceso($row['ProcesoId']));
             $this->setItem($dmnAlcance,$row['AlcanceId']);
             $arrDmnAlcance[] = $dmnAlcance;
         }
